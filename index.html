@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daniele Giacomelli</title>
+  <meta name="description" content="Portfolio di Daniele Giacomelli: junior software developer a Torino, studente di AI for Biomedicine all'Università di Torino.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="canonical" href="https://daniele-giacomelli.github.io/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:site_name" content="Daniele Giacomelli">
+  <meta property="og:title" content="Daniele Giacomelli">
+  <meta property="og:description" content="Junior software developer a Torino: sviluppo web e backend, deep learning per l'imaging medico.">
+  <meta property="og:url" content="https://daniele-giacomelli.github.io/">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <header class="site-header">
+    <nav aria-label="Navigazione principale">
+      <a class="brand" href="/">Daniele Giacomelli</a>
+      <ul>
+        <li><a href="#progetti">Progetti</a></li>
+        <li><a href="#esperienza">Esperienza</a></li>
+        <li><a href="#contatti">Contatti</a></li>
+        <!-- <li><a href="appunti/">Appunti</a></li> -->
+      </ul>
+    </nav>
+  </header>
+
+  <main id="contenuto">
+    <section class="hero">
+      <h1>Ciao, sono Daniele.</h1>
+      <p class="lead">
+        Junior software developer a Torino. Sviluppo web e backend (Java/Spring Boot,
+        Node.js, PHP) e studio deep learning applicato all'imaging medico:
+        laureando in Informatica e studente della magistrale in AI for Biomedicine
+        all'Università di Torino.
+      </p>
+    </section>
+
+    <section id="progetti">
+      <h2>Progetti</h2>
+
+      <article class="card">
+        <h3>Tesi triennale: età ossea pediatrica da radiografie</h3>
+        <p>
+          Stima della configurazione articolare della mano per la valutazione dell'età ossea
+          pediatrica, sotto la guida del prof. Marco Grangetto. Ho replicato in PyTorch i primi
+          due stadi della pipeline BoNet (hand detection con Faster R-CNN e stima di 17 keypoint
+          anatomici con Keypoint R-CNN), progettato un'estensione dei keypoint a entrambe le mani
+          tramite mirroring delle immagini e scritto gli script di training e valutazione,
+          eseguiti su server con GPU NVIDIA.
+        </p>
+        <p class="tags">Python · PyTorch · torchvision · Computer vision</p>
+      </article>
+
+      <article class="card">
+        <h3>Sito di Ghiprog</h3>
+        <p>
+          Sito bilingue (italiano/inglese) in produzione per uno studio di progettazione CAD,
+          con pagine azienda, prodotto, news e contatti. Ho curato la SEO (URL puliti, sitemap XML
+          con varianti linguistiche hreflang, robots.txt) e risolto un problema di accesso da alcuni
+          dispositivi analizzando gli header HTTP del server.
+        </p>
+        <p class="tags">PHP · HTML · CSS · JavaScript · SEO</p>
+        <p><a href="https://ghiprog.it">ghiprog.it</a></p>
+      </article>
+    </section>
+
+    <section id="esperienza">
+      <h2>Esperienza e formazione</h2>
+      <ul class="timeline">
+        <li>
+          <span class="when">gen 2026 – oggi</span>
+          <div>
+            <strong>Sviluppatore web freelance, GHIVA Progettazione CAD</strong>
+            <p>Sviluppo e manutenzione del sito ghiprog.it, SEO e diagnosi di problemi lato server.</p>
+          </div>
+        </li>
+        <li>
+          <span class="when">2026 – in corso</span>
+          <div>
+            <strong>Laurea Magistrale in AI for Biomedicine</strong>
+            <p>Università di Torino.</p>
+          </div>
+        </li>
+        <li>
+          <span class="when">2021 – laurea prevista nov 2026</span>
+          <div>
+            <strong>Laurea Triennale in Informatica</strong>
+            <p>Università di Torino.</p>
+          </div>
+        </li>
+        <li>
+          <span class="when">gen 2021</span>
+          <div>
+            <strong>Stage PCTO, AIC Automazioni Industriali Capitanio</strong>
+            <p>Archiviazione dati e interfaccia utente in Python e Ignition HMI.</p>
+          </div>
+        </li>
+        <li>
+          <span class="when">2021</span>
+          <div>
+            <strong>Diploma in Informatica e Telecomunicazioni</strong>
+            <p>I.I.S. Perlasca, Vobarno.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="competenze">
+      <h2>Competenze</h2>
+      <ul class="skills">
+        <li><strong>Linguaggi</strong> Java, Python, C, JavaScript, SQL, PHP, HTML, CSS</li>
+        <li><strong>Framework</strong> Spring Boot, Node.js/Express, PyTorch, torchvision</li>
+        <li><strong>Database</strong> PostgreSQL, MySQL, MongoDB</li>
+        <li><strong>Strumenti</strong> Git, GitHub, API REST, Docker (base), Figma</li>
+      </ul>
+      <p class="tags">Lingue: italiano madrelingua, inglese fluente.</p>
+    </section>
+
+    <section id="contatti">
+      <h2>Contatti</h2>
+      <ul class="links">
+        <li><a href="https://www.linkedin.com/in/daniele-giacomelli">LinkedIn</a></li>
+        <li><a href="https://github.com/daniele-giacomelli">GitHub</a></li>
+        <!-- <li><a href="mailto:LA_TUA_EMAIL">Email</a></li> -->
+        <!-- <li><a href="CV_Daniele_Giacomelli.pdf">Scarica il CV</a></li> -->
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 Daniele Giacomelli</p>
+  </footer>
+</body>
+</html>
