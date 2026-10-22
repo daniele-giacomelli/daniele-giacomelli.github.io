@@ -17,25 +17,33 @@
   <meta property="og:url" content="https://daniele-giacomelli.github.io/">
   <meta name="twitter:card" content="summary">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <a class="skip-link" href="#contenuto">Vai al contenuto</a>
   <header class="site-header">
     <nav aria-label="Navigazione principale">
-      <a class="brand" href="/">Daniele Giacomelli</a>
+      <a class="brand" href="/"><span class="dim">~/</span>daniele-giacomelli</a>
       <ul>
-        <li><a href="#progetti">Progetti</a></li>
-        <li><a href="#esperienza">Esperienza</a></li>
-        <li><a href="#contatti">Contatti</a></li>
-        <!-- <li><a href="appunti/">Appunti</a></li> -->
+        <li><a href="#progetti">progetti</a></li>
+        <li><a href="#esperienza">esperienza</a></li>
+        <li><a href="#contatti">contatti</a></li>
+        <!-- <li><a href="appunti/">appunti</a></li> -->
       </ul>
     </nav>
   </header>
 
   <main id="contenuto">
     <section class="hero">
-      <h1>Ciao, sono Daniele.</h1>
+      <h1>Daniele<br>Giacomelli<span class="caret" aria-hidden="true"></span></h1>
+      <dl class="meta">
+        <div><dt>base</dt><dd>Torino</dd></div>
+        <div><dt>studio</dt><dd>Informatica, UniTo</dd></div>
+        <div><dt>adesso</dt><dd>AI for Biomedicine</dd></div>
+      </dl>
       <p class="lead">
         Junior software developer a Torino. Sviluppo web e backend (Java/Spring Boot,
         Node.js, PHP) e studio deep learning applicato all'imaging medico:
@@ -57,7 +65,9 @@
           tramite mirroring delle immagini e scritto gli script di training e valutazione,
           eseguiti su server con GPU NVIDIA.
         </p>
-        <p class="tags">Python · PyTorch · torchvision · Computer vision</p>
+        <ul class="tags" aria-label="Tecnologie">
+          <li>Python</li><li>PyTorch</li><li>torchvision</li><li>Computer vision</li>
+        </ul>
       </article>
 
       <article class="card">
@@ -68,7 +78,9 @@
           con varianti linguistiche hreflang, robots.txt) e risolto un problema di accesso da alcuni
           dispositivi analizzando gli header HTTP del server.
         </p>
-        <p class="tags">PHP · HTML · CSS · JavaScript · SEO</p>
+        <ul class="tags" aria-label="Tecnologie">
+          <li>PHP</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>SEO</li>
+        </ul>
         <p><a href="https://ghiprog.it">ghiprog.it</a></p>
       </article>
     </section>
@@ -122,7 +134,7 @@
         <li><strong>Database</strong> PostgreSQL, MySQL, MongoDB</li>
         <li><strong>Strumenti</strong> Git, GitHub, API REST, Docker (base), Figma</li>
       </ul>
-      <p class="tags">Lingue: italiano madrelingua, inglese fluente.</p>
+      <p class="note">Lingue: italiano madrelingua, inglese fluente.</p>
     </section>
 
     <section id="contatti">
@@ -137,7 +149,10 @@
   </main>
 
   <footer class="site-footer">
-    <p>© 2026 Daniele Giacomelli</p>
-  </footer>
+    <p>© 2026 Daniele Giacomelli</p>  </footer>
+
+  <script>
+    console.log("%cCiao! Se stai curiosando qui, il codice del sito è su github.com/daniele-giacomelli", "font-family: monospace; font-size: 13px;");
+  </script>
 </body>
 </html>

@@ -1,11 +1,14 @@
 :root {
-  --bg: #fcfcfb;
-  --fg: #1c1c1a;
-  --muted: #6b6b66;
-  --line: #e6e6e1;
-  --accent: #2456d6;
+  --bg: #fbfaf7;
+  --fg: #171614;
+  --muted: #6a6862;
+  --line: #e4e2db;
+  --accent: #17365d; /* lo stesso blu del CV */
+  --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+  --chip: #f1efe9;
   --card: #ffffff;
-  --radius: 10px;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -17,6 +20,28 @@ html { scroll-behavior: smooth; }
 
 /* Le sezioni non finiscono sotto l'header sticky quando si segue un'ancora */
 section[id] { scroll-margin-top: 72px; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  line-height: 1.6;
+}
+
+::selection { background: var(--accent); color: var(--bg); }
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  border-radius: 2px;
+  transition: background-color 0.15s;
+}
+/* Al passaggio il link si "evidenzia" come con un pennarello */
+a:hover { background: var(--accent-soft); }
 
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -36,17 +61,6 @@ section[id] { scroll-margin-top: 72px; }
 }
 .skip-link:focus { top: 12px; }
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
-}
-
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
-
 .site-header {
   border-bottom: 1px solid var(--line);
   background: var(--bg);
@@ -58,10 +72,10 @@ a:hover { text-decoration: underline; }
 .site-header nav,
 main,
 .site-footer {
-  max-width: 760px;
+  max-width: 800px;
   margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 .site-header nav {
@@ -71,72 +85,167 @@ main,
   gap: 16px;
   padding-top: 14px;
   padding-bottom: 14px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
 }
 
-.brand { font-weight: 700; color: var(--fg); }
-.brand:hover { text-decoration: none; }
+.brand { font-weight: 700; text-decoration: none; }
+.brand:hover { background: none; }
+.dim { color: var(--muted); font-weight: 400; }
 
 .site-header ul {
   display: flex;
-  gap: 18px;
+  gap: 20px;
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 0.95rem;
+}
+.site-header ul a { position: relative; color: var(--muted); text-decoration: none; }
+.site-header ul a:hover { color: var(--fg); background: none; }
+.site-header ul a::before {
+  content: "#";
+  position: absolute;
+  left: -0.85em;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.site-header ul a:hover::before { opacity: 1; }
+
+/* Intestazione: nome grande in monospace con il cursore che lampeggia */
+.hero { padding: 80px 0 40px; }
+.hero h1 {
+  font-family: var(--mono);
+  font-size: clamp(2.4rem, 8.5vw, 4.9rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+  margin: 0 0 32px;
+}
+.caret {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.82em;
+  margin-left: 0.1em;
+  background: var(--accent);
+  vertical-align: -0.04em;
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .caret { animation: none; }
 }
 
-.hero { padding: 64px 0 24px; }
-.hero h1 { font-size: 2.4rem; margin: 0 0 12px; line-height: 1.15; }
-.lead { font-size: 1.15rem; color: var(--muted); margin: 0; }
+/* Didascalie sotto il nome, allineate a griglia */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 40px;
+  margin: 0 0 32px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+.meta dt { color: var(--muted); font-size: 0.75rem; }
+.meta dd { margin: 0; }
 
-section { padding: 28px 0; }
+.lead { font-size: 1.15rem; color: var(--muted); margin: 0; max-width: 62ch; }
+
+/* Sezioni numerate: 01, 02, ... */
+main { counter-reset: sezione; }
+section { padding: 36px 0; }
 h2 {
+  counter-increment: sezione;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-family: var(--mono);
   font-size: 1.3rem;
-  margin: 0 0 16px;
-  padding-bottom: 8px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--fg);
+}
+h2::before {
+  content: counter(sezione, decimal-leading-zero);
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+/* Progetti come righe, non come blocchi */
+.card {
+  padding: 20px 0;
   border-bottom: 1px solid var(--line);
 }
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-  margin-bottom: 14px;
-}
-.card h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.card h3 { margin: 0 0 6px; font-size: 1.1rem; }
 .card p { margin: 6px 0; }
 
-.tags { color: var(--muted); font-size: 0.9rem; }
-.tags.big { font-size: 1rem; }
+/* Tecnologie come piccoli "token" di codice */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 12px 0 4px;
+  padding: 0;
+}
+.tags li {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: var(--chip);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 1px 8px;
+}
 
 .timeline { list-style: none; padding: 0; margin: 0; }
 .timeline li {
   display: grid;
   grid-template-columns: 170px 1fr;
   gap: 16px;
-  padding: 10px 0;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
 }
-.timeline .when { color: var(--muted); font-size: 0.9rem; }
+.timeline .when {
+  font-family: var(--mono);
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding-top: 3px;
+}
 .timeline p { margin: 2px 0 0; color: var(--muted); }
 
-.skills { list-style: none; padding: 0; margin: 0 0 8px; }
+.skills { list-style: none; padding: 0; margin: 8px 0; }
 .skills li {
   display: grid;
   grid-template-columns: 110px 1fr;
   gap: 12px;
-  padding: 4px 0;
+  padding: 6px 0;
 }
-.skills strong { color: var(--muted); font-weight: 600; }
+.skills strong {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 400;
+  padding-top: 3px;
+}
+.note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
 
-.links { list-style: none; padding: 0; margin: 0; display: flex; gap: 20px; }
+.links { list-style: none; padding: 0; margin: 16px 0 0; display: flex; gap: 28px; }
+.links a { font-family: var(--mono); font-size: 1rem; }
 
 .site-footer {
+  font-family: var(--mono);
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   padding-top: 24px;
   padding-bottom: 40px;
 }
+.site-footer p { margin: 0 0 4px; }
 
 /* Quiz */
 .quiz-question { margin-bottom: 22px; }
@@ -160,27 +269,41 @@ h2 {
 .explanation { color: var(--muted); font-size: 0.92rem; margin-top: 6px; }
 .score { font-weight: 700; margin-top: 12px; }
 
+/* Pagina 404 */
+.not-found { padding: 80px 0 40px; }
+.not-found h1 {
+  font-family: var(--mono);
+  font-size: clamp(3rem, 14vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin: 0 0 20px;
+}
+.not-found .links { margin-top: 24px; }
+
 @media (max-width: 560px) {
-  .hero h1 { font-size: 1.9rem; }
+  .site-header nav,
+  main,
+  .site-footer { padding-left: 16px; padding-right: 16px; }
+  .hero { padding-top: 48px; }
   .timeline li { grid-template-columns: 1fr; gap: 2px; }
   .site-header nav { flex-wrap: wrap; row-gap: 6px; padding-top: 10px; padding-bottom: 10px; }
   .site-header ul { gap: 14px; flex-wrap: wrap; }
   section[id] { scroll-margin-top: 104px; }
   .skills li { grid-template-columns: 1fr; gap: 0; padding: 6px 0; }
+  .meta { gap: 10px 28px; }
 }
-
-/* Pagina 404 */
-.not-found { padding: 80px 0 40px; }
-.not-found h1 { font-size: 2rem; margin: 0 0 12px; }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #131312;
-    --fg: #ecece8;
-    --muted: #a0a09a;
-    --line: #2a2a27;
-    --accent: #7fa4ff;
-    --card: #1a1a18;
+    --bg: #12110f;
+    --fg: #ecebe6;
+    --muted: #a09e97;
+    --line: #2a2926;
+    /* Il navy su fondo scuro non si leggerebbe: stessa tinta, più chiara */
+    --accent: #90b4e6;
+    --chip: #1c1b19;
+    --card: #1a1917;
   }
   .option.correct { background: #14301f; }
   .option.wrong { background: #3a1916; }

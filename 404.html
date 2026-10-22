@@ -7,20 +7,25 @@
   <meta name="robots" content="noindex">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap">
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <header class="site-header">
     <nav aria-label="Navigazione principale">
-      <a class="brand" href="/">Daniele Giacomelli</a>
+      <a class="brand" href="/"><span class="dim">~/</span>daniele-giacomelli</a>
     </nav>
   </header>
 
   <main id="contenuto">
     <section class="not-found">
-      <h1>Pagina non trovata</h1>
-      <p class="lead">Questo indirizzo non esiste, o la pagina è stata spostata.</p>
-      <p><a href="/">Torna alla home</a></p>
+      <h1>404<span class="caret" aria-hidden="true"></span></h1>
+      <p class="lead">Questa pagina non esiste, o è stata spostata.</p>
+      <ul class="links">
+        <li><a href="/">cd ~</a> <span class="dim">(torna alla home)</span></li>
+      </ul>
     </section>
   </main>
 </body>
