@@ -38,12 +38,11 @@
 
   <main id="contenuto">
     <section class="hero">
-      <h1>Daniele<br>Giacomelli<span class="caret" aria-hidden="true"></span></h1>
+      <h1>Daniele<br>Giacomelli<span class="caret" aria-hidden="true"><svg class="senso" viewBox="0 0 12 10"><path d="M2 9 0.5 5M6 8.5V3.5M10 9l1.5-4"/></svg></span></h1>
       <dl class="meta">
         <div><dt>base</dt><dd>Torino</dd></div>
         <div><dt>studio</dt><dd>Informatica, UniTo</dd></div>
-        <div><dt>adesso</dt><dd>AI for Biomedicine</dd></div>
-      </dl>
+        <div><dt>adesso</dt><dd>AI for Biomedicine</dd></div>      </dl>
       <p class="lead">
         Junior software developer a Torino. Sviluppo web e backend (Java/Spring Boot,
         Node.js, PHP) e studio deep learning applicato all'imaging medico:
@@ -151,8 +150,36 @@
   <footer class="site-footer">
     <p>© 2026 Daniele Giacomelli</p>  </footer>
 
+  <p class="secret" role="status" aria-live="polite" lang="en"></p>
+  <div class="filo" aria-hidden="true"></div>
+
   <script>
-    console.log("%cCiao! Se stai curiosando qui, il codice del sito è su github.com/daniele-giacomelli", "font-family: monospace; font-size: 13px;");
+    console.log(
+      "%cCiao! Se stai curiosando qui, il codice del sito è su github.com/daniele-giacomelli\n" +
+      "Da grandi poteri derivano grandi responsabilità. Anche in produzione.",
+      "font-family: monospace; font-size: 13px;"
+    );
+
+    // Il cursore dopo il nome, cliccato, diventa una chiave (e viceversa)
+    const segreto = document.querySelector(".secret");
+    let timerSegreto;
+    document.querySelector(".caret").addEventListener("click", (e) => {
+      const chiave = e.currentTarget.classList.toggle("chiave");
+      clearTimeout(timerSegreto);
+      segreto.classList.toggle("visibile", chiave);
+      if (!chiave) return;
+      segreto.textContent = "May your heart be your guiding key.";
+      timerSegreto = setTimeout(() => segreto.classList.remove("visibile"), 5000);
+    });
+
+    // Il filo che scende dall'alto mentre si scorre la pagina
+    const filo = document.querySelector(".filo");
+    const aggiornaFilo = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      filo.style.setProperty("--avanzamento", max > 0 ? scrollY / max : 0);
+    };
+    addEventListener("scroll", aggiornaFilo, { passive: true });
+    aggiornaFilo();
   </script>
 </body>
 </html>
