@@ -1,3 +1,13 @@
+/* JetBrains Mono ospitato nel repo (licenza in fonts/OFL.txt): un solo file
+   variabile con tutti i pesi, sottoinsieme latino (lettere accentate incluse) */
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg: #fbfaf7;
   --fg: #171614;
