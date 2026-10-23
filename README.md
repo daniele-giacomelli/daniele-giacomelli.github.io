@@ -13,6 +13,8 @@ GitHub Pages pubblica direttamente il branch `main`.
 - `en/index.html`: la versione in inglese
 - `style.css`: lo stile, con tema scuro automatico
 - `404.html`: la pagina per gli indirizzi che non esistono
+- `appunti/`: quiz e appunti per esame e modulo (`appunti/<esame>/<modulo>/`). Il motore è
+  `appunti/quiz.js`, le domande stanno nel `quiz.json` di ogni modulo
 - `fonts/`: JetBrains Mono, ospitato qui invece che su Google Fonts (licenza in `fonts/OFL.txt`)
 
 ## Provarlo in locale

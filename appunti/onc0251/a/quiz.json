@@ -1,0 +1,630 @@
+{
+ "titolo": "Structural biochemistry",
+ "descrizione": "Le domande dei Test A e B dell'anno scorso, con la risposta corretta.",
+ "test": {
+  "A": [
+   {
+    "q": "Which four elements account for about 96% of the human body’s mass?",
+    "o": [
+     "Ca, Na, K, Cl",
+     "C, H, O, N",
+     "Fe, Zn, Cu, Mn",
+     "S, P, Mg, Ca"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The number of protons in an atom determines:",
+    "o": [
+     "Its isotope",
+     "Its atomic radius",
+     "Its identity (element type)",
+     "Its chemical bonds"
+    ],
+    "a": 2
+   },
+   {
+    "q": "The quantum number n defines:",
+    "o": [
+     "Spin of an electron",
+     "Energy level of the orbital",
+     "Shape of the orbital",
+     "Magnetic orientation"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Which rule states that two electrons cannot have the same set of four quantum numbers?",
+    "o": [
+     "Aufbau principle",
+     "Hund’s rule",
+     "Pauli exclusion principle",
+     "Le Chatelier’s principle"
+    ],
+    "a": 2
+   },
+   {
+    "q": "Electronegativity represents:",
+    "o": [
+     "The energy needed to remove an electron",
+     "The tendency of an atom to attract electrons in a bond",
+     "The number of valence electrons",
+     "The number of isotopes"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Carbon’s ability to form four covalent bonds is due to:",
+    "o": [
+     "Its d-orbitals",
+     "Its sp³ hybridization",
+     "Its low electronegativity",
+     "Its ionic nature"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The ability of carbon to form long chains and complex branched molecules is mainly due to:",
+    "o": [
+     "Its low atomic mass",
+     "Its four available covalent bonds (tetravalence)",
+     "Its high electronegativity",
+     "Its metallic bonding"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Two molecules that are mirror, non-superimposable images are:",
+    "o": [
+     "Epimers",
+     "Diastereomers",
+     "Enantiomers",
+     "Geometric isomers"
+    ],
+    "a": 2
+   },
+   {
+    "q": "The α and β forms of glucose differ in:",
+    "o": [
+     "Carbon number",
+     "Oxidation state",
+     "Orientation of the hydroxyl on the anomeric carbon",
+     "Type of glycosidic linkage"
+    ],
+    "a": 2
+   },
+   {
+    "q": "A pyranose ring in carbohydrates contains:",
+    "o": [
+     "4 carbon atoms",
+     "5 carbon atoms",
+     "6 atoms total (5 C + 1 O)",
+     "7 atoms total (6 C + 1 O)"
+    ],
+    "a": 2
+   },
+   {
+    "q": "The main energy-storage polysaccharide in animals is:",
+    "o": [
+     "Cellulose",
+     "Glycogen",
+     "Amylose",
+     "Pectin"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Cellulose differs from starch because:",
+    "o": [
+     "It is branched",
+     "It contains α(1→4) linkages",
+     "It contains β(1→4) linkages",
+     "It is made of fructose units"
+    ],
+    "a": 2
+   },
+   {
+    "q": "Lipids are generally characterized by:",
+    "o": [
+     "High water solubility",
+     "Insolubility in water",
+     "Peptide bonds",
+     "Negative charges"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Saturated fatty acids have:",
+    "o": [
+     "Only single C–C bonds",
+     "One double bond",
+     "Many double bonds",
+     "Rings"
+    ],
+    "a": 0
+   },
+   {
+    "q": "The ω-3 and ω-6 fatty acids differ in:",
+    "o": [
+     "Number of carbon atoms",
+     "Position of the first double bond from the methyl end",
+     "Type of ester bond",
+     "Presence of phosphate groups"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Phospholipids are amphipathic molecules because they contain:",
+    "o": [
+     "Two identical polar heads",
+     "A polar head and nonpolar tails",
+     "Only nonpolar chains",
+     "Only charged groups"
+    ],
+    "a": 1
+   },
+   {
+    "q": "In sphingolipids, the backbone is:",
+    "o": [
+     "Glycerol",
+     "Sphingosine",
+     "Cholesterol",
+     "Fatty acid"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Cholesterol is essential for membranes because it:",
+    "o": [
+     "Hydrolyzes triglycerides",
+     "Increases membrane rigidity and stability",
+     "Catalyzes lipid synthesis",
+     "Forms peptide bonds"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Amino acids in proteins are:",
+    "o": [
+     "Usually D-isomers",
+     "Usually L-isomers",
+     "Achiral",
+     "Random mixtures"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The peptide bond is:",
+    "o": [
+     "A pure single bond",
+     "A pure double bond",
+     "A partial double bond that restricts rotation",
+     "An ionic bond"
+    ],
+    "a": 2
+   },
+   {
+    "q": "The α-helix is stabilized mainly by:",
+    "o": [
+     "Disulfide bonds",
+     "Ionic bonds",
+     "Hydrogen bonds between backbone atoms",
+     "Van der Waals forces"
+    ],
+    "a": 2
+   },
+   {
+    "q": "In β-sheets, peptide chains are stabilized by:",
+    "o": [
+     "Hydrogen bonds between side chains",
+     "Hydrogen bonds between backbone atoms",
+     "Hydrophobic collapse",
+     "Disulfide bridges"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The Ramachandran plot shows:",
+    "o": [
+     "DNA base pairing",
+     "Allowed φ and ψ angles in a polypeptide",
+     "Enzyme reaction rates",
+     "Peptide bond lengths"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The quaternary structure of a protein refers to:",
+    "o": [
+     "The folding of a single chain",
+     "The arrangement of multiple subunits",
+     "Post-translational modifications",
+     "Side-chain chemistry"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Collagen is composed of:",
+    "o": [
+     "α-helices",
+     "Triple helices of left-handed chains",
+     "β-sheets",
+     "Random coils"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The repeating amino acid motif in collagen is:",
+    "o": [
+     "Ala-Gly-Ala",
+     "Gly-X-Y (often Pro or Hydroxyproline)",
+     "Leu-Ile-Val",
+     "Ser-Thr-Tyr"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Myoglobin’s main role is to:",
+    "o": [
+     "Transport CO₂",
+     "Store oxygen in muscle",
+     "Buffer blood pH",
+     "Hydrolyze ATP"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Hemoglobin’s sigmoidal oxygen-binding curve reflects:",
+    "o": [
+     "Constant affinity",
+     "Cooperative binding among subunits",
+     "Denaturation",
+     "Enzymatic activity"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The Bohr effect describes:",
+    "o": [
+     "Increased O₂ affinity at low pH",
+     "Decreased O₂ affinity at low pH",
+     "The binding of CO to hemoglobin",
+     "The oxidation of Fe²⁺ to Fe³⁺"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Enzymes accelerate reactions by:",
+    "o": [
+     "Increasing activation energy",
+     "Decreasing activation energy",
+     "Changing reaction equilibrium",
+     "Replacing substrates"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Phosphorylation as a post-translational modification typically occurs on:",
+    "o": [
+     "Serine, threonine, and tyrosine",
+     "Glycine, alanine, and leucine",
+     "Cysteine, methionine, and tryptophan",
+     "Aspartate, glutamate, and histidine"
+    ],
+    "a": 0
+   }
+  ],
+  "B": [
+   {
+    "q": "Which subatomic particle carries a positive charge?",
+    "o": [
+     "Electron",
+     "Proton",
+     "Neutron",
+     "Isotope"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The atomic number of an element corresponds to:",
+    "o": [
+     "The number of neutrons",
+     "The number of electrons in a neutral atom",
+     "The sum of neutrons and protons",
+     "The number of valence electrons"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Which orbital can hold a maximum of 10 electrons?",
+    "o": [
+     "s",
+     "p",
+     "d",
+     "f"
+    ],
+    "a": 2
+   },
+   {
+    "q": "The tendency of an atom to attract shared electrons is called:",
+    "o": [
+     "Ionization energy",
+     "Electron affinity",
+     "Electronegativity",
+     "Polarization"
+    ],
+    "a": 2
+   },
+   {
+    "q": "Which statement about noble gases is correct?",
+    "o": [
+     "They have low ionization energies.",
+     "They readily form covalent bonds.",
+     "They have complete outer electron shells and are chemically inert",
+     "They are the most reactive nonmetals."
+    ],
+    "a": 2
+   },
+   {
+    "q": "Which property of carbon allows it to create the complex molecules essential for life?",
+    "o": [
+     "It forms metallic bonds",
+     "It easily loses electrons",
+     "It can form four stable covalent bonds in multiple arrangements",
+     "It is a noble gas"
+    ],
+    "a": 2
+   },
+   {
+    "q": "The geometry of methane (CH₄) is:",
+    "o": [
+     "Planar",
+     "Tetrahedral",
+     "Linear",
+     "Trigonal planar"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Molecules with the same formula but different spatial arrangements around a double bond are:",
+    "o": [
+     "Enantiomers",
+     "Geometric isomers",
+     "Conformers",
+     "Epimers"
+    ],
+    "a": 1
+   },
+   {
+    "q": "A sugar containing six carbon atoms is called a:",
+    "o": [
+     "Pentose",
+     "Hexose",
+     "Triose",
+     "Heptose"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The bond linking monosaccharides in disaccharides and polysaccharides is called a:",
+    "o": [
+     "Peptide bond",
+     "Glycosidic bond",
+     "Ester bond",
+     "Hydrogen bond"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The polysaccharide that forms plant cell walls is:",
+    "o": [
+     "Glycogen",
+     "Cellulose",
+     "Amylose",
+     "Amylopectin"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The main function of carbohydrates in living organisms is to:",
+    "o": [
+     "Provide genetic information",
+     "Serve as a primary source of energy",
+     "Form biological membranes",
+     "Catalyze biochemical reactions"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Which of the following is not a lipid?",
+    "o": [
+     "Triglyceride",
+     "Phospholipid",
+     "Glycogen",
+     "Cholesterol"
+    ],
+    "a": 2
+   },
+   {
+    "q": "Which type of fatty acid is liquid at room temperature?",
+    "o": [
+     "Saturated",
+     "Unsaturated",
+     "Trans-configured",
+     "Very long-chain"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The head group of a phospholipid is typically:",
+    "o": [
+     "Nonpolar",
+     "Polar and hydrophilic",
+     "Neutral",
+     "Hydrophobic"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Which lipid component predominates in the myelin sheath?",
+    "o": [
+     "Sphingomyelin",
+     "Cholesterol",
+     "Lecithin",
+     "Triglyceride"
+    ],
+    "a": 0
+   },
+   {
+    "q": "The major structural difference between sphingolipids and phosphoglycerides is:",
+    "o": [
+     "Sphingolipids contain sphingosine instead of glycerol",
+     "Phosphoglycerides are unsaturated",
+     "Sphingolipids lack phosphate",
+     "Phosphoglycerides contain carbohydrate residues"
+    ],
+    "a": 0
+   },
+   {
+    "q": "Which molecule serves as the precursor of all steroids?",
+    "o": [
+     "Squalene",
+     "Palmitate",
+     "Glycerol",
+     "Stearate"
+    ],
+    "a": 0
+   },
+   {
+    "q": "Which functional group is present in all amino acids?",
+    "o": [
+     "Phosphate group",
+     "Carboxyl and amino groups",
+     "Carbonyl group",
+     "Hydroxyl group"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Peptide bonds form between:",
+    "o": [
+     "Two amino groups",
+     "Two carboxyl groups",
+     "An amino and a carboxyl group",
+     "Two side chains"
+    ],
+    "a": 2
+   },
+   {
+    "q": "The β-sheet is stabilized by:",
+    "o": [
+     "Disulfide bridges",
+     "Hydrogen bonds between polypeptide chains",
+     "Ionic interactions",
+     "Hydrophobic collapse"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Which level of protein structure consists of simple, repetitive folding patterns such as α-helices and β- sheets?",
+    "o": [
+     "Primary",
+     "Secondary",
+     "Tertiary",
+     "Quaternary"
+    ],
+    "a": 1
+   },
+   {
+    "q": "A disulfide bond forms between two residues of:",
+    "o": [
+     "Methionine",
+     "Cysteine",
+     "Serine",
+     "Tyrosine"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Which type of interaction mainly drives nonpolar amino acid side chains to the interior of a folded protein?",
+    "o": [
+     "Hydrogen bonds",
+     "Ionic interactions",
+     "Hydrophobic interactions",
+     "Disulfide bridges"
+    ],
+    "a": 2
+   },
+   {
+    "q": "The basic structural unit of collagen is made of:",
+    "o": [
+     "Three left-handed helices",
+     "Two supercoiled α helices",
+     "One β sheet",
+     "Four globular subunits"
+    ],
+    "a": 0
+   },
+   {
+    "q": "Collagen structure and stability depend largely on the presence of:",
+    "o": [
+     "Methionine and valine",
+     "Proline and glycine",
+     "Glycine and alanine",
+     "Cysteine and lysine"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The prosthetic group of hemoglobin responsible for oxygen binding is:",
+    "o": [
+     "NADH",
+     "FAD",
+     "Heme",
+     "Biotin"
+    ],
+    "a": 2
+   },
+   {
+    "q": "The oxygen dissociation curve of myoglobin is:",
+    "o": [
+     "Sigmoidal",
+     "Hyperbolic",
+     "Linear",
+     "Inverse"
+    ],
+    "a": 1
+   },
+   {
+    "q": "The cooperative binding of oxygen in hemoglobin is explained by:",
+    "o": [
+     "The Bohr effect",
+     "The T ↔ R conformational transition",
+     "Presence of Fe³⁺ ions",
+     "CO₂ transport"
+    ],
+    "a": 1
+   },
+   {
+    "q": "Enzyme activity is generally lost at high temperature because:",
+    "o": [
+     "Substrate concentration decreases",
+     "The enzyme denatures",
+     "pH increases",
+     "Cofactors are depleted"
+    ],
+    "a": 1
+   },
+   {
+    "q": "An enzyme that moves a phosphate group from ATP to another molecule belongs to which class?",
+    "o": [
+     "Hydrolase",
+     "Transferase",
+     "Oxidoreductase",
+     "Ligase"
+    ],
+    "a": 1
+   }
+  ]
+ }
+}
