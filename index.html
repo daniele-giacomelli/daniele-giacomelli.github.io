@@ -7,10 +7,14 @@
   <meta name="description" content="Portfolio di Daniele Giacomelli: junior software developer a Torino, studente di AI for Biomedicine and Healthcare all'Università di Torino.">
   <meta name="color-scheme" content="light dark">
   <link rel="canonical" href="https://daniele-giacomelli.github.io/">
+  <link rel="alternate" hreflang="it" href="https://daniele-giacomelli.github.io/">
+  <link rel="alternate" hreflang="en" href="https://daniele-giacomelli.github.io/en/">
+  <link rel="alternate" hreflang="x-default" href="https://daniele-giacomelli.github.io/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
   <meta property="og:type" content="website">
   <meta property="og:locale" content="it_IT">
+  <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="Daniele Giacomelli">
   <meta property="og:title" content="Daniele Giacomelli">
   <meta property="og:description" content="Junior software developer a Torino: sviluppo web e backend, magistrale in AI for Biomedicine and Healthcare.">
@@ -34,6 +38,7 @@
         <li><a href="#esperienza">esperienza</a></li>
         <li><a href="#contatti">contatti</a></li>
         <!-- <li><a href="appunti/">appunti</a></li> -->
+        <li><a class="lang" href="/en/" hreflang="en" lang="en" aria-label="English version">EN</a></li>
       </ul>
     </nav>
   </header>
@@ -153,38 +158,12 @@
   </main>
 
   <footer class="site-footer">
-    <p>© 2026 Daniele Giacomelli</p>  </footer>
+    <p>© 2026 Daniele Giacomelli</p>
+  </footer>
 
   <p class="secret" role="status" aria-live="polite" lang="en"></p>
   <div class="filo" aria-hidden="true"></div>
 
-  <script>
-    console.log(
-      "%cCiao! Se stai curiosando qui, il codice del sito è su github.com/daniele-giacomelli\n" +
-      "Da grandi poteri derivano grandi responsabilità. Anche in produzione.",
-      "font-family: monospace; font-size: 13px;"
-    );
-
-    // Il cursore dopo il nome, cliccato, diventa una chiave (e viceversa)
-    const segreto = document.querySelector(".secret");
-    let timerSegreto;
-    document.querySelector(".caret").addEventListener("click", (e) => {
-      const chiave = e.currentTarget.classList.toggle("chiave");
-      clearTimeout(timerSegreto);
-      segreto.classList.toggle("visibile", chiave);
-      if (!chiave) return;
-      segreto.textContent = "May your heart be your guiding key.";
-      timerSegreto = setTimeout(() => segreto.classList.remove("visibile"), 5000);
-    });
-
-    // Il filo che scende dall'alto mentre si scorre la pagina
-    const filo = document.querySelector(".filo");
-    const aggiornaFilo = () => {
-      const max = document.documentElement.scrollHeight - innerHeight;
-      filo.style.setProperty("--avanzamento", max > 0 ? scrollY / max : 0);
-    };
-    addEventListener("scroll", aggiornaFilo, { passive: true });
-    aggiornaFilo();
-  </script>
+  <script src="/script.js"></script>
 </body>
 </html>

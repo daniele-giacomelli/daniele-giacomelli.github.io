@@ -121,6 +121,9 @@ main,
   transition: opacity 0.15s;
 }
 .site-header ul a:hover::before { opacity: 1; }
+/* Il selettore di lingua è un'etichetta, non una sezione: niente "#" */
+.site-header ul a.lang { color: var(--fg); padding-left: 12px; border-left: 1px solid var(--line); }
+.site-header ul a.lang::before { content: none; }
 
 /* Intestazione: nome grande in monospace con il cursore che lampeggia */
 .hero { padding: 80px 0 40px; }
