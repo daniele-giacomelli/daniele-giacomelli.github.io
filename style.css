@@ -307,6 +307,8 @@ h2::before {
 }
 .note { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
 
+.availability { margin: 16px 0 0; }
+
 .links { list-style: none; padding: 0; margin: 16px 0 0; display: flex; gap: 28px; }
 .links a { font-family: var(--mono); font-size: 1rem; }
 .links .dim { font-family: var(--mono); font-size: 0.75rem; }
