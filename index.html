@@ -6,6 +6,7 @@
   <title>Daniele Giacomelli</title>
   <meta name="description" content="Portfolio di Daniele Giacomelli: junior software developer a Torino, studente di AI for Biomedicine and Healthcare all'Università di Torino.">
   <meta name="color-scheme" content="light dark">
+  <script src="/tema.js"></script>
   <link rel="canonical" href="https://daniele-giacomelli.github.io/">
   <link rel="alternate" hreflang="it" href="https://daniele-giacomelli.github.io/">
   <link rel="alternate" hreflang="en" href="https://daniele-giacomelli.github.io/en/">
@@ -26,45 +27,77 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="preload" href="/fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preload" href="/fonts/BodoniModa.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/BodoniModa-Italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>Java · Spring Boot</span><span>Node.js · Express</span><span>PyTorch</span><span>Computer vision</span><span>AI for Biomedicine &amp; Healthcare</span><span>Part-time · Torino o da remoto</span>
+      <span>Java · Spring Boot</span><span>Node.js · Express</span><span>PyTorch</span><span>Computer vision</span><span>AI for Biomedicine &amp; Healthcare</span><span>Part-time · Torino o da remoto</span>
+    </div>
+  </div>
+
   <header class="site-header">
     <nav aria-label="Navigazione principale">
-      <a class="brand" href="/"><span class="dim">~/</span>daniele-giacomelli</a>
-      <ul>
-        <li><a href="#progetti">progetti</a></li>
-        <li><a href="#esperienza">esperienza</a></li>
-        <li><a href="#contatti">contatti</a></li>
-        <li><a href="/appunti/">appunti</a></li>
-        <li><a class="lang" href="/en/" hreflang="en" lang="en" aria-label="English version">EN</a></li>
+      <a class="brand" href="/"><span class="brand-star" aria-hidden="true">✦</span><span><span class="dim">~/</span>daniele-giacomelli</span></a>
+      <ul class="nav-links">
+        <li><a href="#progetti"><sup>01</sup>progetti</a></li>
+        <li><a href="#esperienza"><sup>02</sup>esperienza</a></li>
+        <li><a href="#contatti"><sup>04</sup>contatti</a></li>
+        <li><a class="tab" href="/appunti/">appunti</a></li>
       </ul>
+      <div class="nav-tools">
+        <div class="lang-switch" role="group" aria-label="Lingua">
+          <a href="/" aria-current="page" lang="it">IT</a>
+          <a href="/en/" hreflang="en" lang="en" aria-label="English version">EN</a>
+        </div>
+        <button class="theme-toggle" type="button" aria-pressed="false"><span class="sr">Tema scuro</span><span class="knob" aria-hidden="true"></span></button>
+      </div>
     </nav>
   </header>
 
+
   <main id="contenuto">
-    <section class="hero">
-      <h1>Daniele<br>Giacomelli<span class="caret" aria-hidden="true"><svg class="senso" viewBox="0 0 12 10"><path d="M2 9 0.5 5M6 8.5V3.5M10 9l1.5-4"/></svg></span></h1>
-      <dl class="meta">
-        <div><dt>base</dt><dd>Torino</dd></div>
-        <div><dt>studio</dt><dd>Informatica, UniTo</dd></div>
-        <div><dt>adesso</dt><dd>AI for Biomedicine and Healthcare</dd></div>
-      </dl>
-      <p class="lead">
-        Junior software developer a Torino. Sviluppo web e backend (Java/Spring Boot,
-        Node.js, PHP). Sono laureando in Informatica all'Università di Torino, con una tesi
-        di deep learning su radiografie della mano, e ho iniziato la magistrale in
-        AI for Biomedicine and Healthcare.
-      </p>
+    <section class="hero cover">
+      <p class="issue"><span>N° <span data-numero>01</span></span><span data-stagione hidden></span><span>Portfolio</span><span>Torino, IT</span></p>
+
+      <div class="blob" aria-hidden="true"></div>
+      <span class="spark" aria-hidden="true" style="top: 22%; right: 30%;">✦</span>
+      <span class="spark" aria-hidden="true" style="top: 12%; right: 6%;">✦</span>
+      <span class="spark" aria-hidden="true" style="top: 52%; right: 3%;">✦</span>
+      <span class="sticker sticker-holo" aria-hidden="true">AI for<br>Biomedicine<br>&amp; Healthcare</span>
+      <span class="sticker sticker-star" aria-hidden="true">junior<br>dev</span>
+
+      <h1 class="name"><span class="first">Daniele</span><span class="last">Giacomelli<span class="caret" aria-hidden="true"><svg class="senso" viewBox="0 0 12 10"><path d="M2 9 0.5 5M6 8.5V3.5M10 9l1.5-4"/></svg></span></span></h1>
+
+      <div class="cover-grid">
+        <div class="window">
+          <div class="window-bar" aria-hidden="true"><span>about_me.txt</span><span><i></i><i></i><i></i></span></div>
+          <p class="lead">
+            Junior software developer a Torino. Sviluppo web e backend (Java/Spring Boot,
+            Node.js, PHP). Sono laureando in Informatica all'Università di Torino, con una tesi
+            di deep learning su radiografie della mano, e ho iniziato la magistrale in
+            AI for Biomedicine and Healthcare.
+          </p>
+        </div>
+        <dl class="meta">
+          <div><dt>base</dt><dd>Torino</dd></div>
+          <div><dt>studio</dt><dd>Informatica, UniTo</dd></div>
+          <div><dt>adesso</dt><dd>AI for Biomedicine and Healthcare</dd></div>
+        </dl>
+      </div>
     </section>
 
     <section id="progetti">
       <h2>Progetti</h2>
 
       <article class="card">
+        <p class="kicker">Tesi triennale · 2026</p>
         <h3>Stima della configurazione articolare della mano per la valutazione dell'età ossea pediatrica da immagini radiografiche</h3>
-        <p>
+        <p class="body">
           Tesi triennale in Informatica, sotto la guida del prof. Marco Grangetto. Ho replicato in PyTorch i primi
           due stadi della pipeline BoNet (hand detection con Faster R-CNN e stima di 17 keypoint
           anatomici con Keypoint R-CNN), progettato un'estensione dei keypoint a entrambe le mani
@@ -77,8 +110,9 @@
       </article>
 
       <article class="card">
+        <p class="kicker">Cliente · in produzione</p>
         <h3>Sito di Ghiprog</h3>
-        <p>
+        <p class="body">
           Sito bilingue (italiano/inglese) in produzione per uno studio di progettazione CAD,
           con pagine azienda, prodotto, news e contatti. Ho curato la SEO (URL puliti, sitemap XML
           con varianti linguistiche hreflang, robots.txt) e risolto un problema di accesso da alcuni

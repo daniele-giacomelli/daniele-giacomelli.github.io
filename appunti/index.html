@@ -6,6 +6,7 @@
   <title>Appunti · Daniele Giacomelli</title>
   <meta name="description" content="Appunti e quiz di Daniele Giacomelli per gli esami della magistrale in AI for Biomedicine and Healthcare all'Università di Torino.">
   <meta name="color-scheme" content="light dark">
+  <script src="/tema.js"></script>
   <link rel="canonical" href="https://daniele-giacomelli.github.io/appunti/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="/fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin>
@@ -15,13 +16,16 @@
   <a class="skip-link" href="#contenuto">Vai al contenuto</a>
   <header class="site-header">
     <nav aria-label="Navigazione principale">
-      <a class="brand" href="/"><span class="dim">~/</span>daniele-giacomelli</a>
-      <ul>
-        <li><a href="/#progetti">progetti</a></li>
-        <li><a href="/#esperienza">esperienza</a></li>
-        <li><a href="/#contatti">contatti</a></li>
-        <li><a href="/appunti/" aria-current="page">appunti</a></li>
+      <a class="brand" href="/"><span class="brand-star" aria-hidden="true">✦</span><span><span class="dim">~/</span>daniele-giacomelli</span></a>
+      <ul class="nav-links">
+        <li><a href="/#progetti"><sup>01</sup>progetti</a></li>
+        <li><a href="/#esperienza"><sup>02</sup>esperienza</a></li>
+        <li><a href="/#contatti"><sup>04</sup>contatti</a></li>
+        <li><a class="tab" href="/appunti/" aria-current="page">appunti</a></li>
       </ul>
+      <div class="nav-tools">
+        <button class="theme-toggle" type="button" aria-pressed="false"><span class="sr">Tema scuro</span><span class="knob" aria-hidden="true"></span></button>
+      </div>
     </nav>
   </header>
 

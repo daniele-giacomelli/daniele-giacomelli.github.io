@@ -6,6 +6,7 @@
   <title>Daniele Giacomelli</title>
   <meta name="description" content="Portfolio of Daniele Giacomelli: junior software developer in Turin, Master's student in AI for Biomedicine and Healthcare at the University of Turin.">
   <meta name="color-scheme" content="light dark">
+  <script src="/tema.js"></script>
   <link rel="canonical" href="https://daniele-giacomelli.github.io/en/">
   <link rel="alternate" hreflang="it" href="https://daniele-giacomelli.github.io/">
   <link rel="alternate" hreflang="en" href="https://daniele-giacomelli.github.io/en/">
@@ -26,45 +27,77 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="preload" href="/fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/BodoniModa.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/BodoniModa-Italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <a class="skip-link" href="#content">Skip to content</a>
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>Java · Spring Boot</span><span>Node.js · Express</span><span>PyTorch</span><span>Computer vision</span><span>AI for Biomedicine &amp; Healthcare</span><span>Part-time · Turin or remote</span>
+      <span>Java · Spring Boot</span><span>Node.js · Express</span><span>PyTorch</span><span>Computer vision</span><span>AI for Biomedicine &amp; Healthcare</span><span>Part-time · Turin or remote</span>
+    </div>
+  </div>
+
   <header class="site-header">
     <nav aria-label="Main navigation">
-      <a class="brand" href="/en/"><span class="dim">~/</span>daniele-giacomelli</a>
-      <ul>
-        <li><a href="#projects">projects</a></li>
-        <li><a href="#experience">experience</a></li>
-        <li><a href="#contact">contact</a></li>
-        <li><a href="/appunti/" hreflang="it">notes</a></li>
-        <li><a class="lang" href="/" hreflang="it" lang="it" aria-label="Versione italiana">IT</a></li>
+      <a class="brand" href="/en/"><span class="brand-star" aria-hidden="true">✦</span><span><span class="dim">~/</span>daniele-giacomelli</span></a>
+      <ul class="nav-links">
+        <li><a href="#projects"><sup>01</sup>projects</a></li>
+        <li><a href="#experience"><sup>02</sup>experience</a></li>
+        <li><a href="#contact"><sup>04</sup>contact</a></li>
+        <li><a class="tab" href="/appunti/" hreflang="it">notes</a></li>
       </ul>
+      <div class="nav-tools">
+        <div class="lang-switch" role="group" aria-label="Language">
+          <a href="/" hreflang="it" lang="it" aria-label="Versione italiana">IT</a>
+          <a href="/en/" aria-current="page" lang="en">EN</a>
+        </div>
+        <button class="theme-toggle" type="button" aria-pressed="false"><span class="sr">Dark theme</span><span class="knob" aria-hidden="true"></span></button>
+      </div>
     </nav>
   </header>
 
+
   <main id="content">
-    <section class="hero">
-      <h1>Daniele<br>Giacomelli<span class="caret" aria-hidden="true"><svg class="senso" viewBox="0 0 12 10"><path d="M2 9 0.5 5M6 8.5V3.5M10 9l1.5-4"/></svg></span></h1>
-      <dl class="meta">
-        <div><dt>based in</dt><dd>Turin, Italy</dd></div>
-        <div><dt>studies</dt><dd>Computer Science, UniTo</dd></div>
-        <div><dt>now</dt><dd>AI for Biomedicine and Healthcare</dd></div>
-      </dl>
-      <p class="lead">
-        Junior software developer in Turin. I build web and backend applications (Java/Spring Boot,
-        Node.js, PHP). I'm finishing my Bachelor's in Computer Science at the University of Turin,
-        with a deep learning thesis on hand X&#8209;rays, and I've started the Master's in
-        AI for Biomedicine and Healthcare.
-      </p>
+    <section class="hero cover">
+      <p class="issue"><span>No. <span data-numero>01</span></span><span data-stagione hidden></span><span>Portfolio</span><span>Turin, IT</span></p>
+
+      <div class="blob" aria-hidden="true"></div>
+      <span class="spark" aria-hidden="true" style="top: 22%; right: 30%;">✦</span>
+      <span class="spark" aria-hidden="true" style="top: 12%; right: 6%;">✦</span>
+      <span class="spark" aria-hidden="true" style="top: 52%; right: 3%;">✦</span>
+      <span class="sticker sticker-holo" aria-hidden="true">AI for<br>Biomedicine<br>&amp; Healthcare</span>
+      <span class="sticker sticker-star" aria-hidden="true">junior<br>dev</span>
+
+      <h1 class="name"><span class="first">Daniele</span><span class="last">Giacomelli<span class="caret" aria-hidden="true"><svg class="senso" viewBox="0 0 12 10"><path d="M2 9 0.5 5M6 8.5V3.5M10 9l1.5-4"/></svg></span></span></h1>
+
+      <div class="cover-grid">
+        <div class="window">
+          <div class="window-bar" aria-hidden="true"><span>about_me.txt</span><span><i></i><i></i><i></i></span></div>
+          <p class="lead">
+            Junior software developer in Turin. I build web and backend applications (Java/Spring Boot,
+            Node.js, PHP). I'm finishing my Bachelor's in Computer Science at the University of Turin,
+            with a deep learning thesis on hand X&#8209;rays, and I've started the Master's in
+            AI for Biomedicine and Healthcare.
+          </p>
+        </div>
+        <dl class="meta">
+          <div><dt>based in</dt><dd>Turin, Italy</dd></div>
+          <div><dt>studies</dt><dd>Computer Science, UniTo</dd></div>
+          <div><dt>now</dt><dd>AI for Biomedicine and Healthcare</dd></div>
+        </dl>
+      </div>
     </section>
 
     <section id="projects">
       <h2>Projects</h2>
 
       <article class="card">
+        <p class="kicker">Bachelor's thesis · 2026</p>
         <h3>Hand joint configuration estimation for pediatric bone age assessment from X&#8209;ray images</h3>
-        <p>
+        <p class="body">
           Bachelor's thesis in Computer Science (written in Italian), supervised by Prof. Marco Grangetto.
           I replicated in PyTorch the first two stages of the BoNet pipeline (hand detection with
           Faster R-CNN and estimation of 17 anatomical keypoints with Keypoint R-CNN), designed an
@@ -77,8 +110,9 @@
       </article>
 
       <article class="card">
+        <p class="kicker">Client · in production</p>
         <h3>Ghiprog website</h3>
-        <p>
+        <p class="body">
           Bilingual (Italian/English) production website for a CAD design studio, with company,
           product, news and contact pages. I took care of SEO (clean URLs, XML sitemap with hreflang
           language variants, robots.txt) and fixed an access problem on some devices by analyzing
