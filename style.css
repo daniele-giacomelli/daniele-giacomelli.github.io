@@ -40,9 +40,9 @@
   --chrome: linear-gradient(180deg, #ffffff 0%, #d5dae3 42%, #8f98aa 50%, #dfe3ea 62%, #ffffff 100%);
   --shadow: 6px 6px 0 var(--accent);
   --on-holo: #10182b;       /* testo sopra olografico e lime: sempre scuro */
+  --icona-sole: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4.5'/%3E%3Cpath d='M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1'/%3E%3C/svg%3E");
+  --icona-luna: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20.5 14.8A8.8 8.8 0 0 1 9.2 3.5a8.8 8.8 0 1 0 11.3 11.3z'/%3E%3C/svg%3E");
   --ticker-bg: var(--accent);
-  --grain-blend: multiply;
-  --grain-opacity: 0.07;
   /* Cromo chiaro: il nome navy deve restare leggibile anche dove passa sopra la goccia */
   --blob-bg:
     radial-gradient(circle at 32% 28%, #ffffff 0 8%, transparent 22%),
@@ -102,19 +102,11 @@ body::before {
 
 /* La goccia e gli adesivi possono sporgere dal bordo: niente scroll orizzontale */
 html, body { overflow-x: clip; }
-/* Grana da carta stampata */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  pointer-events: none;
-  opacity: var(--grain-opacity);
-  mix-blend-mode: var(--grain-blend);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
 
 ::selection { background: var(--hot); color: var(--on-holo); }
+/* Anche le parti che il browser disegna da sé seguono la palette */
+html { scrollbar-color: var(--accent) transparent; }
+input, textarea { caret-color: var(--accent); }
 
 a {
   color: inherit;
@@ -197,13 +189,14 @@ main,
   list-style: none;
 }
 .nav-links a {
-  padding: 2px 3px;
+  display: inline-block;
+  padding: 4px 4px; /* almeno 24px di altezza: bersaglio comodo anche al tocco */
   text-decoration: none;
-  /* L'evidenziatore copre tutta l'altezza, così il testo scuro resta leggibile anche nel tema scuro */
-  background: linear-gradient(var(--hot), var(--hot)) no-repeat 0 0 / 0% 100%;
-  transition: background-size 0.25s;
+  /* L'evidenziatore copre tutta la voce e compare in dissolvenza insieme al cambio di colore del testo:
+     così non c'è mai testo scuro su fondo scuro, nemmeno a metà transizione */
+  transition: background-color 0.15s, color 0.15s;
 }
-.nav-links a:hover, .nav-links a[aria-current] { background-color: transparent; background-size: 100% 100%; color: var(--on-holo); }
+.nav-links a:hover, .nav-links a[aria-current] { background-color: var(--hot); color: var(--on-holo); }
 .nav-links sup { margin-right: 3px; font-size: 0.65em; color: var(--accent); }
 .nav-links a:hover sup, .nav-links a[aria-current] sup { color: var(--on-holo); }
 /* Gli appunti sono un'altra area: linguetta olografica, come un adesivo */
@@ -223,7 +216,7 @@ main,
 
 /* Lingua: pillola a due posizioni */
 .lang-switch { display: inline-flex; border: 1.5px solid var(--fg); border-radius: 999px; overflow: hidden; }
-.lang-switch a { padding: 1px 9px; text-decoration: none; font-size: 0.75rem; }
+.lang-switch a { padding: 4px 10px; text-decoration: none; font-size: 0.75rem; line-height: 1.3; }
 .lang-switch a[aria-current] { background: var(--fg); color: var(--bg); }
 .lang-switch a:not([aria-current]):hover { background: var(--hot); color: var(--on-holo); }
 
@@ -255,10 +248,21 @@ main,
   line-height: 1;
   transition: transform 0.25s;
 }
-.theme-toggle .knob::after { content: "☀"; }
+/* Sole e luna disegnati in SVG (non caratteri di testo), con lo stesso tratto */
+.theme-toggle .knob::after {
+  content: "";
+  width: 11px;
+  height: 11px;
+  background: #10182b;
+  -webkit-mask: var(--icona-sole) center / contain no-repeat;
+  mask: var(--icona-sole) center / contain no-repeat;
+}
 .theme-toggle[aria-pressed="true"] { background: #17365d; }
 .theme-toggle[aria-pressed="true"] .knob { transform: translateX(24px); }
-.theme-toggle[aria-pressed="true"] .knob::after { content: "☾"; }
+.theme-toggle[aria-pressed="true"] .knob::after {
+  -webkit-mask-image: var(--icona-luna);
+  mask-image: var(--icona-luna);
+}
 
 /* Nastro che scorre sotto la testata */
 .ticker {
@@ -482,7 +486,7 @@ h2::before {
 .card:nth-of-type(odd) { transform: rotate(-0.4deg); }
 .kicker {
   display: inline-block;
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   padding: 2px 8px;
   background: var(--holo);
   border: 1px solid var(--fg);
@@ -492,7 +496,7 @@ h2::before {
   letter-spacing: 0.1em;
 }
 .card h3 {
-  margin: 0 0 14px;
+  margin: 0 0 10px;
   font-family: var(--serif);
   font-optical-sizing: auto;
   font-size: clamp(1.4rem, 2.6vw, 2rem);
@@ -616,6 +620,49 @@ h2::before {
 }
 .links a[download]:hover { background: var(--holo); }
 .links a[download]:active { box-shadow: 1px 1px 0 var(--fg); transform: translate(2px, 2px); }
+
+/* ---------- Contatti: a sinistra disponibilità e link, a destra il modulo come finestra ---------- */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 5fr 6fr;
+  gap: 40px 56px;
+  align-items: start;
+}
+.contact-form { transform: rotate(0.6deg); }
+.contact-fields { display: grid; gap: 14px; padding: 18px 20px 20px; }
+.field { display: grid; gap: 4px; }
+.field label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.field label .dim { text-transform: none; letter-spacing: 0; }
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 9px 11px;
+  font: inherit;
+  color: var(--fg);
+  background: var(--bg);
+  border: 2px solid var(--fg);
+  border-radius: 0;
+  transition: box-shadow 0.15s;
+}
+.field textarea { resize: vertical; min-height: 120px; }
+.field input:focus-visible,
+.field textarea:focus-visible { outline: none; box-shadow: 4px 4px 0 var(--accent); }
+.field [aria-invalid="true"] { border-color: var(--bad); box-shadow: 4px 4px 0 var(--bad); }
+.field-error { margin: 0; min-height: 0; font-size: 0.85rem; color: var(--bad); }
+.field-error:empty { display: none; }
+.trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.contact-fields .note { margin: 0; }
+.contact-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.contact-actions .btn { min-height: 44px; }
+.btn:disabled { cursor: progress; }
+.form-status { margin: 0; font-weight: 600; }
+.form-status[data-tipo="ok"] { color: var(--ok); }
+.form-status[data-tipo="errore"] { color: var(--bad); }
 
 .site-footer {
   font-family: var(--mono);
@@ -852,6 +899,8 @@ h2::before {
 /* ---------- Schermi stretti ---------- */
 @media (max-width: 860px) {
   .cover-grid { grid-template-columns: 1fr; gap: 28px; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .contact-form { transform: none; }
   .blob { width: 56vw; right: -18vw; top: 70px; }
   .sticker-holo { width: 104px; height: 104px; font-size: 0.6rem; }
   .sticker-star { width: 92px; height: 92px; font-size: 0.62rem; }
@@ -902,8 +951,6 @@ h2::before {
     --bad: #f08a80;
     --bad-soft: #3a1c19;
     --ticker-bg: #17365d;
-    --grain-blend: screen;
-    --grain-opacity: 0.05;
     /* Goccia color grafite, così il nome azzurro resta leggibile sopra */
     --blob-bg:
       radial-gradient(circle at 32% 28%, #9aa6bf 0 6%, transparent 20%),
@@ -932,8 +979,6 @@ h2::before {
   --bad: #f08a80;
   --bad-soft: #3a1c19;
   --ticker-bg: #17365d;
-  --grain-blend: screen;
-  --grain-opacity: 0.05;
   --blob-bg:
     radial-gradient(circle at 32% 28%, #9aa6bf 0 6%, transparent 20%),
     radial-gradient(circle at 40% 40%, #3a4560, #1d2640 45%, #0f1528 80%);

@@ -95,8 +95,8 @@
       <h2>Projects</h2>
 
       <article class="card">
-        <p class="kicker">Bachelor's thesis · 2026</p>
         <h3>Hand joint configuration estimation for pediatric bone age assessment from X&#8209;ray images</h3>
+        <p class="kicker">Bachelor's thesis · 2026</p>
         <p class="body">
           Bachelor's thesis in Computer Science (written in Italian), supervised by Prof. Marco Grangetto.
           I replicated in PyTorch the first two stages of the BoNet pipeline (hand detection with
@@ -110,8 +110,8 @@
       </article>
 
       <article class="card">
-        <p class="kicker">Client · in production</p>
         <h3>Ghiprog website</h3>
+        <p class="kicker">Client · in production</p>
         <p class="body">
           Bilingual (Italian/English) production website for a CAD design studio, with company,
           product, news and contact pages. I took care of SEO (clean URLs, XML sitemap with hreflang
@@ -179,14 +179,46 @@
 
     <section id="contact">
       <h2>Contact</h2>
-      <p class="availability">
-        I'm looking for a part-time position that fits around my university schedule, in Turin or remote.
-      </p>
-      <ul class="links">
-        <li><a href="https://www.linkedin.com/in/daniele-giacomelli">LinkedIn</a></li>
-        <li><a href="https://github.com/daniele-giacomelli">GitHub</a></li>
-        <li><a href="/CV_Daniele_Giacomelli.pdf" download hreflang="it">Download CV</a> <span class="dim">(in Italian, PDF, 120 KB)</span></li>
-      </ul>
+      <div class="contact-grid">
+        <div>
+          <p class="availability">
+            I'm looking for a part-time position that fits around my university schedule, in Turin or remote.
+          </p>
+          <ul class="links">
+            <li><a href="https://www.linkedin.com/in/daniele-giacomelli">LinkedIn</a></li>
+            <li><a href="https://github.com/daniele-giacomelli">GitHub</a></li>
+            <li><a href="/CV_Daniele_Giacomelli.pdf" download hreflang="it">Download CV</a> <span class="dim">(in Italian, PDF, 120 KB)</span></li>
+          </ul>
+        </div>
+
+        <!-- data-chiave: the public Web3Forms access key (web3forms.com), meant to live in the HTML -->
+        <form class="window contact-form" data-chiave="1d98dc18-6049-4340-8c17-a0657fb7b2f4" novalidate aria-labelledby="form-title">
+          <div class="window-bar"><span id="form-title">new_message.txt</span><span aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="contact-fields">
+            <div class="field">
+              <label for="c-name">Name</label>
+              <input id="c-name" name="name" type="text" autocomplete="name" required maxlength="100" aria-describedby="c-name-error">
+              <p class="field-error" id="c-name-error"></p>
+            </div>
+            <div class="field">
+              <label for="c-email">Email <span class="dim">(so I can reply)</span></label>
+              <input id="c-email" name="email" type="email" autocomplete="email" required maxlength="200" aria-describedby="c-email-error">
+              <p class="field-error" id="c-email-error"></p>
+            </div>
+            <div class="field">
+              <label for="c-message">Message</label>
+              <textarea id="c-message" name="message" rows="5" required minlength="10" maxlength="4000" aria-describedby="c-message-error"></textarea>
+              <p class="field-error" id="c-message-error"></p>
+            </div>
+            <input class="trap" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <p class="note">Your message goes through Web3Forms, which forwards it to my email. I only use your details to reply.</p>
+            <div class="contact-actions">
+              <button class="btn" type="submit">Send message</button>
+              <p class="form-status" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+        </form>
+      </div>
     </section>
   </main>
 

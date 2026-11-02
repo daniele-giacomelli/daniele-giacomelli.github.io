@@ -42,6 +42,11 @@ console.log(
     });
   }, { rootMargin: "-45% 0px -50% 0px" });
   sezioni.forEach((s) => osservatore.observe(s));
+  // L'ultima sezione è corta e non arriva a metà schermo: in fondo alla pagina la si evidenzia comunque
+  addEventListener("scroll", () => {
+    if (innerHeight + scrollY < document.documentElement.scrollHeight - 4) return;
+    voci.forEach((a, i) => (i === voci.length - 1 ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
+  }, { passive: true });
 })();
 
 // Il cursore dopo il nome, cliccato, diventa una chiave (e viceversa)
@@ -64,3 +69,91 @@ const aggiornaFilo = () => {
 };
 addEventListener("scroll", aggiornaFilo, { passive: true });
 aggiornaFilo();
+
+// Modulo di contatto: invia a Web3Forms, che inoltra il messaggio per email.
+// Il controllo dei campi è nostro (novalidate) per avere messaggi chiari nella lingua della pagina.
+(() => {
+  const modulo = document.querySelector(".contact-form");
+  if (!modulo) return;
+  const stato = modulo.querySelector(".form-status");
+  const pulsante = modulo.querySelector('button[type="submit"]');
+  const testoPulsante = pulsante.textContent;
+  const t = inglese
+    ? {
+        nome: "Tell me your name.",
+        email: "I need an email address to reply, like name@example.com.",
+        messaggio: "Write at least a couple of words (10 characters).",
+        invio: "Sending…",
+        ok: "Message sent. I'll reply to the address you gave me.",
+        errore: "It didn't go through. Try again in a moment, or write to me on LinkedIn.",
+        spento: "The form isn't active yet. For now, you can reach me on LinkedIn.",
+      }
+    : {
+        nome: "Scrivimi il tuo nome.",
+        email: "Mi serve un indirizzo email per risponderti, tipo nome@esempio.it.",
+        messaggio: "Scrivi almeno un paio di parole (10 caratteri).",
+        invio: "Invio in corso…",
+        ok: "Messaggio inviato. Ti rispondo all'indirizzo che mi hai lasciato.",
+        errore: "Non è partito. Riprova tra poco, oppure scrivimi su LinkedIn.",
+        spento: "Il modulo non è ancora attivo. Per ora puoi scrivermi su LinkedIn.",
+      };
+  const campi = {
+    name: [modulo.elements.name, (v) => v.trim().length > 0, t.nome],
+    email: [modulo.elements.email, (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()), t.email],
+    message: [modulo.elements.message, (v) => v.trim().length >= 10, t.messaggio],
+  };
+  const segna = (campo, errore) => {
+    const avviso = document.getElementById(campo.getAttribute("aria-describedby"));
+    campo.setAttribute("aria-invalid", String(Boolean(errore)));
+    avviso.textContent = errore || "";
+  };
+  // Dopo il primo errore il campo si ricontrolla mentre si scrive, così l'avviso sparisce appena è a posto
+  Object.values(campi).forEach(([campo, valido, errore]) => {
+    campo.addEventListener("input", () => {
+      if (campo.getAttribute("aria-invalid") === "true") segna(campo, valido(campo.value) ? "" : errore);
+    });
+  });
+  const mostra = (testo, tipo) => { stato.textContent = testo; stato.dataset.tipo = tipo || ""; };
+
+  modulo.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    let primo = null;
+    Object.values(campi).forEach(([campo, valido, errore]) => {
+      const ok = valido(campo.value);
+      segna(campo, ok ? "" : errore);
+      if (!ok && !primo) primo = campo;
+    });
+    if (primo) { primo.focus(); mostra(""); return; }
+    if (modulo.elements.botcheck.checked) return; // un bot: non inviamo e non diciamo niente
+    if (!modulo.dataset.chiave) { mostra(t.spento, "errore"); return; }
+
+    pulsante.disabled = true;
+    pulsante.textContent = t.invio;
+    mostra("");
+    try {
+      const risposta = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: modulo.dataset.chiave,
+          subject: inglese ? "New message from the portfolio (EN)" : "Nuovo messaggio dal portfolio",
+          from_name: "Portfolio",
+          name: campi.name[0].value.trim(),
+          email: campi.email[0].value.trim(),
+          message: campi.message[0].value.trim(),
+          botcheck: false,
+        }),
+      });
+      const dati = await risposta.json().catch(() => ({}));
+      if (!risposta.ok || !dati.success) throw new Error(dati.message || `HTTP ${risposta.status}`);
+      modulo.reset();
+      mostra(t.ok, "ok");
+    } catch (errore) {
+      console.error("Modulo di contatto:", errore);
+      mostra(t.errore, "errore");
+    } finally {
+      pulsante.disabled = false;
+      pulsante.textContent = testoPulsante;
+    }
+  });
+})();

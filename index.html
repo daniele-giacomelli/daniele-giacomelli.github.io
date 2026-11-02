@@ -95,8 +95,8 @@
       <h2>Progetti</h2>
 
       <article class="card">
-        <p class="kicker">Tesi triennale · 2026</p>
         <h3>Stima della configurazione articolare della mano per la valutazione dell'età ossea pediatrica da immagini radiografiche</h3>
+        <p class="kicker">Tesi triennale · 2026</p>
         <p class="body">
           Tesi triennale in Informatica, sotto la guida del prof. Marco Grangetto. Ho replicato in PyTorch i primi
           due stadi della pipeline BoNet (hand detection con Faster R-CNN e stima di 17 keypoint
@@ -110,8 +110,8 @@
       </article>
 
       <article class="card">
-        <p class="kicker">Cliente · in produzione</p>
         <h3>Sito di Ghiprog</h3>
+        <p class="kicker">Cliente · in produzione</p>
         <p class="body">
           Sito bilingue (italiano/inglese) in produzione per uno studio di progettazione CAD,
           con pagine azienda, prodotto, news e contatti. Ho curato la SEO (URL puliti, sitemap XML
@@ -179,15 +179,47 @@
 
     <section id="contatti">
       <h2>Contatti</h2>
-      <p class="availability">
-        Cerco un'opportunità part-time compatibile con gli orari universitari, a Torino o da remoto.
-      </p>
-      <ul class="links">
-        <li><a href="https://www.linkedin.com/in/daniele-giacomelli">LinkedIn</a></li>
-        <li><a href="https://github.com/daniele-giacomelli">GitHub</a></li>
-        <!-- <li><a href="mailto:LA_TUA_EMAIL">Email</a></li> -->
-        <li><a href="CV_Daniele_Giacomelli.pdf" download>Scarica il CV</a> <span class="dim">(PDF, 120 KB)</span></li>
-      </ul>
+      <div class="contact-grid">
+        <div>
+          <p class="availability">
+            Cerco un'opportunità part-time compatibile con gli orari universitari, a Torino o da remoto.
+          </p>
+          <ul class="links">
+            <li><a href="https://www.linkedin.com/in/daniele-giacomelli">LinkedIn</a></li>
+            <li><a href="https://github.com/daniele-giacomelli">GitHub</a></li>
+            <li><a href="CV_Daniele_Giacomelli.pdf" download>Scarica il CV</a> <span class="dim">(PDF, 120 KB)</span></li>
+          </ul>
+        </div>
+
+        <!-- data-chiave: la chiave di accesso pubblica di Web3Forms (web3forms.com), pensata per stare nell'HTML -->
+        <form class="window contact-form" data-chiave="1d98dc18-6049-4340-8c17-a0657fb7b2f4" novalidate aria-labelledby="modulo-titolo">
+          <div class="window-bar"><span id="modulo-titolo">nuovo_messaggio.txt</span><span aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="contact-fields">
+            <div class="field">
+              <label for="c-nome">Nome</label>
+              <input id="c-nome" name="name" type="text" autocomplete="name" required maxlength="100" aria-describedby="c-nome-errore">
+              <p class="field-error" id="c-nome-errore"></p>
+            </div>
+            <div class="field">
+              <label for="c-email">Email <span class="dim">(per risponderti)</span></label>
+              <input id="c-email" name="email" type="email" autocomplete="email" required maxlength="200" aria-describedby="c-email-errore">
+              <p class="field-error" id="c-email-errore"></p>
+            </div>
+            <div class="field">
+              <label for="c-messaggio">Messaggio</label>
+              <textarea id="c-messaggio" name="message" rows="5" required minlength="10" maxlength="4000" aria-describedby="c-messaggio-errore"></textarea>
+              <p class="field-error" id="c-messaggio-errore"></p>
+            </div>
+            <!-- Trappola per i bot: invisibile alle persone, i programmi automatici la spuntano -->
+            <input class="trap" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <p class="note">Il messaggio passa da Web3Forms, che me lo inoltra per email. Uso i tuoi dati solo per risponderti.</p>
+            <div class="contact-actions">
+              <button class="btn" type="submit">Invia messaggio</button>
+              <p class="form-status" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+        </form>
+      </div>
     </section>
   </main>
 
