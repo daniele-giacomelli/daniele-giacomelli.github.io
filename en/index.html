@@ -6,7 +6,7 @@
   <title>Daniele Giacomelli</title>
   <meta name="description" content="Portfolio of Daniele Giacomelli: junior software developer in Turin, Master's student in AI for Biomedicine and Healthcare at the University of Turin.">
   <meta name="color-scheme" content="light dark">
-  <script src="/tema.js"></script>
+  <script src="/tema.js?v=2026110208"></script>
   <link rel="canonical" href="https://daniele-giacomelli.github.io/en/">
   <link rel="alternate" hreflang="it" href="https://daniele-giacomelli.github.io/">
   <link rel="alternate" hreflang="en" href="https://daniele-giacomelli.github.io/en/">
@@ -27,19 +27,12 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="preload" href="/fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/BodoniModa.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/BodoniModa-Italic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/style.css">
+  <link rel="preload" href="/fonts/Fraunces.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/Fraunces-Italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/style.css?v=2026110208">
 </head>
 <body>
   <a class="skip-link" href="#content">Skip to content</a>
-  <div class="ticker" aria-hidden="true">
-    <div class="ticker-track">
-      <span>Java · Spring Boot</span><span>Node.js · Express</span><span>PyTorch</span><span>Computer vision</span><span>AI for Biomedicine &amp; Healthcare</span><span>Part-time · Turin or remote</span>
-      <span>Java · Spring Boot</span><span>Node.js · Express</span><span>PyTorch</span><span>Computer vision</span><span>AI for Biomedicine &amp; Healthcare</span><span>Part-time · Turin or remote</span>
-    </div>
-  </div>
-
   <header class="site-header">
     <nav aria-label="Main navigation">
       <a class="brand" href="/en/"><span class="brand-star" aria-hidden="true">✦</span><span><span class="dim">~/</span>daniele-giacomelli</span></a>
@@ -62,7 +55,7 @@
 
   <main id="content">
     <section class="hero cover">
-      <p class="issue"><span>No. <span data-numero>01</span></span><span data-stagione hidden></span><span>Portfolio</span><span>Turin, IT</span></p>
+      <p class="issue"><span>No. <span data-numero>01</span></span><span>Portfolio</span><span>Turin, IT</span></p>
 
       <div class="blob" aria-hidden="true"></div>
       <span class="spark" aria-hidden="true" style="top: 22%; right: 30%;">✦</span>
@@ -82,6 +75,7 @@
             with a deep learning thesis on hand X&#8209;rays, and I'm now doing a Master's in
             AI for Biomedicine and Healthcare.
           </p>
+          <p class="window-actions"><a class="btn" href="#contact">Write to me</a></p>
         </div>
         <dl class="meta">
           <div><dt>based in</dt><dd>Turin, Italy</dd></div>
@@ -94,34 +88,57 @@
     <section id="projects">
       <h2>Projects</h2>
 
-      <article class="card">
-        <h3>Hand joint configuration estimation for pediatric bone age assessment from X&#8209;ray images</h3>
-        <p class="kicker">Bachelor's thesis · 2026</p>
-        <p class="body">
-          Bachelor's thesis in Computer Science (written in Italian), supervised by Prof. Marco Grangetto.
-          I replicated in PyTorch the first two stages of the BoNet pipeline (hand detection with
-          Faster R-CNN and estimation of 17 anatomical keypoints with Keypoint R-CNN), designed an
-          extension of the keypoints to both hands through image mirroring, and wrote the training
-          and evaluation scripts, run on a server with NVIDIA GPUs.
-        </p>
-        <ul class="tags" aria-label="Technologies">
-          <li>Python</li><li>PyTorch</li><li>torchvision</li><li>Computer vision</li>
-        </ul>
+      <article class="card progetto">
+        <header class="card-head">
+          <h3>Hand joint configuration estimation for pediatric bone age assessment from X&#8209;ray images</h3>
+          <p class="kicker">Bachelor's thesis · 2026</p>
+        </header>
+        <div class="card-text">
+          <p class="body">
+            Bachelor's thesis in Computer Science (written in Italian), supervised by Prof. Marco Grangetto.
+            I replicated in PyTorch the first two stages of the BoNet pipeline (hand detection with
+            Faster R-CNN and estimation of 17 anatomical keypoints with Keypoint R-CNN), designed an
+            extension of the keypoints to both hands through image mirroring, and wrote the training
+            and evaluation scripts, run on a server with NVIDIA GPUs.
+          </p>
+          <ul class="tags" aria-label="Technologies">
+            <li>Python</li><li>PyTorch</li><li>torchvision</li><li>Computer vision</li>
+          </ul>
+        </div>
+        <a class="window shot" href="/tesi/Giacomelli_Daniele_tesi_triennale.pdf" target="_blank" rel="noopener" aria-label="Open the thesis PDF (1.2 MB, in Italian) in a new tab">
+          <span class="window-bar" aria-hidden="true"><span>tesi_triennale.pdf · 1.2 MB</span><span><i></i><i></i><i></i></span></span>
+          <span class="copertina" aria-hidden="true">
+            <span class="cop-sopra">University of Turin</span>
+            <span class="cop-titolo">Bachelor's thesis</span>
+            <span class="cop-sotto">Computer Science · 54 pages · PDF</span>
+          </span>
+          <span class="azione" aria-hidden="true">Open the PDF ↗</span>
+        </a>
       </article>
 
-      <article class="card">
-        <h3>Ghiprog website</h3>
-        <p class="kicker">Client · in production</p>
-        <p class="body">
-          Bilingual (Italian/English) production website for a CAD design studio, with company,
-          product, news and contact pages. I took care of SEO (clean URLs, XML sitemap with hreflang
-          language variants, robots.txt) and fixed an access problem on some devices by analyzing
-          the server's HTTP headers.
-        </p>
-        <ul class="tags" aria-label="Technologies">
-          <li>PHP</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>SEO</li>
-        </ul>
-        <p><a href="https://ghiprog.it">ghiprog.it</a></p>
+      <article class="card progetto">
+        <header class="card-head">
+          <h3>KGM1 website · GHIVA</h3>
+          <p class="kicker">Client · in production</p>
+        </header>
+        <div class="card-text">
+          <p class="body">
+            Complete redesign of GHIVA's website, dedicated to KGM1, an airborne wind energy research project.
+            I rebuilt the site in PHP, bilingual and responsive, and I handle its maintenance and news updates.
+            I also took care of SEO (clean URLs, per-page titles and previews, a sitemap with hreflang, indexing
+            on Google and Bing) and found why the site wouldn't open on phones: they opened links over HTTPS,
+            but the certificate on the server wasn't active.
+          </p>
+          <ul class="tags" aria-label="Technologies">
+            <li>PHP</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>SEO</li><li>IIS</li>
+          </ul>
+        </div>
+        <a class="window shot" href="https://ghiprog.it" target="_blank" rel="noopener" aria-label="Open ghiprog.it in a new tab">
+          <span class="window-bar" aria-hidden="true"><span>ghiprog.it</span><span><i></i><i></i><i></i></span></span>
+          <img src="/img/ghiprog.webp" width="1200" height="607" loading="lazy" decoding="async"
+               alt="The ghiprog.it home page: the KGM1 project, “Airborne Wind Energy for Off-Grid Applications”, over a photo of the prototype">
+          <span class="azione" aria-hidden="true">Open the site ↗</span>
+        </a>
       </article>
     </section>
 
@@ -129,10 +146,10 @@
       <h2>Experience and education</h2>
       <ul class="timeline">
         <li>
-          <span class="when">Jan 2026 – present</span>
+          <span class="when">2026</span>
           <div>
-            <strong>Freelance web developer, GHIVA Progettazione CAD</strong>
-            <p>Development and maintenance of ghiprog.it, SEO and server-side troubleshooting.</p>
+            <strong>Web developer (occasional collaboration), GHIVA Progettazione CAD</strong>
+            <p>Redesigned ghiprog.it, handled its SEO and diagnosed a server-side issue.</p>
           </div>
         </li>
         <li>
@@ -187,7 +204,7 @@
           <ul class="links">
             <li><a href="https://www.linkedin.com/in/daniele-giacomelli">LinkedIn</a></li>
             <li><a href="https://github.com/daniele-giacomelli">GitHub</a></li>
-            <li><a href="/CV_Daniele_Giacomelli.pdf" download hreflang="it">Download CV</a> <span class="dim">(in Italian, PDF, 120 KB)</span></li>
+            <li><a href="/CV_Daniele_Giacomelli.pdf" download hreflang="it">Download CV</a> <span class="dim">(in Italian, PDF, 145 KB)</span></li>
           </ul>
         </div>
 
@@ -229,6 +246,6 @@
   <p class="secret" role="status" aria-live="polite"></p>
   <div class="filo" aria-hidden="true"></div>
 
-  <script src="/script.js"></script>
+  <script src="/script.js?v=2026110208"></script>
 </body>
 </html>

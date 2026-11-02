@@ -10,43 +10,32 @@ console.log(
   "font-family: monospace; font-size: 13px;"
 );
 
-// Testata: stagione e numero del "fascicolo" si aggiornano da soli.
-// Il N° 01 è l'autunno 2026; poi cresce di uno a ogni stagione (primavera da marzo, estate da giugno, autunno da settembre, inverno da dicembre)
+// Testata: il numero del "fascicolo" cresce da solo di uno a ogni stagione.
+// Il N° 01 è l'autunno 2026 (primavera da marzo, estate da giugno, autunno da settembre, inverno da dicembre)
 (() => {
   const oggi = new Date();
   const trimestre = (anno, mese) => Math.floor((anno * 12 + mese - 2) / 3);
-  const corrente = trimestre(oggi.getFullYear(), oggi.getMonth());
-  const numero = Math.max(1, corrente - trimestre(2026, 8) + 1);
-  const nomi = inglese ? ["Spring", "Summer", "Autumn", "Winter"] : ["Primavera", "Estate", "Autunno", "Inverno"];
+  const numero = Math.max(1, trimestre(oggi.getFullYear(), oggi.getMonth()) - trimestre(2026, 8) + 1);
   const campoNumero = document.querySelector("[data-numero]");
-  const campoStagione = document.querySelector("[data-stagione]");
   if (campoNumero) campoNumero.textContent = String(numero).padStart(2, "0");
-  if (campoStagione) {
-    campoStagione.textContent = `${nomi[((corrente % 4) + 4) % 4]} ${oggi.getFullYear()}`;
-    campoStagione.hidden = false;
-  }
 })();
 
 // Nel menu si evidenzia la voce della sezione che si sta leggendo
 (() => {
   const voci = [...document.querySelectorAll('.nav-links a[href^="#"]')];
-  const sezioni = voci.map((a) => document.querySelector(a.getAttribute("href"))).filter(Boolean);
-  if (!sezioni.length || !("IntersectionObserver" in window)) return;
-  const osservatore = new IntersectionObserver((osservate) => {
-    osservate.forEach((o) => {
-      if (!o.isIntersecting) return;
-      voci.forEach((a) => {
-        if (a.getAttribute("href") === `#${o.target.id}`) a.setAttribute("aria-current", "true");
-        else a.removeAttribute("aria-current");
-      });
-    });
-  }, { rootMargin: "-45% 0px -50% 0px" });
-  sezioni.forEach((s) => osservatore.observe(s));
-  // L'ultima sezione è corta e non arriva a metà schermo: in fondo alla pagina la si evidenzia comunque
-  addEventListener("scroll", () => {
-    if (innerHeight + scrollY < document.documentElement.scrollHeight - 4) return;
-    voci.forEach((a, i) => (i === voci.length - 1 ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
-  }, { passive: true });
+  const sezioni = voci.map((a) => document.querySelector(a.getAttribute("href")));
+  if (!voci.length || sezioni.includes(null)) return;
+  // Un solo calcolo a ogni scorrimento: la voce attiva è l'ultima sezione il cui inizio ha superato metà schermo.
+  // In cima alla pagina nessuna; in fondo l'ultima, anche se è troppo corta per arrivare a metà schermo
+  const aggiorna = () => {
+    const inFondo = innerHeight + scrollY >= document.documentElement.scrollHeight - 4;
+    let attiva = inFondo ? sezioni.length - 1 : -1;
+    if (!inFondo) sezioni.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight / 2) attiva = i; });
+    voci.forEach((a, i) => (i === attiva ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
+  };
+  addEventListener("scroll", aggiorna, { passive: true });
+  addEventListener("resize", aggiorna, { passive: true });
+  aggiorna();
 })();
 
 // Il cursore dopo il nome, cliccato, diventa una chiave (e viceversa)
@@ -80,6 +69,7 @@ aggiornaFilo();
   const testoPulsante = pulsante.textContent;
   const t = inglese
     ? {
+        controlla: "Some fields need fixing: they're highlighted above.",
         nome: "Tell me your name.",
         email: "I need an email address to reply, like name@example.com.",
         messaggio: "Write at least a couple of words (10 characters).",
@@ -89,6 +79,7 @@ aggiornaFilo();
         spento: "The form isn't active yet. For now, you can reach me on LinkedIn.",
       }
     : {
+        controlla: "Alcuni campi vanno sistemati: li trovi evidenziati qui sopra.",
         nome: "Scrivimi il tuo nome.",
         email: "Mi serve un indirizzo email per risponderti, tipo nome@esempio.it.",
         messaggio: "Scrivi almeno un paio di parole (10 caratteri).",
@@ -107,11 +98,19 @@ aggiornaFilo();
     campo.setAttribute("aria-invalid", String(Boolean(errore)));
     avviso.textContent = errore || "";
   };
-  // Dopo il primo errore il campo si ricontrolla mentre si scrive, così l'avviso sparisce appena è a posto
+  // Un campo si controlla quando lo si lascia (solo se c'è scritto qualcosa: passarci sopra col Tab non è un errore).
+  // Dopo un errore si ricontrolla mentre si scrive, così l'avviso sparisce appena è a posto
   Object.values(campi).forEach(([campo, valido, errore]) => {
+    campo.addEventListener("blur", () => {
+      if (campo.value.trim()) segna(campo, valido(campo.value) ? "" : errore);
+    });
     campo.addEventListener("input", () => {
       if (campo.getAttribute("aria-invalid") === "true") segna(campo, valido(campo.value) ? "" : errore);
     });
+  });
+  // "Scrivimi" in cima alla pagina porta dritto al primo campo
+  document.querySelectorAll(`.window-actions a[href="#${modulo.closest("section").id}"]`).forEach((a) => {
+    a.addEventListener("click", () => setTimeout(() => campi.name[0].focus({ preventScroll: true }), 400));
   });
   const mostra = (testo, tipo) => { stato.textContent = testo; stato.dataset.tipo = tipo || ""; };
 
@@ -123,7 +122,7 @@ aggiornaFilo();
       segna(campo, ok ? "" : errore);
       if (!ok && !primo) primo = campo;
     });
-    if (primo) { primo.focus(); mostra(""); return; }
+    if (primo) { primo.focus(); mostra(t.controlla, "errore"); return; }
     if (modulo.elements.botcheck.checked) return; // un bot: non inviamo e non diciamo niente
     if (!modulo.dataset.chiave) { mostra(t.spento, "errore"); return; }
 

@@ -13,12 +13,12 @@ GitHub Pages pubblica direttamente il branch `main`.
 - `en/index.html`: la versione in inglese
 - `style.css`: lo stile, con tema chiaro e scuro
 - `tema.js`: l'interruttore chiaro/scuro; senza una scelta salvata segue il tema di sistema
-- `script.js`: i dettagli della home (testata con stagione e numero automatici, menu che segue la sezione, easter egg)
+- `script.js`: i dettagli della home (numero della testata automatico, menu che segue la sezione, modulo di contatto, easter egg)
 - `404.html`: la pagina per gli indirizzi che non esistono
 - `appunti/`: quiz e appunti per esame e modulo (`appunti/<esame>/<modulo>/`). Il motore è
   `appunti/quiz.js`, le domande stanno nel `quiz.json` di ogni modulo
-- `fonts/`: JetBrains Mono e Bodoni Moda, ospitati qui invece che su Google Fonts
-  (licenze in `fonts/OFL.txt` e `fonts/OFL-BodoniModa.txt`)
+- `fonts/`: JetBrains Mono e Fraunces, ospitati qui invece che su Google Fonts
+  (licenze in `fonts/OFL.txt` e `fonts/OFL-Fraunces.txt`)
 
 ## Provarlo in locale
 
