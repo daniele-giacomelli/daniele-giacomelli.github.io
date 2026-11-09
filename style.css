@@ -181,8 +181,8 @@ main,
 
 .brand { display: inline-flex; align-items: baseline; gap: 6px; font-weight: 700; text-decoration: none; white-space: nowrap; }
 
-/* Sotto i 900px le voci del menu non stanno accanto al nome: vanno su una seconda riga */
-@media (max-width: 900px) {
+/* Sotto i 980px le voci del menu non stanno accanto al nome (col percorso della sezione): vanno su una seconda riga */
+@media (max-width: 980px) {
   .site-header nav { flex-wrap: wrap; row-gap: 8px; }
   .nav-tools { order: 2; margin-left: auto; }
   .nav-links { order: 3; width: 100%; margin: 0; flex-wrap: wrap; }
@@ -472,6 +472,38 @@ h2::before {
   line-height: 0.8;
   color: transparent;
   -webkit-text-stroke: 1.5px var(--fg);
+  /* Il numero della sezione in cui si è si riempie come un liquido: sale dal basso con una cresta
+     di onde che scorre, e si svuota quando si passa a un'altra sezione (classe messa da script.js) */
+  --livello: 0;
+  --pieno: calc(var(--livello) * 0.89em - 0.09em);
+  background-image:
+    radial-gradient(ellipse 50% 100% at 50% 100%, var(--accent) 96%, transparent 100%),
+    linear-gradient(var(--accent), var(--accent));
+  background-repeat: repeat-x, no-repeat;
+  background-size: 0.3em 0.09em, 100% max(0em, var(--pieno));
+  background-position-x: 0, 0;
+  background-position-y: bottom var(--pieno), bottom;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: --livello 1.2s cubic-bezier(0.5, 0, 0.2, 1);
+}
+section.attuale > h2::before {
+  --livello: 1;
+  animation: onda 0.4s linear 3;
+}
+@keyframes onda { to { background-position-x: 0.3em, 0; } }
+@property --livello { syntax: "<number>"; inherits: false; initial-value: 0; }
+
+/* Il percorso della sezione dopo il nome in alto, con il cursore mentre si scrive */
+.percorso { color: var(--accent); }
+.percorso.scrive::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: -0.15em;
+  background: currentColor;
 }
 
 /* Progetti come articoli */
@@ -811,17 +843,61 @@ h2::before {
   background: color-mix(in srgb, var(--fg) 45%, transparent);
   pointer-events: none;
 }
-.filo::after {
-  content: "";
+/* Il ragnetto in fondo al filo. Avvicinandosi col mouse gli spunta il senso di ragno (???);
+   cliccato tira fuori le zampe, diventa rosso e dice la sua frase, poi torna com'era */
+.ragno {
   position: absolute;
-  left: -4px;
-  bottom: -4px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 2px var(--hot);
+  left: -13.5px;
+  bottom: -18px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  pointer-events: auto;
 }
+.ragno svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ragno .corpo {
+  fill: var(--accent);
+  stroke: var(--hot);
+  stroke-width: 2;
+  transition: fill 0.2s, stroke 0.2s;
+}
+.ragno .zampe {
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform-origin: 14px 14px;
+  transform: scale(0.2);
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(0.3, 1.6, 0.5, 1), opacity 0.15s;
+}
+.ragno-senso {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  margin-bottom: 2px;
+  font-family: var(--mono);
+  font-size: var(--t-1);
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity 0.15s;
+}
+.ragno.vicino .ragno-senso,
+.ragno:focus-visible .ragno-senso {
+  opacity: 1;
+  animation: vibra-senso 0.12s linear 4 alternate;
+}
+@keyframes vibra-senso { to { transform: translateX(calc(-50% + 1.5px)); } }
+.ragno.attivo .corpo { fill: #d3202f; stroke: var(--accent); }
+.ragno.attivo .zampe { transform: none; opacity: 1; }
+.ragno.attivo .ragno-senso { opacity: 0; }
 @media (max-width: 1200px) {
   .filo { display: none; }
 }
@@ -966,10 +1042,13 @@ h2::before {
 @media (prefers-reduced-motion: reduce) {
   .caret::before,
   .hero h1:hover .senso,
+  .ragno.vicino .ragno-senso,
+  .ragno:focus-visible .ragno-senso,
+  section.attuale > h2::before,
   .blob,
   .spark,
   body::before { animation: none; }
-  .theme-toggle .knob, .nav-links a, .brand-star, .btn, .window.shot, .azione { transition: none; }
+  .theme-toggle .knob, .nav-links a, .brand-star, .btn, .window.shot, .azione, .ragno .zampe, h2::before { transition: none; }
 }
 
 /* ---------- Schermi stretti ---------- */
@@ -986,6 +1065,8 @@ h2::before {
   main,
   .site-footer { padding-left: 16px; padding-right: 16px; }
   .site-header { top: 8px; margin: 8px 0; padding: 0 10px; }
+  /* Su telefono il percorso farebbe andare a capo i pulsanti e l'intestazione cambierebbe altezza scorrendo */
+  .percorso { display: none; }
   .hero { padding-top: 48px; }
   section { padding: 48px 0; }
   /* Il titolo ufficiale della tesi è lungo: su telefono scende a 18px per restare compatto */

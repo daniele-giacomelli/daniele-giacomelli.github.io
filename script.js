@@ -38,17 +38,86 @@ console.log(
   aggiorna();
 })();
 
-// Il cursore dopo il nome, cliccato, diventa una chiave (e viceversa)
+// Il messaggio in basso, condiviso dalla chiave e dal ragnetto: resta 5 secondi
 const segreto = document.querySelector(".secret");
 let timerSegreto;
+const mostraSegreto = (testo, lingua = "en") => {
+  clearTimeout(timerSegreto);
+  segreto.lang = lingua;
+  segreto.textContent = testo;
+  segreto.classList.add("visibile");
+  timerSegreto = setTimeout(() => segreto.classList.remove("visibile"), 5000);
+};
+
+// Mentre si scorre: il nome in alto diventa il percorso della sezione (~/daniele-giacomelli/progetti),
+// scritto lettera per lettera come in un terminale, e il numero della sezione in cui si è si riempie di colore
+(() => {
+  const percorso = document.querySelector(".brand .percorso");
+  const sezioni = [...document.querySelectorAll("main > section[id]")];
+  if (!percorso || !sezioni.length) return;
+  const fermo = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let voluto = "";
+  let timerScrittura;
+  // Cancella fino alla parte in comune col nuovo percorso, poi scrive il resto
+  const scrivi = () => {
+    clearTimeout(timerScrittura);
+    const attuale = percorso.textContent;
+    if (attuale === voluto) { timerScrittura = setTimeout(() => percorso.classList.remove("scrive"), 900); return; }
+    percorso.classList.add("scrive");
+    const comune = voluto.startsWith(attuale);
+    percorso.textContent = comune ? voluto.slice(0, attuale.length + 1) : attuale.slice(0, -1);
+    timerScrittura = setTimeout(scrivi, comune ? 55 : 30);
+  };
+  const aggiorna = () => {
+    const inFondo = innerHeight + scrollY >= document.documentElement.scrollHeight - 4;
+    let attiva = inFondo ? sezioni.length - 1 : -1;
+    if (!inFondo) sezioni.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight / 2) attiva = i; });
+    sezioni.forEach((s, i) => s.classList.toggle("attuale", i === attiva));
+    const nuovo = attiva < 0 ? "" : "/" + sezioni[attiva].id;
+    if (nuovo === voluto) return;
+    voluto = nuovo;
+    if (fermo) percorso.textContent = voluto;
+    else scrivi();
+  };
+  addEventListener("scroll", aggiorna, { passive: true });
+  addEventListener("resize", aggiorna, { passive: true });
+  aggiorna();
+})();
+
+// Il cursore dopo il nome, cliccato, diventa una chiave (e viceversa)
 document.querySelector(".caret").addEventListener("click", (e) => {
   const chiave = e.currentTarget.classList.toggle("chiave");
-  clearTimeout(timerSegreto);
-  segreto.classList.toggle("visibile", chiave);
-  if (!chiave) return;
-  segreto.textContent = "May your heart be your guiding key.";
-  timerSegreto = setTimeout(() => segreto.classList.remove("visibile"), 5000);
+  if (chiave) mostraSegreto("May your heart be your guiding key.");
+  else { clearTimeout(timerSegreto); segreto.classList.remove("visibile"); }
 });
+
+// Il ragnetto in fondo al filo: da vicino gli viene il senso di ragno, cliccato tira fuori le zampe e parla
+(() => {
+  const ragno = document.querySelector(".ragno");
+  if (!ragno) return;
+  let timerRagno;
+  ragno.addEventListener("click", () => {
+    clearTimeout(timerRagno);
+    ragno.classList.add("attivo");
+    // In italiano sulla pagina italiana; la frase della chiave invece resta sempre in inglese
+    if (inglese) mostraSegreto("With great power there must also come great responsibility.");
+    else mostraSegreto("Con un grande potere deve venire anche una grande responsabilità.", "it");
+    timerRagno = setTimeout(() => ragno.classList.remove("attivo"), 5000);
+  });
+  // "Vicino" = il puntatore entro 90px dal ragno. Un solo calcolo per fotogramma
+  if (!matchMedia("(hover: hover)").matches) return;
+  let inAttesa = false;
+  addEventListener("pointermove", (e) => {
+    if (inAttesa) return;
+    inAttesa = true;
+    requestAnimationFrame(() => {
+      inAttesa = false;
+      const r = ragno.getBoundingClientRect();
+      const vicino = r.width > 0 && Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2)) < 90;
+      ragno.classList.toggle("vicino", vicino);
+    });
+  }, { passive: true });
+})();
 
 // Il filo che scende dall'alto mentre si scorre la pagina
 const filo = document.querySelector(".filo");
