@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Le pagine del sito per i motori di ricerca. Portfolio italiano e inglese si dichiarano a vicenda come
+     traduzioni (hreflang); gli appunti hanno un solo indirizzo, la lingua si cambia sulla pagina.
+     Aggiungendo un modulo agli appunti, aggiungi qui il suo indirizzo. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://daniele-giacomelli.github.io/</loc>
+    <lastmod>2026-11-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="it" href="https://daniele-giacomelli.github.io/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://daniele-giacomelli.github.io/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://daniele-giacomelli.github.io/"/>
+  </url>
+  <url>
+    <loc>https://daniele-giacomelli.github.io/en/</loc>
+    <lastmod>2026-11-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="it" href="https://daniele-giacomelli.github.io/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://daniele-giacomelli.github.io/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://daniele-giacomelli.github.io/"/>
+  </url>
+  <url>
+    <loc>https://daniele-giacomelli.github.io/appunti/</loc>
+    <lastmod>2026-11-09</lastmod>
+  </url>
+  <url>
+    <loc>https://daniele-giacomelli.github.io/appunti/onc0251/a/</loc>
+    <lastmod>2026-11-09</lastmod>
+  </url>
+</urlset>

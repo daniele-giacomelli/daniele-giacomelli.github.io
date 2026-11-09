@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://daniele-giacomelli.github.io/sitemap.xml
