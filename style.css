@@ -39,7 +39,16 @@
   --bad-soft: #f7e3df;
   --holo: linear-gradient(115deg, #c8d4ff, #e6c8ff 28%, #ffd3e6 52%, #c6f2ff 76%, #dcffd6);
   --chrome: linear-gradient(180deg, #ffffff 0%, #d5dae3 42%, #8f98aa 50%, #dfe3ea 62%, #ffffff 100%);
-  --shadow: 6px 6px 0 var(--accent);
+  /* Ombre piene, pulsanti principali e pulsante del CV: nel tema scuro diventano scuri (vedi sotto) */
+  --ombra: var(--accent);
+  /* Bordi e barre delle finestre: di giorno inchiostro e blu del CV, di notte più morbidi */
+  --bordo: var(--fg);
+  --barra: linear-gradient(90deg, var(--accent), #4f78b0 60%, #9fb7e0);
+  --shadow: 6px 6px 0 var(--ombra);
+  --pulsante: var(--fg);
+  --su-pulsante: var(--bg);
+  --oggetto: var(--chrome);
+  --su-oggetto: #10182b;
   --on-holo: #10182b;       /* testo sopra olografico e lime: sempre scuro */
   --icona-sole: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4.5'/%3E%3Cpath d='M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1'/%3E%3C/svg%3E");
   --icona-luna: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20.5 14.8A8.8 8.8 0 0 1 9.2 3.5a8.8 8.8 0 1 0 11.3 11.3z'/%3E%3C/svg%3E");
@@ -153,7 +162,7 @@ a:hover { background: color-mix(in srgb, var(--hot) 70%, transparent); }
   top: -48px;
   z-index: 60;
   background: var(--card);
-  border: 2px solid var(--fg);
+  border: 2px solid var(--bordo);
   padding: 8px 12px;
 }
 .skip-link:focus { top: 12px; }
@@ -187,8 +196,8 @@ main,
   background: color-mix(in srgb, var(--card) 72%, transparent);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
   backdrop-filter: blur(14px) saturate(1.4);
-  border: 2px solid var(--fg);
-  box-shadow: 5px 5px 0 var(--accent);
+  border: 2px solid var(--bordo);
+  box-shadow: 5px 5px 0 var(--ombra);
   font-family: var(--mono);
   font-size: var(--t-2);
 }
@@ -231,16 +240,16 @@ main,
 .nav-links a.tab {
   display: inline-block;
   padding: 3px 9px;
-  border: 1.5px solid var(--fg);
+  border: 1.5px solid var(--bordo);
   background: var(--holo);
   color: var(--on-holo);
 }
-.nav-links a.tab:hover, .nav-links a.tab[aria-current] { background: var(--holo); box-shadow: 3px 3px 0 var(--accent); }
+.nav-links a.tab:hover, .nav-links a.tab[aria-current] { background: var(--holo); box-shadow: 3px 3px 0 var(--ombra); }
 
 .nav-tools { display: flex; align-items: center; gap: 12px; }
 
 /* Lingua: pillola a due posizioni */
-.lang-switch { display: inline-flex; border: 1.5px solid var(--fg); border-radius: 999px; overflow: hidden; }
+.lang-switch { display: inline-flex; border: 1.5px solid var(--bordo); border-radius: 999px; overflow: hidden; }
 .lang-switch a { padding: 4px 10px; text-decoration: none; font-size: var(--t-1); line-height: 1.3; }
 .lang-switch a[aria-current] { background: var(--fg); color: var(--bg); }
 /* Negli appunti la lingua si cambia sulla stessa pagina: pulsanti invece di link */
@@ -256,7 +265,7 @@ main,
   width: 50px;
   height: 26px;
   padding: 0;
-  border: 1.5px solid var(--fg);
+  border: 1.5px solid var(--bordo);
   border-radius: 999px;
   background: var(--holo);
   cursor: pointer;
@@ -305,7 +314,7 @@ main,
   gap: 8px 24px;
   margin: 0 0 28px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--fg);
+  border-bottom: 1px solid var(--bordo);
   font-family: var(--mono);
   font-size: var(--t-1);
   text-transform: uppercase;
@@ -383,7 +392,7 @@ main,
   height: 132px;
   border-radius: 50%;
   background: var(--holo);
-  border: 2px solid var(--fg);
+  border: 2px solid var(--bordo);
   box-shadow: 4px 4px 0 var(--fg);
   transform: rotate(-12deg);
   right: -12px;
@@ -413,13 +422,13 @@ main,
   gap: 12px 40px;
   margin: 0 0 32px;
   padding: 14px 0;
-  border-top: 1px solid var(--fg);
-  border-bottom: 1px solid var(--fg);
+  border-top: 1px solid var(--bordo);
+  border-bottom: 1px solid var(--bordo);
   font-family: var(--mono);
   font-size: var(--t-2);
 }
 .cover .meta { flex-direction: column; gap: 0; margin: 0; padding: 0; border-bottom: 0; }
-.cover .meta div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--fg); }
+.cover .meta div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--bordo); }
 .meta dt { color: var(--muted); font-size: var(--t-1); }
 .cover .meta dt { text-transform: uppercase; letter-spacing: 0.1em; padding-top: 2px; }
 .meta dd { margin: 0; }
@@ -431,19 +440,19 @@ main,
   position: relative;
   z-index: 4;
   background: var(--card);
-  border: 2px solid var(--fg);
-  box-shadow: 8px 8px 0 var(--accent);
+  border: 2px solid var(--bordo);
+  box-shadow: 8px 8px 0 var(--ombra);
 }
 .window-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 8px 5px 12px;
-  background: linear-gradient(90deg, var(--accent), #4f78b0 60%, #9fb7e0);
+  background: var(--barra);
   color: #fff;
   font-family: var(--mono);
   font-size: var(--t-1);
-  border-bottom: 2px solid var(--fg);
+  border-bottom: 2px solid var(--bordo);
 }
 .window-bar i {
   display: inline-block;
@@ -451,7 +460,7 @@ main,
   height: 14px;
   margin-left: 4px;
   background: var(--chrome);
-  border: 1px solid var(--fg);
+  border: 1px solid var(--bordo);
 }
 .window .lead { padding: 20px 22px 4px; color: var(--fg); font-size: var(--t-4); }
 
@@ -459,15 +468,15 @@ main,
 .window-actions { margin: 0; padding: 14px 22px 22px; }
 a.btn { display: inline-block; text-decoration: none; }
 /* Un pulsante che è un link non prende l'evidenziatore lime dei link: tiene il suo fondo e il suo testo */
-a.btn:hover { background: var(--fg); color: var(--bg); }
+a.btn:hover { background: var(--pulsante); color: var(--su-pulsante); }
 .btn { transition: transform 0.12s, box-shadow 0.12s; }
-.btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--accent); }
-.btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--accent); }
+.btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ombra); }
+.btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ombra); }
 
 /* ---------- Sezioni come pagine di rivista ---------- */
 main { counter-reset: sezione; }
 section { padding: 72px 0; }
-main > section[id] { border-top: 3px solid var(--fg); margin-top: 24px; }
+main > section[id] { border-top: 3px solid var(--bordo); margin-top: 24px; }
 h2 {
   counter-increment: sezione;
   display: flex;
@@ -530,7 +539,7 @@ section.attuale > h2::before {
   padding: 28px 30px 24px;
   margin: 0 0 36px;
   background: var(--card);
-  border: 2px solid var(--fg);
+  border: 2px solid var(--bordo);
   box-shadow: var(--shadow);
 }
 .kicker {
@@ -538,7 +547,7 @@ section.attuale > h2::before {
   margin: 0 0 14px;
   padding: 2px 8px;
   background: var(--holo);
-  border: 1px solid var(--fg);
+  border: 1px solid var(--bordo);
   font-family: var(--mono);
   font-size: var(--t-1);
   text-transform: uppercase;
@@ -579,7 +588,7 @@ section.attuale > h2::before {
   text-decoration: none;
   transition: transform 0.15s, box-shadow 0.15s;
 }
-.window.shot:hover { background: var(--card); transform: translate(-2px, -2px); box-shadow: 10px 10px 0 var(--accent); }
+.window.shot:hover { background: var(--card); transform: translate(-2px, -2px); box-shadow: 10px 10px 0 var(--ombra); }
 .window.shot img, .copertina { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 607; }
 
 /* Copertina della tesi disegnata: blu del CV, titolo in Fraunces. Le misure seguono la larghezza della finestra */
@@ -622,7 +631,7 @@ section.attuale > h2::before {
   padding: 3px 9px;
   background: var(--holo);
   color: var(--on-holo);
-  border: 1.5px solid var(--fg);
+  border: 1.5px solid var(--bordo);
   box-shadow: 3px 3px 0 var(--fg);
   font-family: var(--mono);
   font-size: var(--t-1);
@@ -663,7 +672,7 @@ section.attuale > h2::before {
   font-family: var(--mono);
   font-size: var(--t-1);
   background: var(--bg);
-  border: 1.5px solid var(--fg);
+  border: 1.5px solid var(--bordo);
   padding: 2px 8px;
 }
 
@@ -694,13 +703,13 @@ section.attuale > h2::before {
   margin: 8px 0 16px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  border-top: 2px solid var(--fg);
-  border-left: 2px solid var(--fg);
+  border-top: 2px solid var(--bordo);
+  border-left: 2px solid var(--bordo);
 }
 .skills li {
   padding: 16px 18px;
-  border-right: 2px solid var(--fg);
-  border-bottom: 2px solid var(--fg);
+  border-right: 2px solid var(--bordo);
+  border-bottom: 2px solid var(--bordo);
   background: var(--card);
 }
 .skills strong {
@@ -735,19 +744,19 @@ section.attuale > h2::before {
 .links a[download] {
   display: inline-block;
   padding: 9px 18px;
-  background: var(--chrome);
-  border: 2px solid var(--fg);
-  box-shadow: 3px 3px 0 var(--accent);
+  background: var(--oggetto);
+  border: 2px solid var(--bordo);
+  box-shadow: 3px 3px 0 var(--ombra);
   font-family: var(--mono);
   font-style: normal;
   font-size: var(--t-2);
   font-weight: 700;
   text-decoration: none;
-  color: #10182b;
+  color: var(--su-oggetto);
   transition: transform 0.12s, box-shadow 0.12s;
 }
-.links a[download]:hover { background: var(--chrome); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--accent); }
-.links a[download]:active { box-shadow: 1px 1px 0 var(--accent); transform: translate(2px, 2px); }
+.links a[download]:hover { background: var(--oggetto); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ombra); }
+.links a[download]:active { box-shadow: 1px 1px 0 var(--ombra); transform: translate(2px, 2px); }
 
 /* ---------- Contatti: a sinistra disponibilità e link, a destra il modulo come finestra ---------- */
 .contact-grid {
@@ -772,13 +781,13 @@ section.attuale > h2::before {
   font: inherit;
   color: var(--fg);
   background: var(--bg);
-  border: 2px solid var(--fg);
+  border: 2px solid var(--bordo);
   border-radius: 0;
   transition: box-shadow 0.15s;
 }
 .field textarea { resize: vertical; min-height: 120px; }
 .field input:focus-visible,
-.field textarea:focus-visible { outline: none; box-shadow: 4px 4px 0 var(--accent); }
+.field textarea:focus-visible { outline: none; box-shadow: 4px 4px 0 var(--ombra); }
 .field [aria-invalid="true"] { border-color: var(--bad); box-shadow: 4px 4px 0 var(--bad); }
 .field-error { margin: 0; min-height: 0; font-size: var(--t-2); color: var(--bad); }
 .field-error:empty { display: none; }
@@ -929,9 +938,9 @@ section.attuale > h2::before {
   max-width: calc(100% - 32px);
   margin: 0;
   padding: 12px 18px;
-  background: var(--fg);
-  color: var(--bg);
-  border: 2px solid var(--fg);
+  background: var(--pulsante);
+  color: var(--su-pulsante);
+  border: 2px solid var(--pulsante);
   box-shadow: 4px 4px 0 var(--hot);
   font-family: var(--mono);
   font-size: var(--t-2);
@@ -975,7 +984,7 @@ section.attuale > h2::before {
   flex: 1 1 160px;
   text-align: left;
   background: var(--card);
-  border: 2px solid var(--fg);
+  border: 2px solid var(--bordo);
   padding: 12px 14px;
   font: inherit;
   color: inherit;
@@ -983,7 +992,7 @@ section.attuale > h2::before {
 }
 .tile b { display: block; font-family: var(--mono); font-size: var(--t-2); }
 .tile span { font-size: var(--t-2); color: var(--muted); }
-.tile:hover { box-shadow: 4px 4px 0 var(--accent); }
+.tile:hover { box-shadow: 4px 4px 0 var(--ombra); }
 .tile[aria-pressed="true"] { background: var(--holo); box-shadow: 4px 4px 0 var(--fg); }
 .tile[aria-pressed="true"] span { color: var(--fg); }
 .check { display: flex; gap: 8px; align-items: center; margin: 6px 0; cursor: pointer; }
@@ -993,22 +1002,22 @@ section.attuale > h2::before {
   font-family: var(--mono);
   font-size: var(--t-2);
   font-weight: 700;
-  background: var(--fg);
-  color: var(--bg);
-  border: 2px solid var(--fg);
-  box-shadow: 3px 3px 0 var(--accent);
+  background: var(--pulsante);
+  color: var(--su-pulsante);
+  border: 2px solid var(--pulsante);
+  box-shadow: 3px 3px 0 var(--ombra);
   padding: 9px 18px;
   cursor: pointer;
 }
 .btn.ghost { background: var(--card); color: var(--fg); box-shadow: none; }
 .btn:disabled { opacity: 0.35; cursor: default; }
-.btn.ghost:hover:not(:disabled) { box-shadow: 3px 3px 0 var(--accent); }
+.btn.ghost:hover:not(:disabled) { box-shadow: 3px 3px 0 var(--ombra); }
 .link { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; cursor: pointer; }
 .quiz-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 0; }
 
 .quiz-meta { display: flex; justify-content: space-between; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); }
-.quiz-bar { height: 8px; background: var(--card); border: 1.5px solid var(--fg); overflow: hidden; margin: 10px 0 22px; }
-.quiz-bar i { display: block; height: 100%; background: var(--holo); border-right: 1.5px solid var(--fg); transition: width 0.2s; }
+.quiz-bar { height: 8px; background: var(--card); border: 1.5px solid var(--bordo); overflow: hidden; margin: 10px 0 22px; }
+.quiz-bar i { display: block; height: 100%; background: var(--holo); border-right: 1.5px solid var(--bordo); transition: width 0.2s; }
 .quiz-q { font-family: var(--serif); font-optical-sizing: auto; font-size: var(--t-5); font-weight: 600; line-height: 1.3; margin: 0 0 16px; }
 .quiz-q:focus { outline: none; }
 .ans {
@@ -1018,7 +1027,7 @@ section.attuale > h2::before {
   width: 100%;
   text-align: left;
   background: var(--card);
-  border: 2px solid var(--fg);
+  border: 2px solid var(--bordo);
   padding: 11px 14px;
   margin: 10px 0;
   font: inherit;
@@ -1026,7 +1035,7 @@ section.attuale > h2::before {
   cursor: pointer;
 }
 .ans .l { flex: none; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); }
-.ans:hover:not(:disabled) { box-shadow: 4px 4px 0 var(--accent); }
+.ans:hover:not(:disabled) { box-shadow: 4px 4px 0 var(--ombra); }
 .ans.sel { background: var(--holo); }
 .ans.ok { border-color: var(--ok); background: var(--ok-soft); box-shadow: 4px 4px 0 var(--ok); }
 .ans.bad { border-color: var(--bad); background: var(--bad-soft); box-shadow: 4px 4px 0 var(--bad); }
@@ -1094,13 +1103,13 @@ section.attuale > h2::before {
   .sticker-star { width: 74px; height: 74px; font-size: 0.55rem; top: 34px; right: -4px; }
   .sticker-holo { right: -4px; bottom: -48px; }
   .name .last { padding-left: 0.25em; }
-  .window { box-shadow: 5px 5px 0 var(--accent); }
-  .card { padding: 22px 18px 18px; box-shadow: 4px 4px 0 var(--accent); }
+  .window { box-shadow: 5px 5px 0 var(--ombra); }
+  .card { padding: 22px 18px 18px; box-shadow: 4px 4px 0 var(--ombra); }
   /* Su telefono: titolo, anteprima, poi il testo */
   .card.progetto { grid-template-columns: 1fr; grid-template-areas: "testa" "anteprima" "testo"; row-gap: 18px; }
   .timeline li { grid-template-columns: 1fr; gap: 2px; }
   /* Riga 1: nome e strumenti; riga 2: le voci del menu */
-  .site-header nav { flex-wrap: wrap; row-gap: 8px; padding: 8px 10px; box-shadow: 4px 4px 0 var(--accent); }
+  .site-header nav { flex-wrap: wrap; row-gap: 8px; padding: 8px 10px; box-shadow: 4px 4px 0 var(--ombra); }
   .nav-tools { order: 2; margin-left: auto; }
   .nav-links { order: 3; width: 100%; margin: 0; flex-wrap: wrap; gap: 6px 10px; font-size: var(--t-1); }
   section[id] { scroll-margin-top: 124px; }
@@ -1111,7 +1120,7 @@ section.attuale > h2::before {
 /* Testo sopra superfici olografiche o lime: scuro anche nel tema scuro.
    Sta in fondo perché deve vincere sui colori delle regole sopra */
 .kicker, .tile[aria-pressed="true"], .tile[aria-pressed="true"] span,
-.ans.sel, .ans.sel .l, .sticker, .links a[download]:hover { color: var(--on-holo); }
+.ans.sel, .ans.sel .l, .sticker { color: var(--on-holo); }
 
 /* ---------- Tema scuro: rivista stampata su carta blu notte ----------
    Vale quando lo chiede il sistema (salvo scelta "chiaro" con l'interruttore)
@@ -1119,13 +1128,21 @@ section.attuale > h2::before {
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0c1120;
-    --fg: #eceff6;
+    /* Testo un filo meno bianco: resta oltre 13:1 sul fondo ma abbaglia meno */
+    --fg: #d3d9e6;
     --muted: #a1a9bb;
     --line: rgba(236, 239, 246, 0.2);
     /* Il navy su fondo scuro non si leggerebbe: stessa tinta, più chiara */
     --accent: #90b4e6;
     --chip: #18203a;
     --card: #131a30;
+    --ombra: #2c4c80;
+    --bordo: #5a6a90;
+    --barra: linear-gradient(90deg, #1d3a66, #2b4f86 60%, #3b5f96);
+    --pulsante: #24467a;
+    --su-pulsante: #d3d9e6;
+    --oggetto: linear-gradient(180deg, #33415f 0%, #1c2540 46%, #141b2f 52%, #26304d 100%);
+    --su-oggetto: #d3d9e6;
     --ok: #6fcf92;
     --ok-soft: #16301f;
     --bad: #f08a80;
@@ -1147,12 +1164,20 @@ section.attuale > h2::before {
 }
 :root[data-theme="dark"] {
   --bg: #0c1120;
-  --fg: #eceff6;
+  /* Testo un filo meno bianco: resta oltre 13:1 sul fondo ma abbaglia meno */
+  --fg: #d3d9e6;
   --muted: #a1a9bb;
   --line: rgba(236, 239, 246, 0.2);
   --accent: #90b4e6;
   --chip: #18203a;
   --card: #131a30;
+  --ombra: #2c4c80;
+  --bordo: #5a6a90;
+  --barra: linear-gradient(90deg, #1d3a66, #2b4f86 60%, #3b5f96);
+  --pulsante: #24467a;
+  --su-pulsante: #d3d9e6;
+  --oggetto: linear-gradient(180deg, #33415f 0%, #1c2540 46%, #141b2f 52%, #26304d 100%);
+  --su-oggetto: #d3d9e6;
   --ok: #6fcf92;
   --ok-soft: #16301f;
   --bad: #f08a80;
@@ -1170,3 +1195,15 @@ section.attuale > h2::before {
     radial-gradient(2px 2px at 200px 40px, #fff, transparent) 0 0 / 350px 380px;
   color-scheme: dark;
 }
+
+/* ---------- Appunti: niente olografico né cromato ----------
+   Nel quiz quei colori segnano stati veri (test scelto, risposta scelta, avanzamento):
+   una tinta piatta del blu si legge meglio e il quaderno resta più tranquillo */
+.quaderno .theme-toggle { background: var(--bg); }
+.quaderno .theme-toggle .knob { background: var(--fg); border-color: var(--fg); }
+.quaderno .theme-toggle .knob::after { background: var(--bg); }
+.quaderno .tile[aria-pressed="true"],
+.quaderno .ans.sel { background: color-mix(in srgb, var(--accent) 16%, var(--card)); color: var(--fg); }
+.quaderno .tile[aria-pressed="true"] span,
+.quaderno .ans.sel .l { color: var(--fg); }
+.quaderno .quiz-bar i { background: var(--accent); }
