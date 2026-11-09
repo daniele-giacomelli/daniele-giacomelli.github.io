@@ -44,6 +44,7 @@
   /* Bordi e barre delle finestre: di giorno inchiostro e blu del CV, di notte più morbidi */
   --bordo: var(--fg);
   --barra: linear-gradient(90deg, var(--accent), #4f78b0 60%, #9fb7e0);
+  --evidenziatore: color-mix(in srgb, var(--hot) 70%, transparent);
   --shadow: 6px 6px 0 var(--ombra);
   --pulsante: var(--fg);
   --su-pulsante: var(--bg);
@@ -145,10 +146,7 @@ a {
   text-decoration-thickness: 1.5px;
   text-underline-offset: 3px;
   border-radius: 2px;
-  transition: background-color 0.15s;
 }
-/* Al passaggio il link si "evidenzia" come con un pennarello lime */
-a:hover { background: color-mix(in srgb, var(--hot) 70%, transparent); }
 
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -229,13 +227,8 @@ main,
   display: inline-block;
   padding: 4px 4px; /* almeno 24px di altezza: bersaglio comodo anche al tocco */
   text-decoration: none;
-  /* L'evidenziatore copre tutta la voce e compare in dissolvenza insieme al cambio di colore del testo:
-     così non c'è mai testo scuro su fondo scuro, nemmeno a metà transizione */
-  transition: background-color 0.15s, color 0.15s;
 }
-.nav-links a:hover, .nav-links a[aria-current] { background-color: var(--hot); color: var(--on-holo); }
 .nav-links sup { margin-right: 3px; font-size: 0.65em; color: var(--accent); }
-.nav-links a:hover sup, .nav-links a[aria-current] sup { color: var(--on-holo); }
 /* Gli appunti sono un'altra area: etichetta olografica (l'olografico è il colore delle etichette) */
 .nav-links a.tab {
   display: inline-block;
@@ -244,7 +237,6 @@ main,
   background: var(--holo);
   color: var(--on-holo);
 }
-.nav-links a.tab:hover, .nav-links a.tab[aria-current] { background: var(--holo); box-shadow: 3px 3px 0 var(--ombra); }
 
 .nav-tools { display: flex; align-items: center; gap: 12px; }
 
@@ -253,10 +245,8 @@ main,
 .lang-switch a { padding: 4px 10px; text-decoration: none; font-size: var(--t-1); line-height: 1.3; }
 .lang-switch a[aria-current] { background: var(--fg); color: var(--bg); }
 /* Negli appunti la lingua si cambia sulla stessa pagina: pulsanti invece di link */
-.lang-switch button { padding: 4px 10px; background: none; border: 0; color: inherit; font: inherit; font-size: var(--t-1); line-height: 1.3; cursor: pointer; }
+.lang-switch button { padding: 4px 10px; border: 0; color: inherit; font: inherit; font-size: var(--t-1); line-height: 1.3; cursor: pointer; }
 .lang-switch button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
-.lang-switch button:not([aria-pressed="true"]):hover { background: var(--hot); color: var(--on-holo); }
-.lang-switch a:not([aria-current]):hover { background: var(--hot); color: var(--on-holo); }
 
 /* Interruttore del tema: binario olografico, manopola cromata con sole o luna */
 .theme-toggle {
@@ -467,11 +457,6 @@ main,
 /* L'azione principale del primo schermo: scrivermi */
 .window-actions { margin: 0; padding: 14px 22px 22px; }
 a.btn { display: inline-block; text-decoration: none; }
-/* Un pulsante che è un link non prende l'evidenziatore lime dei link: tiene il suo fondo e il suo testo */
-a.btn:hover { background: var(--pulsante); color: var(--su-pulsante); }
-.btn { transition: transform 0.12s, box-shadow 0.12s; }
-.btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ombra); }
-.btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ombra); }
 
 /* ---------- Sezioni come pagine di rivista ---------- */
 main { counter-reset: sezione; }
@@ -586,9 +571,7 @@ section.attuale > h2::before {
   display: block;
   margin-top: 4px;
   text-decoration: none;
-  transition: transform 0.15s, box-shadow 0.15s;
 }
-.window.shot:hover { background: var(--card); transform: translate(-2px, -2px); box-shadow: 10px 10px 0 var(--ombra); }
 .window.shot img, .copertina { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 607; }
 
 /* Copertina della tesi disegnata: blu del CV, titolo in Fraunces. Le misure seguono la larghezza della finestra */
@@ -746,17 +729,13 @@ section.attuale > h2::before {
   padding: 9px 18px;
   background: var(--oggetto);
   border: 2px solid var(--bordo);
-  box-shadow: 3px 3px 0 var(--ombra);
   font-family: var(--mono);
   font-style: normal;
   font-size: var(--t-2);
   font-weight: 700;
   text-decoration: none;
   color: var(--su-oggetto);
-  transition: transform 0.12s, box-shadow 0.12s;
 }
-.links a[download]:hover { background: var(--oggetto); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ombra); }
-.links a[download]:active { box-shadow: 1px 1px 0 var(--ombra); transform: translate(2px, 2px); }
 
 /* ---------- Contatti: a sinistra disponibilità e link, a destra il modulo come finestra ---------- */
 .contact-grid {
@@ -992,8 +971,7 @@ section.attuale > h2::before {
 }
 .tile b { display: block; font-family: var(--mono); font-size: var(--t-2); }
 .tile span { font-size: var(--t-2); color: var(--muted); }
-.tile:hover { box-shadow: 4px 4px 0 var(--ombra); }
-.tile[aria-pressed="true"] { background: var(--holo); box-shadow: 4px 4px 0 var(--fg); }
+.tile[aria-pressed="true"] { background: var(--holo); --h: 4px; }
 .tile[aria-pressed="true"] span { color: var(--fg); }
 .check { display: flex; gap: 8px; align-items: center; margin: 6px 0; cursor: pointer; }
 .check input { accent-color: var(--accent); }
@@ -1005,13 +983,11 @@ section.attuale > h2::before {
   background: var(--pulsante);
   color: var(--su-pulsante);
   border: 2px solid var(--pulsante);
-  box-shadow: 3px 3px 0 var(--ombra);
   padding: 9px 18px;
   cursor: pointer;
 }
-.btn.ghost { background: var(--card); color: var(--fg); box-shadow: none; }
+.btn.ghost { background: var(--card); color: var(--fg); --h: 0px; }
 .btn:disabled { opacity: 0.35; cursor: default; }
-.btn.ghost:hover:not(:disabled) { box-shadow: 3px 3px 0 var(--ombra); }
 .link { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; cursor: pointer; }
 .quiz-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 0; }
 
@@ -1035,10 +1011,9 @@ section.attuale > h2::before {
   cursor: pointer;
 }
 .ans .l { flex: none; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); }
-.ans:hover:not(:disabled) { box-shadow: 4px 4px 0 var(--ombra); }
 .ans.sel { background: var(--holo); }
-.ans.ok { border-color: var(--ok); background: var(--ok-soft); box-shadow: 4px 4px 0 var(--ok); }
-.ans.bad { border-color: var(--bad); background: var(--bad-soft); box-shadow: 4px 4px 0 var(--bad); }
+.ans.ok { border-color: var(--ok); background: var(--ok-soft); --ombra-blocco: var(--ok); --h: 4px; }
+.ans.bad { border-color: var(--bad); background: var(--bad-soft); --ombra-blocco: var(--bad); --h: 4px; }
 .ans:disabled { cursor: default; }
 .quiz-fb { min-height: 1.6em; margin: 10px 0 0; font-weight: 600; }
 .quiz-fb.ok, .quiz-rev .ok { color: var(--ok); }
@@ -1075,7 +1050,7 @@ section.attuale > h2::before {
   .blob,
   .spark,
   body::before { animation: none; }
-  .theme-toggle .knob, .nav-links a, .brand-star, .btn, .window.shot, .azione, .ragno .zampe, h2::before { transition: none; }
+  .theme-toggle .knob, .brand-star, .azione, .ragno .zampe, h2::before { transition: none; }
 }
 
 /* ---------- Schermi stretti ---------- */
@@ -1139,6 +1114,8 @@ section.attuale > h2::before {
     --ombra: #2c4c80;
     --bordo: #5a6a90;
     --barra: linear-gradient(90deg, #1d3a66, #2b4f86 60%, #3b5f96);
+    /* Di notte il lime sotto il testo chiaro non si leggerebbe: evidenziatore blu */
+    --evidenziatore: #2c4c80;
     --pulsante: #24467a;
     --su-pulsante: #d3d9e6;
     --oggetto: linear-gradient(180deg, #33415f 0%, #1c2540 46%, #141b2f 52%, #26304d 100%);
@@ -1174,6 +1151,8 @@ section.attuale > h2::before {
   --ombra: #2c4c80;
   --bordo: #5a6a90;
   --barra: linear-gradient(90deg, #1d3a66, #2b4f86 60%, #3b5f96);
+  /* Di notte il lime sotto il testo chiaro non si leggerebbe: evidenziatore blu */
+  --evidenziatore: #2c4c80;
   --pulsante: #24467a;
   --su-pulsante: #d3d9e6;
   --oggetto: linear-gradient(180deg, #33415f 0%, #1c2540 46%, #141b2f 52%, #26304d 100%);
@@ -1207,3 +1186,54 @@ section.attuale > h2::before {
 .quaderno .tile[aria-pressed="true"] span,
 .quaderno .ans.sel .l { color: var(--fg); }
 .quaderno .quiz-bar i { background: var(--accent); }
+
+/* ---------- Interazioni: due soli gesti per tutto il sito e gli appunti ----------
+   1. Blocchi (pulsanti, CV, anteprime, scelte e risposte del quiz, scheda degli appunti): poggiano sulla
+      loro ombra; al passaggio si sollevano di 2px, al clic affondano di al massimo 3px (i blocchi alti
+      non arrivano a terra) e tornano su con un rimbalzo leggero. Su touch il passaggio non c'è: resta la pressione.
+   2. Testo (link, voci del menu, lingua, "Esci"): l'evidenziatore si stende da sinistra a destra. */
+.btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab {
+  --molla: cubic-bezier(0.34, 1.3, 0.64, 1);
+  --affondo: clamp(1px, var(--h), 3px);
+  box-shadow: var(--h) var(--h) 0 var(--ombra-blocco, var(--ombra));
+  transition: transform 0.28s var(--molla), box-shadow 0.28s var(--molla), background-color 0.15s;
+}
+.btn, .links a[download] { --h: 3px; }
+.window.shot { --h: 8px; }
+.tile, .ans, .nav-links a.tab { --h: 0px; }
+@media (max-width: 560px) { .window.shot { --h: 5px; } }
+@media (hover: hover) {
+  :is(.btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab):hover:not(:disabled) {
+    transform: translate(-2px, -2px);
+    box-shadow: calc(var(--h) + 2px) calc(var(--h) + 2px) 0 var(--ombra-blocco, var(--ombra));
+  }
+}
+:is(.btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab):focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: calc(var(--h) + 2px) calc(var(--h) + 2px) 0 var(--ombra-blocco, var(--ombra));
+}
+:is(.btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab):active:not(:disabled) {
+  transform: translate(var(--affondo), var(--affondo));
+  box-shadow: max(0px, var(--h) - var(--affondo)) max(0px, var(--h) - var(--affondo)) 0 var(--ombra-blocco, var(--ombra));
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+}
+
+a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
+  background-image: linear-gradient(var(--evidenziatore), var(--evidenziatore));
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 0% 100%;
+  transition: background-size 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+:is(a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link):is(:hover, :focus-visible),
+.nav-links a[aria-current] { background-size: 100% 100%; }
+
+/* L'interruttore del tema: la manopola scorre con la stessa molla e si schiaccia al clic */
+.theme-toggle .knob { transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1), scale 0.12s ease-out; }
+.theme-toggle:active .knob { scale: 0.9; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab,
+  a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link, .theme-toggle .knob { transition: none; }
+  :is(.btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab):is(:hover, :focus-visible, :active) { transform: none; }
+}
