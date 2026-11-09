@@ -1,12 +1,65 @@
 // Motore dei quiz, comune a tutti i moduli: legge quiz.json dalla cartella della pagina.
 // Formato di quiz.json:
-// { "titolo": "...", "descrizione": "...",
+// { "titolo": "...", "descrizione": "...", "descrizione_en": "...",
 //   "test": { "A": [ { "q": "domanda", "o": ["opzione", ...], "a": indice_della_giusta } ], "B": [...] } }
+// Le domande restano nella lingua del corso; l'interfaccia segue la lingua della pagina (lingua.js).
 
 const app = document.getElementById("quiz");
 const $ = (s) => app.querySelector(s);
 const LETTERE = "ABCDEFGH";
 const TUTTI = "*";
+
+const TESTI = {
+  it: {
+    errore: `Non riesco a caricare il quiz. In locale avvia un server con <code>python -m http.server</code>.`,
+    domande: (n) => `${n} domande`,
+    migliore: (n) => `migliore: ${n}`,
+    maiSvolto: "mai svolto",
+    modalita: "Modalità",
+    studio: "Studio", studioSotto: "correzione dopo ogni risposta",
+    esame: "Esame", esameSotto: "correzione solo alla fine",
+    opzioni: "Opzioni",
+    mescolaDomande: "Mescola l'ordine delle domande",
+    mescolaRisposte: "Mescola l'ordine delle risposte",
+    inizia: "Inizia",
+    domandaDi: (i, n) => `Domanda ${i} di ${n}`,
+    esci: "Esci",
+    esciConferma: "Uscire dal quiz? I progressi andranno persi.",
+    corretto: "Corretto.",
+    sbagliato: (l) => `Sbagliato: la risposta giusta è la ${l}.`,
+    indietro: "← Indietro", avanti: "Avanti →", termina: "Termina",
+    percentuale: (p) => `${p}% di risposte corrette`,
+    daRivedere: (n) => `${n} da rivedere`,
+    tuttoGiusto: "tutto giusto",
+    rifaiErrori: "Rifai solo gli errori", ricomincia: "Ricomincia", menu: "Menu",
+    errori: "Errori", tua: "La tua", giusta: "Giusta", nessuna: "nessuna",
+  },
+  en: {
+    errore: `Couldn't load the quiz. Locally, start a server with <code>python -m http.server</code>.`,
+    domande: (n) => `${n} questions`,
+    migliore: (n) => `best: ${n}`,
+    maiSvolto: "not taken yet",
+    modalita: "Mode",
+    studio: "Study", studioSotto: "feedback after each answer",
+    esame: "Exam", esameSotto: "feedback only at the end",
+    opzioni: "Options",
+    mescolaDomande: "Shuffle the questions",
+    mescolaRisposte: "Shuffle the answers",
+    inizia: "Start",
+    domandaDi: (i, n) => `Question ${i} of ${n}`,
+    esci: "Quit",
+    esciConferma: "Quit the quiz? Your progress will be lost.",
+    corretto: "Correct.",
+    sbagliato: (l) => `Wrong: the right answer is ${l}.`,
+    indietro: "← Back", avanti: "Next →", termina: "Finish",
+    percentuale: (p) => `${p}% correct`,
+    daRivedere: (n) => `${n} to review`,
+    tuttoGiusto: "all correct",
+    rifaiErrori: "Retry the mistakes", ricomincia: "Start over", menu: "Menu",
+    errori: "Mistakes", tua: "Yours", giusta: "Right", nessuna: "none",
+  },
+};
+const t = () => TESTI[document.documentElement.lang === "en" ? "en" : "it"];
 
 // Preferenze e punteggi migliori restano nel browser, separati per modulo
 const prefisso = "quiz:" + location.pathname + ":";
@@ -24,7 +77,8 @@ const mescola = (a) => {
 };
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-let dati, scelte, cfg, S = null;
+// vista: la funzione che ha disegnato la schermata attuale, per ridisegnarla quando cambia la lingua
+let dati, scelte, cfg, vista, S = null;
 
 async function avvia() {
   try {
@@ -33,7 +87,7 @@ async function avvia() {
     dati = await r.json();
   } catch (errore) {
     // fetch non legge i file aperti con doppio clic (file://): serve un server, anche locale
-    app.innerHTML = `<p class="note">Non riesco a caricare il quiz. In locale avvia un server con <code>python -m http.server</code>.</p>`;
+    app.innerHTML = `<p class="note">${t().errore}</p>`;
     console.error("Quiz non caricato:", errore);
     return;
   }
@@ -54,23 +108,26 @@ function domandeDi(k) {
 
 function home() {
   S = null;
+  vista = home;
+  const T = t();
   const migliori = store.get("migliori") || {};
-  const record = (k) => (migliori[k] != null ? `migliore: ${migliori[k]}` : "mai svolto");
+  const record = (k) => (migliori[k] != null ? T.migliore(migliori[k]) : T.maiSvolto);
+  const descrizione = (document.documentElement.lang === "en" && dati.descrizione_en) || dati.descrizione;
   const tile = (gruppo, k, titolo, sotto, attivo) =>
     `<button type="button" class="tile" data-gruppo="${gruppo}" data-k="${k}" aria-pressed="${attivo}"><b>${titolo}</b><span>${sotto}</span></button>`;
   app.innerHTML = `
-    ${dati.descrizione ? `<p class="note">${esc(dati.descrizione)}</p>` : ""}
+    ${descrizione ? `<p class="note">${esc(descrizione)}</p>` : ""}
     <h3 class="quiz-label">Test</h3>
-    <div class="tiles">${scelte.map(([k, n, c]) => tile("test", k, n, `${c} domande · ${record(k)}`, cfg.test === k)).join("")}</div>
-    <h3 class="quiz-label">Modalità</h3>
+    <div class="tiles">${scelte.map(([k, n, c]) => tile("test", k, n, `${T.domande(c)} · ${record(k)}`, cfg.test === k)).join("")}</div>
+    <h3 class="quiz-label">${T.modalita}</h3>
     <div class="tiles">
-      ${tile("modo", "studio", "Studio", "correzione dopo ogni risposta", cfg.modo === "studio")}
-      ${tile("modo", "esame", "Esame", "correzione solo alla fine", cfg.modo === "esame")}
+      ${tile("modo", "studio", T.studio, T.studioSotto, cfg.modo === "studio")}
+      ${tile("modo", "esame", T.esame, T.esameSotto, cfg.modo === "esame")}
     </div>
-    <h3 class="quiz-label">Opzioni</h3>
-    <label class="check"><input type="checkbox" id="md" ${cfg.mescolaDomande ? "checked" : ""}> Mescola l'ordine delle domande</label>
-    <label class="check"><input type="checkbox" id="mr" ${cfg.mescolaRisposte ? "checked" : ""}> Mescola l'ordine delle risposte</label>
-    <p class="quiz-actions"><button type="button" class="btn" id="inizia">Inizia</button></p>`;
+    <h3 class="quiz-label">${T.opzioni}</h3>
+    <label class="check"><input type="checkbox" id="md" ${cfg.mescolaDomande ? "checked" : ""}> ${T.mescolaDomande}</label>
+    <label class="check"><input type="checkbox" id="mr" ${cfg.mescolaRisposte ? "checked" : ""}> ${T.mescolaRisposte}</label>
+    <p class="quiz-actions"><button type="button" class="btn" id="inizia">${T.inizia}</button></p>`;
   app.querySelectorAll(".tile").forEach((t) => {
     t.onclick = () => { cfg[t.dataset.gruppo] = t.dataset.k; store.set("cfg", cfg); home(); };
   });
@@ -97,13 +154,15 @@ function inizia(solo) {
 }
 
 function mostra() {
+  vista = mostra;
+  const T = t();
   const n = S.qs.length, q = S.qs[S.i], r = S.risposte[S.i];
   const bloccata = cfg.modo === "studio" && r != null;
   app.innerHTML = `
-    <div class="quiz-meta"><span>Domanda ${S.i + 1} di ${n}</span><button type="button" class="link" id="esci">Esci</button></div>
+    <div class="quiz-meta"><span>${T.domandaDi(S.i + 1, n)}</span><button type="button" class="link" id="esci">${T.esci}</button></div>
     <div class="quiz-bar" aria-hidden="true"><i style="width:${(S.i / n) * 100}%"></i></div>
-    <p class="quiz-q" id="domanda" tabindex="-1">${esc(q.q)}</p>
-    <div role="group" aria-labelledby="domanda">
+    <p class="quiz-q" id="domanda" tabindex="-1" lang="en">${esc(q.q)}</p>
+    <div role="group" aria-labelledby="domanda" lang="en">
       ${q.o.map((t, i) => {
         let c = "ans";
         if (bloccata) { if (i === q.a) c += " ok"; else if (i === r) c += " bad"; }
@@ -111,12 +170,12 @@ function mostra() {
         return `<button type="button" class="${c}" data-i="${i}" ${bloccata ? "disabled" : ""} aria-pressed="${i === r}"><span class="l">${LETTERE[i]}</span><span>${esc(t)}</span></button>`;
       }).join("")}
     </div>
-    <p class="quiz-fb ${bloccata ? (r === q.a ? "ok" : "bad") : ""}" role="status">${bloccata ? (r === q.a ? "Corretto." : `Sbagliato: la risposta giusta è la ${LETTERE[q.a]}.`) : ""}</p>
+    <p class="quiz-fb ${bloccata ? (r === q.a ? "ok" : "bad") : ""}" role="status">${bloccata ? (r === q.a ? T.corretto : T.sbagliato(LETTERE[q.a])) : ""}</p>
     <div class="quiz-nav">
-      <button type="button" class="btn ghost" id="prev" ${S.i ? "" : "disabled"}>← Indietro</button>
-      <button type="button" class="btn" id="next" ${r == null ? "disabled" : ""}>${S.i === n - 1 ? "Termina" : "Avanti →"}</button>
+      <button type="button" class="btn ghost" id="prev" ${S.i ? "" : "disabled"}>${T.indietro}</button>
+      <button type="button" class="btn" id="next" ${r == null ? "disabled" : ""}>${S.i === n - 1 ? T.termina : T.avanti}</button>
     </div>`;
-  $("#esci").onclick = () => { if (confirm("Uscire dal quiz? I progressi andranno persi.")) home(); };
+  $("#esci").onclick = () => { if (confirm(t().esciConferma)) home(); };
   app.querySelectorAll(".ans").forEach((b) => (b.onclick = () => scegli(+b.dataset.i)));
   $("#prev").onclick = () => { S.i--; mostra(); $("#domanda").focus(); };
   $("#next").onclick = avanti;
@@ -138,6 +197,8 @@ function avanti() {
 }
 
 function fine() {
+  vista = fine;
+  const T = t();
   const n = S.qs.length;
   const errori = S.qs.filter((q, i) => S.risposte[i] !== q.a);
   const giuste = n - errori.length;
@@ -148,21 +209,21 @@ function fine() {
       store.set("migliori", migliori);
     }
   }
-  const risposta = (q, i) => (i == null ? "nessuna" : `${LETTERE[i]}. ${esc(q.o[i])}`);
+  const risposta = (q, i) => (i == null ? T.nessuna : `${LETTERE[i]}. ${esc(q.o[i])}`);
   app.innerHTML = `
     <p class="quiz-score" tabindex="-1" id="punteggio">${giuste}/${n}</p>
-    <p class="note">${Math.round((giuste / n) * 100)}% di risposte corrette${errori.length ? ` · ${errori.length} da rivedere` : " · tutto giusto"}</p>
+    <p class="note">${T.percentuale(Math.round((giuste / n) * 100))} · ${errori.length ? T.daRivedere(errori.length) : T.tuttoGiusto}</p>
     <p class="quiz-actions">
-      ${errori.length ? `<button type="button" class="btn" id="ripassa">Rifai solo gli errori</button>` : ""}
-      <button type="button" class="btn ${errori.length ? "ghost" : ""}" id="ancora">Ricomincia</button>
-      <button type="button" class="btn ghost" id="menu">Menu</button>
+      ${errori.length ? `<button type="button" class="btn" id="ripassa">${T.rifaiErrori}</button>` : ""}
+      <button type="button" class="btn ${errori.length ? "ghost" : ""}" id="ancora">${T.ricomincia}</button>
+      <button type="button" class="btn ghost" id="menu">${T.menu}</button>
     </p>
-    ${errori.length ? `<h3 class="quiz-label">Errori</h3>
+    ${errori.length ? `<h3 class="quiz-label">${T.errori}</h3>
       ${S.qs.map((q, i) => S.risposte[i] === q.a ? "" : `
         <div class="quiz-rev">
-          <p><b>${q.id}.</b> ${esc(q.q)}</p>
-          <p class="bad">La tua: ${risposta(q, S.risposte[i])}</p>
-          <p class="ok">Giusta: ${risposta(q, q.a)}</p>
+          <p lang="en"><b>${q.id}.</b> ${esc(q.q)}</p>
+          <p class="bad">${T.tua}: <span lang="en">${risposta(q, S.risposte[i])}</span></p>
+          <p class="ok">${T.giusta}: <span lang="en">${risposta(q, q.a)}</span></p>
         </div>`).join("")}` : ""}`;
   $("#punteggio").focus();
   const ripassa = $("#ripassa");
@@ -170,6 +231,9 @@ function fine() {
   $("#ancora").onclick = () => inizia(null);
   $("#menu").onclick = home;
 }
+
+// Cambiata la lingua (lingua.js): si ridisegna la schermata attuale, senza perdere le risposte date
+document.addEventListener("lingua", () => { if (vista) vista(); });
 
 // Tastiera durante il quiz: A-D o 1-4 per rispondere, Invio o → per andare avanti, ← per tornare indietro
 document.addEventListener("keydown", (e) => {

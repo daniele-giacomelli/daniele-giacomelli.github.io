@@ -107,6 +107,20 @@ body::before {
 }
 @keyframes vento { to { transform: translateX(-1400px); } }
 
+/* Appunti: niente cielo, un foglio a quadretti come un quaderno. Righe sottili ogni 24px
+   e un po' più marcate ogni 5 quadretti; il colore viene dall'accento, quindi segue il tema */
+.quaderno::before {
+  --riga: color-mix(in srgb, var(--accent) 7%, transparent);
+  --riga-forte: color-mix(in srgb, var(--accent) 12%, transparent);
+  background:
+    linear-gradient(var(--riga-forte) 1px, transparent 1px) 0 0 / 120px 120px,
+    linear-gradient(90deg, var(--riga-forte) 1px, transparent 1px) 0 0 / 120px 120px,
+    linear-gradient(var(--riga) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--riga) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--bg);
+}
+.quaderno body::before { display: none; }
+
 /* La goccia e gli adesivi possono sporgere dal bordo: niente scroll orizzontale */
 html, body { overflow-x: clip; }
 
@@ -229,6 +243,10 @@ main,
 .lang-switch { display: inline-flex; border: 1.5px solid var(--fg); border-radius: 999px; overflow: hidden; }
 .lang-switch a { padding: 4px 10px; text-decoration: none; font-size: var(--t-1); line-height: 1.3; }
 .lang-switch a[aria-current] { background: var(--fg); color: var(--bg); }
+/* Negli appunti la lingua si cambia sulla stessa pagina: pulsanti invece di link */
+.lang-switch button { padding: 4px 10px; background: none; border: 0; color: inherit; font: inherit; font-size: var(--t-1); line-height: 1.3; cursor: pointer; }
+.lang-switch button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.lang-switch button:not([aria-pressed="true"]):hover { background: var(--hot); color: var(--on-holo); }
 .lang-switch a:not([aria-current]):hover { background: var(--hot); color: var(--on-holo); }
 
 /* Interruttore del tema: binario olografico, manopola cromata con sole o luna */

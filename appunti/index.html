@@ -1,61 +1,71 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" class="quaderno">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Appunti · Daniele Giacomelli</title>
-  <meta name="description" content="Appunti e quiz di Daniele Giacomelli per gli esami della magistrale in AI for Biomedicine and Healthcare all'Università di Torino.">
+  <title data-en="Notes · AI for Biomedicine and Healthcare">Appunti · AI for Biomedicine and Healthcare</title>
+  <meta name="description" content="Quiz e appunti per gli esami della magistrale in AI for Biomedicine and Healthcare all'Università di Torino." data-en-content="Quizzes and notes for the exams of the Master's in AI for Biomedicine and Healthcare at the University of Turin.">
   <meta name="color-scheme" content="light dark">
-  <script src="/tema.js?v=2026110903"></script>
+  <script src="/tema.js?v=2026110904"></script>
+  <script src="/appunti/lingua.js?v=2026110904"></script>
   <link rel="canonical" href="https://daniele-giacomelli.github.io/appunti/">
+  <!-- Anteprima per chi condivide il link nei gruppi del corso: in inglese, la lingua del corso -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Appunti · Notes">
+  <meta property="og:title" content="Quizzes and notes · AI for Biomedicine and Healthcare">
+  <meta property="og:description" content="Practice quizzes for the Master's exams at the University of Turin, in Italian and English.">
+  <meta property="og:url" content="https://daniele-giacomelli.github.io/appunti/">
+  <meta property="og:image" content="https://daniele-giacomelli.github.io/appunti/og-appunti.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Quizzes and notes, AI for Biomedicine and Healthcare, University of Turin">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="/fonts/JetBrainsMono.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/style.css?v=2026110903">
+  <link rel="stylesheet" href="/style.css?v=2026110904">
 </head>
 <body>
-  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+  <a class="skip-link" href="#contenuto" data-en="Skip to content">Vai al contenuto</a>
   <header class="site-header">
-    <nav aria-label="Navigazione principale">
-      <a class="brand" href="/"><span class="brand-star" aria-hidden="true">✦</span><span><span class="dim">~/</span>daniele-giacomelli</span></a>
-      <ul class="nav-links">
-        <li><a href="/#progetti"><sup>01</sup>progetti</a></li>
-        <li><a href="/#esperienza"><sup>02</sup>esperienza</a></li>
-        <li><a href="/#contatti"><sup>04</sup>contatti</a></li>
-        <li><a class="tab" href="/appunti/" aria-current="page">appunti</a></li>
-      </ul>
+    <nav aria-label="Navigazione" data-en-label="Navigation">
+      <a class="brand" href="/appunti/"><span class="brand-star" aria-hidden="true">✦</span><span><span class="dim">~/</span>appunti</span></a>
       <div class="nav-tools">
-        <button class="theme-toggle" type="button" aria-pressed="false"><span class="sr">Tema scuro</span><span class="knob" aria-hidden="true"></span></button>
+        <div class="lang-switch" role="group" aria-label="Lingua" data-en-label="Language">
+          <button type="button" data-lingua="it" lang="it" aria-pressed="false">IT</button>
+          <button type="button" data-lingua="en" lang="en" aria-pressed="false">EN</button>
+        </div>
+        <button class="theme-toggle" type="button" aria-pressed="false"><span class="sr" data-en="Dark theme">Tema scuro</span><span class="knob" aria-hidden="true"></span></button>
       </div>
     </nav>
   </header>
 
   <main id="contenuto">
     <section class="hero">
-      <h1 class="page-title">Appunti</h1>
-      <p class="lead">
+      <h1 class="page-title" data-en="Notes">Appunti</h1>
+      <p class="lead" data-en="Quizzes and notes for the exams of the Master's in AI for Biomedicine and Healthcare, organized by exam and module. I add them as I prepare for each course.">
         Quiz e appunti per gli esami della magistrale in AI for Biomedicine and Healthcare,
         divisi per esame e modulo. Li aggiungo man mano che preparo i corsi.
       </p>
     </section>
 
     <section id="primo-anno">
-      <h2>1° anno</h2>
+      <h2 data-en="1st year">1° anno</h2>
 
       <!-- Per un esame nuovo: copia questo blocco <div class="exam"> -->
       <div class="exam">
         <h3><span class="code">ONC0251</span>Biochemistry, cellular and molecular biology</h3>
         <ul class="modules">
-          <li><span class="letter">A</span><a href="/appunti/onc0251/a/">Structural biochemistry, or the molecules of life</a><span class="status">quiz · 62 domande</span></li>
-          <li><span class="letter">B</span><span class="empty">Introduction to cellular and molecular biology</span><span class="status">in arrivo</span></li>
-          <li><span class="letter">C</span><span class="empty">Cell signaling, metabolism and introduction to immunology</span><span class="status">in arrivo</span></li>
-          <li><span class="letter">D</span><span class="empty">Modeling and quantitative approaches to life science</span><span class="status">in arrivo</span></li>
+          <li><span class="letter">A</span><a href="/appunti/onc0251/a/">Structural biochemistry, or the molecules of life</a><span class="status" data-en="quiz · 62 questions">quiz · 62 domande</span></li>
+          <li><span class="letter">B</span><span class="empty">Introduction to cellular and molecular biology</span><span class="status" data-en="coming soon">in arrivo</span></li>
+          <li><span class="letter">C</span><span class="empty">Cell signaling, metabolism and introduction to immunology</span><span class="status" data-en="coming soon">in arrivo</span></li>
+          <li><span class="letter">D</span><span class="empty">Modeling and quantitative approaches to life science</span><span class="status" data-en="coming soon">in arrivo</span></li>
         </ul>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>© 2026 Daniele Giacomelli</p>
+    <p>© 2026 <a href="/" data-en-href="/en/">Daniele Giacomelli</a></p>
   </footer>
 </body>
 </html>
