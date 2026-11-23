@@ -1275,11 +1275,17 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 .pannello > :last-child { margin-bottom: 0; }
 
 /* Il compito d'esame: una riga per argomento, le sue caselle (una per domanda d'esame) e quante ne hai imparate */
+/* Tre colonne con le loro intestazioni: argomento, domande all'esame (quadratini e numero), imparate */
+.compito { --colonne-compito: minmax(0, 1fr) 190px 72px; }
+.righe-testa { display: grid; grid-template-columns: var(--colonne-compito); gap: 16px; padding: 0 8px 6px; font-size: 0.8125rem; color: var(--grigio); }
+.righe-testa span:last-child { text-align: right; }
 .righe-argomenti { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--riga-app); }
+.riga-esame { display: flex; align-items: center; gap: 10px; }
+.caselle-conto { font-size: 0.8125rem; color: var(--grigio); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .righe-argomenti li { border-bottom: 1px solid var(--riga-app); }
 .riga-argomento {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto 64px;
+  grid-template-columns: var(--colonne-compito);
   align-items: center;
   gap: 16px;
   width: 100%;
@@ -1298,13 +1304,9 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 .riga-conto { text-align: right; font-variant-numeric: tabular-nums; }
 .riga-conto.zero { color: var(--grigio); }
 .caselle { display: flex; gap: 4px; }
-.caselle i, .legenda i { display: inline-block; width: 14px; height: 14px; border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent); background: var(--superficie); }
-.caselle i.piena, .legenda i.piena { background: var(--tinta); border-color: var(--tinta); }
-.caselle i.vista, .legenda i.vista { background: var(--tinta-chiara); border-color: var(--tinta-chiara); }
-.legenda { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin: 12px 0 0; font-size: 0.8125rem; color: var(--grigio); }
-.legenda span { display: inline-flex; align-items: center; gap: 6px; }
-.legenda i { width: 10px; height: 10px; }
-.legenda-filtro { margin-left: auto; }
+.caselle i { display: inline-block; width: 14px; height: 14px; border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent); background: var(--superficie); }
+.caselle i.piena { background: var(--tinta); border-color: var(--tinta); }
+.legenda { margin: 12px 0 0; font-size: 0.8125rem; color: var(--grigio); max-width: 75ch; }
 
 /* Ripasso di oggi */
 .oggi-filtro { font-size: 0.875rem; font-weight: 600; }
@@ -1367,8 +1369,8 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
   .compito, .colonna, .test { grid-column: 1 / -1; }
 }
 @media (max-width: 560px) {
-  .riga-argomento { grid-template-columns: minmax(0, 1fr) auto; }
-  .riga-argomento .caselle { grid-column: 1 / -1; grid-row: 2; }
-  .legenda-filtro { margin-left: 0; }
+  .compito { --colonne-compito: minmax(0, 1fr) 72px; }
+  .righe-testa span:nth-child(2) { display: none; }
+  .riga-argomento .riga-esame { grid-column: 1 / -1; grid-row: 2; }
   .conto-valore { font-size: 1.5rem; }
 }

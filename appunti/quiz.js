@@ -38,10 +38,12 @@ const TESTI = {
     contoNuove: "Mai viste", contoImparate: "Imparate", contoStima: "Se l'esame fosse oggi",
     su: (n) => `su ${n}`,
     compito: "Il compito d'esame",
-    compitoSotto: (n, s) => `${n} domande, divise per argomento come nei test dell'anno scorso. Oggi ne sapresti con sicurezza circa ${s}.`,
-    caselleLabel: (p, s) => `${p} domande all'esame, ne sapresti ${s}`,
-    imparateBreve: (c, n) => `${c} di ${n}`,
-    legendaSai: "la sai", legendaViste: "vista, da consolidare", legendaDaVedere: "da vedere",
+    compitoSotto: (n, s) => `L'esame ha ${n} domande e ogni argomento ne vale sempre lo stesso numero. Oggi ne sapresti con sicurezza circa ${s}.`,
+    caselleLabel: (p, s) => `${s} su ${p} domande d'esame`,
+    caselleConto: (p, s) => `${s} su ${p}`,
+    imparateBreve: (c, n) => `${c} su ${n}`,
+    colonnaArgomento: "Argomento", colonnaEsame: "Domande all'esame", colonnaImparate: "Imparate",
+    legenda: "Ogni quadratino è una domanda dell'esame. Si colora in proporzione alle domande dell'argomento che hai imparato: se di Lipidi ne hai imparate metà, sapresti circa 3 delle sue 6.",
     materiali: "Materiali", scheda: "Scheda di confronto", schedaSotto: "I concetti che all'esame si confondono, uno accanto all'altro.",
     imparate: (c, n) => `${c} di ${n} imparate`,
     simula: "Simula un test",
@@ -92,10 +94,12 @@ const TESTI = {
     contoNuove: "Never seen", contoImparate: "Learned", contoStima: "If the exam were today",
     su: (n) => `of ${n}`,
     compito: "The exam paper",
-    compitoSotto: (n, s) => `${n} questions, split by topic as in last year's tests. Today you would surely know about ${s}.`,
-    caselleLabel: (p, s) => `${p} exam questions, you would know ${s}`,
+    compitoSotto: (n, s) => `The exam has ${n} questions and each topic is always worth the same number. Today you would surely know about ${s}.`,
+    caselleLabel: (p, s) => `${s} of ${p} exam questions`,
+    caselleConto: (p, s) => `${s} of ${p}`,
     imparateBreve: (c, n) => `${c} of ${n}`,
-    legendaSai: "you know it", legendaViste: "seen, not yet learned", legendaDaVedere: "not seen",
+    colonnaArgomento: "Topic", colonnaEsame: "Exam questions", colonnaImparate: "Learned",
+    legenda: "Each square is an exam question. It fills in proportion to the questions of that topic you have learned: if you have learned half of Lipids, you would know about 3 of its 6.",
     materiali: "Materials", scheda: "Comparison sheet", schedaSotto: "The concepts that are easy to mix up in the exam, side by side.",
     imparate: (c, n) => `${c} of ${n} learned`,
     simula: "Simulate a test",
@@ -244,15 +248,13 @@ function home() {
   const righe = dati.argomenti.map((a) => {
     const qs = tutte.filter((q) => q.t === a.id);
     const imp = qs.filter(imparata).length;
-    const viste = qs.filter((q) => srs[q.id] && !imparata(q)).length;
     const piene = qs.length ? Math.round((a.peso * imp) / qs.length) : 0;
-    const chiare = qs.length ? Math.min(a.peso - piene, Math.round((a.peso * viste) / qs.length)) : 0;
-    return { a, qs, imp, piene, chiare, stima: qs.length ? (a.peso * imp) / qs.length : 0 };
+    return { a, qs, imp, piene, stima: qs.length ? (a.peso * imp) / qs.length : 0 };
   });
   const totaleEsame = righe.reduce((n, r) => n + r.a.peso, 0);
   const stima = Math.round(righe.reduce((n, r) => n + r.stima, 0));
   const imparateTutte = tutte.filter(imparata).length;
-  console.assert(righe.every((r) => r.piene + r.chiare <= r.a.peso), "caselle oltre il peso dell'argomento");
+  console.assert(righe.every((r) => r.piene <= r.a.peso), "caselle oltre il peso dell'argomento");
   const conto = (etichetta, valore, nota) =>
     `<div class="conto"><dt>${etichetta}</dt><dd><span class="conto-valore${valore === 0 ? " zero" : ""}">${valore}</span> <span class="conto-nota">${nota}</span></dd></div>`;
   app.innerHTML = `
@@ -268,14 +270,15 @@ function home() {
         ${cfg.argomenti.length ? `<button type="button" class="link" id="tutti">${T.argomentiTutti}</button>` : ""}
       </div>
       <p class="pannello-sotto">${T.compitoSotto(totaleEsame, stima)}</p>
+      <div class="righe-testa" aria-hidden="true"><span>${T.colonnaArgomento}</span><span>${T.colonnaEsame}</span><span>${T.colonnaImparate}</span></div>
       <ul class="righe-argomenti">
         ${righe.map((r) => `<li><button type="button" class="riga-argomento" data-gruppo="argomento" data-k="${r.a.id}" aria-pressed="${cfg.argomenti.includes(r.a.id)}">
           <span class="riga-nome">${esc(r.a[inglese() ? "en" : "it"])}</span>
-          <span class="caselle" role="img" aria-label="${T.caselleLabel(r.a.peso, r.piene)}">${Array.from({ length: r.a.peso }, (_, i) => `<i class="${i < r.piene ? "piena" : i < r.piene + r.chiare ? "vista" : ""}"></i>`).join("")}</span>
+          <span class="riga-esame"><span class="caselle" role="img" aria-label="${T.caselleLabel(r.a.peso, r.piene)}">${Array.from({ length: r.a.peso }, (_, i) => `<i class="${i < r.piene ? "piena" : ""}"></i>`).join("")}</span><span class="caselle-conto" aria-hidden="true">${T.caselleConto(r.a.peso, r.piene)}</span></span>
           <span class="riga-conto${r.imp === 0 ? " zero" : ""}">${T.imparateBreve(r.imp, r.qs.length)}</span>
         </button></li>`).join("")}
       </ul>
-      <p class="legenda"><span><i class="piena"></i>${T.legendaSai}</span> <span><i class="vista"></i>${T.legendaViste}</span> <span><i></i>${T.legendaDaVedere}</span> <span class="legenda-filtro">${T.argomentiNota}</span></p>
+      <p class="legenda">${T.legenda} ${T.argomentiNota}</p>
     </section>
     <div class="colonna">
     <section class="pannello oggi" aria-labelledby="titolo-oggi">
