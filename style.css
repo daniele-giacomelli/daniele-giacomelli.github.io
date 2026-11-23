@@ -1265,6 +1265,9 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 .pannello { padding: 20px 22px; background: var(--superficie); border: 1.5px solid var(--bordo); box-shadow: 6px 6px 0 var(--ombra); }
 .compito { grid-column: span 8; }
 .colonna { grid-column: span 4; display: grid; gap: 24px; }
+.oggi-nota { margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--riga-app); }
+/* Azzera i progressi: un'azione di servizio, fuori dai pannelli, in fondo a destra */
+.azzera-riga { grid-column: 1 / -1; margin: 0; text-align: right; font-size: 0.875rem; }
 .test { grid-column: 1 / -1; }
 .test .seg { display: inline-flex; margin-right: 16px; }
 .test .check { display: inline-flex; margin-right: 20px; }

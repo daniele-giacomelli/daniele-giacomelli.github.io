@@ -279,12 +279,11 @@ function home() {
         ${extra.length ? `<button type="button" class="btn ${giro.length ? "ghost" : ""}" id="ancora">${T.ancora(extra.length)}</button>` : ""}
       </div>
       <label class="check"><input type="checkbox" id="nascondi" ${cfg.nascondi ? "checked" : ""}> ${T.nascondi}</label>
+      <p class="pannello-sotto oggi-nota">${T.comeFunziona} ${T.ancoraNota}</p>
     </section>
     <section class="pannello materiali" aria-labelledby="titolo-materiali">
       <h2 class="pannello-titolo" id="titolo-materiali">${T.materiali}</h2>
       <p><a href="/appunti/onc0251/a/confronti/">${T.scheda}</a><br><span class="pannello-sotto">${T.schedaSotto}</span></p>
-      <p class="pannello-sotto">${T.comeFunziona} ${T.ancoraNota}</p>
-      <p><button type="button" class="link" id="azzera">${T.azzera}</button></p>
     </section>
     </div>
     <section class="pannello test" aria-labelledby="titolo-test">
@@ -298,7 +297,8 @@ function home() {
       <label class="check"><input type="checkbox" id="md" ${cfg.mescolaDomande ? "checked" : ""}> ${T.mescolaDomande}</label>
       <label class="check"><input type="checkbox" id="mr" ${cfg.mescolaRisposte ? "checked" : ""}> ${T.mescolaRisposte}</label>
       <p class="quiz-actions"><button type="button" class="btn ghost" id="inizia">${T.inizia}</button></p>
-    </section>`;
+    </section>
+    <p class="azzera-riga"><button type="button" class="link" id="azzera">${T.azzera}</button></p>`;
   app.querySelectorAll("[data-gruppo]").forEach((b) => {
     b.onclick = () => {
       const { gruppo, k } = b.dataset;
@@ -362,8 +362,9 @@ function mostra() {
   const n = S.qs.length, q = S.qs[S.i], r = S.risposte[S.i], incerta = !!S.incerte[S.i];
   const bloccata = correzioneSubito() && r != null;
   const esito = !bloccata ? "" : r !== q.a ? T.sbagliato(LETTERE[q.a]) : incerta ? T.correttoIncerto : T.corretto;
-  // Con "rispondi prima di vedere le opzioni" si mostra solo la domanda, finché non si apre (o se si è già risposto)
-  const nascoste = cfg.nascondi && r == null && !S.aperte[S.i];
+  // Con "rispondi prima di vedere le opzioni" si mostra solo la domanda, finché non si apre (o se si è già risposto).
+  // Vale solo per il ripasso, dove sta la casella: i test restano come all'esame
+  const nascoste = cfg.nascondi && S.modo === RIPASSO && r == null && !S.aperte[S.i];
   app.innerHTML = `
     <div class="quiz-meta"><span>${T.domandaDi(S.i + 1, n)}${q.t ? ` · ${esc(nomeArgomento(q.t))}` : ""}${q.ripetuta ? ` · ${T.ripetuta}` : ""}</span><button type="button" class="link" id="esci">${T.esci}</button></div>
     <span class="giro-caselle" aria-hidden="true">${S.qs.map((x, i) => {
