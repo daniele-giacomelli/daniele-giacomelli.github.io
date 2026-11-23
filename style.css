@@ -1250,6 +1250,7 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 .appunti .link { font-size: 0.875rem; }
 .appunti .check { font-size: 0.875rem; }
 .appunti .check input { accent-color: var(--accent); }
+.appunti .btn { border-width: 1.5px; }
 
 /* La pagina iniziale: griglia a 12 colonne, gutter 16px.
    Righe: 3+3+3+3 (i conti), 9+3 (compito e ripasso), 6+6 (test e materiali): ogni bordo interno
@@ -1269,8 +1270,12 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 /* Azzera i progressi: un'azione di servizio, fuori dai pannelli, in fondo a destra */
 .azzera-riga { grid-column: 1 / -1; margin: 0; text-align: right; font-size: 0.875rem; }
 .test { grid-column: 1 / -1; }
-.test .seg { display: inline-flex; margin-right: 16px; }
-.test .check { display: inline-flex; margin-right: 20px; }
+/* Tre campi etichettati affiancati: Test, Modalità, Opzioni */
+.campi { display: grid; grid-template-columns: repeat(3, minmax(0, max-content)); gap: 16px 48px; margin: 6px 0 20px; }
+.campo { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.campo-nome { font-size: 0.8125rem; color: var(--grigio); }
+.campo-nota { font-size: 0.8125rem; color: var(--grigio); max-width: 30ch; }
+.campo .check { margin: 0; }
 .pannello-testa { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
 .pannello-titolo { margin: 0; font-family: var(--serif); font-optical-sizing: auto; font-style: normal; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
 .pannello-sotto { margin: 4px 0 14px; font-size: 0.875rem; color: var(--grigio); max-width: 62ch; }
@@ -1280,7 +1285,7 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 /* Il compito d'esame: una riga per argomento, le sue caselle (una per domanda d'esame) e quante ne hai imparate */
 /* Tre colonne: argomento (con quante domande vale all'esame), la barra di quanto ne hai imparato, il conto */
 .compito { --colonne-compito: minmax(0, 1fr) minmax(80px, 200px) 72px; }
-.riga-nome small { display: block; font-size: 0.75rem; color: var(--grigio); font-weight: 400; }
+.riga-nome small { display: block; font-size: 0.8125rem; color: var(--grigio); font-weight: 400; }
 .riga-barra { height: 10px; background: var(--superficie); border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent); }
 .riga-barra i { display: block; height: 100%; background: var(--tinta); }
 .righe-argomenti { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--riga-app); }
@@ -1313,9 +1318,10 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 .oggi-azioni { display: grid; gap: 8px; margin: 0 0 14px; }
 .oggi-azioni .btn { width: 100%; }
 
-/* Simula un test: scelte a segmenti neutre */
-.seg { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
-.seg button { padding: 6px 12px; background: var(--superficie); border: 1.5px solid var(--bordo); font: inherit; font-family: var(--mono); font-size: var(--t-1); color: var(--inchiostro); cursor: pointer; }
+/* Simula un test: scelte a segmenti uniti, così non si confondono con i pulsanti d'azione */
+.seg { display: inline-flex; margin: 0; }
+.seg button { min-height: 36px; padding: 6px 14px; background: var(--superficie); border: 1.5px solid var(--pulsante); font: inherit; font-family: var(--mono); font-size: 0.8125rem; font-weight: 600; color: var(--inchiostro); cursor: pointer; }
+.seg button + button { margin-left: -1.5px; }
 .seg button span { color: var(--grigio); margin-left: 4px; font-variant-numeric: tabular-nums; }
 .seg button[aria-pressed="true"] { background: var(--pulsante); border-color: var(--pulsante); color: var(--su-pulsante); }
 .seg button[aria-pressed="true"] span { color: inherit; opacity: 0.7; }
@@ -1369,8 +1375,8 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
   .compito, .colonna, .test { grid-column: 1 / -1; }
 }
 @media (max-width: 560px) {
-  .compito { --colonne-compito: minmax(0, 1fr) 72px; }
   .compito { --colonne-compito: minmax(0, 1fr) 64px; }
+  .campi { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .riga-argomento .riga-barra { grid-column: 1 / -1; grid-row: 2; }
   .conto-valore { font-size: 1.5rem; }
 }

@@ -51,6 +51,9 @@ const TESTI = {
     mescolaDomande: "Mescola l'ordine delle domande",
     mescolaRisposte: "Mescola l'ordine delle risposte",
     inizia: "Inizia",
+    testSotto: "I test A e B dell'anno scorso, interi, come all'esame.",
+    opzioni: "Opzioni",
+    iniziaTest: (nome) => `Inizia il ${nome}`,
     azzera: "Azzera i progressi",
     azzeraConferma: "Cancellare tutti i progressi del ripasso e i punteggi migliori di questo modulo?",
     domandaDi: (i, n) => `Domanda ${i} di ${n}`,
@@ -103,6 +106,9 @@ const TESTI = {
     mescolaDomande: "Shuffle the questions",
     mescolaRisposte: "Shuffle the answers",
     inizia: "Start",
+    testSotto: "Last year's Test A and B, whole, as on exam day.",
+    opzioni: "Options",
+    iniziaTest: (nome) => `Start ${nome}`,
     azzera: "Reset progress",
     azzeraConferma: "Delete all review progress and best scores for this module?",
     domandaDi: (i, n) => `Question ${i} of ${n}`,
@@ -288,15 +294,28 @@ function home() {
     </div>
     <section class="pannello test" aria-labelledby="titolo-test">
       <h2 class="pannello-titolo" id="titolo-test">${T.simula}</h2>
-      <p class="pannello-sotto">${cfg.modo === "esame" ? T.esameSotto : T.studioSotto}${migliori[cfg.test] != null ? `. ${T.migliore(migliori[cfg.test])}` : ""}</p>
-      <div class="seg" role="group" aria-label="Test">${scelte.map(([k, n]) => scelta("test", k, `${n()} <span>${contaTest(k)}</span>`, cfg.test === k)).join("")}</div>
-      <div class="seg" role="group" aria-label="${T.modalita}">
-        ${scelta("modo", "studio", T.studio, cfg.modo === "studio")}
-        ${scelta("modo", "esame", T.esame, cfg.modo === "esame")}
+      <p class="pannello-sotto">${T.testSotto}</p>
+      <div class="campi">
+        <div class="campo">
+          <span class="campo-nome" id="campo-test">Test</span>
+          <div class="seg" role="group" aria-labelledby="campo-test">${scelte.map(([k, n]) => scelta("test", k, `${n()} <span>${contaTest(k)}</span>`, cfg.test === k)).join("")}</div>
+          ${migliori[cfg.test] != null ? `<span class="campo-nota">${T.migliore(migliori[cfg.test])}</span>` : ""}
+        </div>
+        <div class="campo">
+          <span class="campo-nome" id="campo-modo">${T.modalita}</span>
+          <div class="seg" role="group" aria-labelledby="campo-modo">
+            ${scelta("modo", "studio", T.studio, cfg.modo === "studio")}
+            ${scelta("modo", "esame", T.esame, cfg.modo === "esame")}
+          </div>
+          <span class="campo-nota">${cfg.modo === "esame" ? T.esameSotto : T.studioSotto}</span>
+        </div>
+        <div class="campo">
+          <span class="campo-nome">${T.opzioni}</span>
+          <label class="check"><input type="checkbox" id="md" ${cfg.mescolaDomande ? "checked" : ""}> ${T.mescolaDomande}</label>
+          <label class="check"><input type="checkbox" id="mr" ${cfg.mescolaRisposte ? "checked" : ""}> ${T.mescolaRisposte}</label>
+        </div>
       </div>
-      <label class="check"><input type="checkbox" id="md" ${cfg.mescolaDomande ? "checked" : ""}> ${T.mescolaDomande}</label>
-      <label class="check"><input type="checkbox" id="mr" ${cfg.mescolaRisposte ? "checked" : ""}> ${T.mescolaRisposte}</label>
-      <p class="quiz-actions"><button type="button" class="btn ghost" id="inizia">${T.inizia}</button></p>
+      <p class="quiz-actions"><button type="button" class="btn" id="inizia">${T.iniziaTest(scelte.find(([k]) => k === cfg.test)[1]())}</button></p>
     </section>
     <p class="azzera-riga"><button type="button" class="link" id="azzera">${T.azzera}</button></p>`;
   app.querySelectorAll("[data-gruppo]").forEach((b) => {
