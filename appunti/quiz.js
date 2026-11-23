@@ -28,12 +28,15 @@ const TESTI = {
     tutte: "Tutte",
     oggi: "Ripasso di oggi",
     oggiStato: (s, n) => `<b>${s}</b> da ripassare · <b>${n}</b> mai viste`,
-    oggiVuoto: "Per oggi hai finito. Domani tornano le domande in scadenza.",
+    oggiVuoto: "Ripasso di oggi fatto. Se vuoi, continua con le domande più deboli.",
+    ancora: (n) => `Ancora ${n} sulle più deboli`,
+    ancoraNota: "Il giro sulle più deboli ripropone subito quelle che sbagli di più o segni come incerte.",
     iniziaRipasso: (n) => `Inizia il ripasso (${n})`,
     comeFunziona: "Sbagliate e incerte tornano domani, le giuste dopo 2, 4 e 7 giorni.",
     argomenti: "Argomenti",
     argomentiTutti: "Tutti gli argomenti", argomentiNota: "tocca per filtrare ripasso e test",
-    consolidateBreve: (c, n) => `${c}/${n}`,
+    imparate: (c, n) => `${c} di ${n} imparate`,
+    imparateNota: "Imparata = risposta giusta e sicura in due ripassi diversi.",
     simula: "Simula un test",
     soloSu: (a) => `Solo: ${a}`,
     pesoEsame: (p) => `${p} all'esame`,
@@ -70,12 +73,15 @@ const TESTI = {
     tutte: "All",
     oggi: "Today's review",
     oggiStato: (s, n) => `<b>${s}</b> due · <b>${n}</b> never seen`,
-    oggiVuoto: "You're done for today. Questions that are due will be back tomorrow.",
+    oggiVuoto: "Today's review is done. If you like, keep going with your weakest questions.",
+    ancora: (n) => `${n} more on the weakest`,
+    ancoraNota: "The round on the weakest brings back right away the ones you miss most or mark as unsure.",
     iniziaRipasso: (n) => `Start the review (${n})`,
     comeFunziona: "Wrong and unsure answers come back tomorrow, right ones after 2, 4 and 7 days.",
     argomenti: "Topics",
     argomentiTutti: "All topics", argomentiNota: "tap to filter review and tests",
-    consolidateBreve: (c, n) => `${c}/${n}`,
+    imparate: (c, n) => `${c} of ${n} learned`,
+    imparateNota: "Learned = answered right and sure in two separate reviews.",
     simula: "Simulate a test",
     soloSu: (a) => `Only: ${a}`,
     pesoEsame: (p) => `${p} in the exam`,
@@ -176,6 +182,15 @@ function registra(id, giusta, incerta) {
   store.set("srs", srs);
 }
 
+// Il giro extra, quando si vuole continuare oggi stesso: le domande già viste più fragili
+// (scatola più bassa, più errori), anche se non sono in scadenza. Con l'esame vicino ha senso insistere
+function giroExtra() {
+  const srs = store.get("srs") || {};
+  return mescola(domandeDi(TUTTI).filter(nelFiltro).filter((q) => srs[q.id] && srs[q.id].b < INTERVALLI.length - 1))
+    .sort((a, b) => srs[a.id].b - srs[b.id].b || srs[b.id].e - srs[a.id].e)
+    .slice(0, GIRO);
+}
+
 // Il giro di ripasso: prima le scadute (le più fragili per prime), poi le mai viste,
 // partendo dagli argomenti che pesano di più all'esame
 function giroDiRipasso() {
@@ -200,6 +215,7 @@ function home() {
   const migliori = store.get("migliori") || {};
   const tutte = domandeDi(TUTTI);
   const { scadute, nuove, giro } = giroDiRipasso();
+  const extra = giroExtra();
   const consolidate = (qs) => qs.filter((q) => srs[q.id] && srs[q.id].b >= CONSOLIDATA).length;
   const contaTest = (k) => domandeDi(k).filter(nelFiltro).length;
   const scelta = (gruppo, k, testo, attivo) =>
@@ -209,8 +225,11 @@ function home() {
       <h3 class="quiz-label">${T.oggi}</h3>
       <p class="quiz-oggi-stato">${giro.length ? T.oggiStato(scadute.length, nuove.length) : T.oggiVuoto}</p>
       ${cfg.argomenti.length ? `<p class="quiz-oggi-filtro">${T.soloSu(cfg.argomenti.map((id) => esc(nomeArgomento(id))).join(", "))}</p>` : ""}
-      ${giro.length ? `<p class="quiz-actions"><button type="button" class="btn" id="ripasso">${T.iniziaRipasso(giro.length)}</button></p>` : ""}
-      <p class="quiz-oggi-nota">${T.comeFunziona}</p>
+      <p class="quiz-actions">
+        ${giro.length ? `<button type="button" class="btn" id="ripasso">${T.iniziaRipasso(giro.length)}</button>` : ""}
+        ${extra.length ? `<button type="button" class="btn ${giro.length ? "ghost" : ""}" id="ancora">${T.ancora(extra.length)}</button>` : ""}
+      </p>
+      <p class="quiz-oggi-nota">${T.comeFunziona}${extra.length ? ` ${T.ancoraNota}` : ""}</p>
     </div>
     ${dati.argomenti.length ? `
     <div class="quiz-testa">
@@ -225,10 +244,11 @@ function home() {
           <span class="argomento-nome">${esc(a[inglese() ? "en" : "it"])}</span>
           <span class="argomento-peso">${T.pesoEsame(a.peso)}</span>
           <span class="argomento-barra" aria-hidden="true"><i style="width:${qs.length ? Math.round((c / qs.length) * 100) : 0}%"></i></span>
-          <span class="argomento-conto">${T.consolidateBreve(c, qs.length)}</span>
+          <span class="argomento-conto">${T.imparate(c, qs.length)}</span>
         </button></li>`;
       }).join("")}
-    </ul>` : ""}
+    </ul>
+    <p class="quiz-testa-nota quiz-argomenti-nota">${T.imparateNota}</p>` : ""}
     <details class="quiz-test" ${testAperto ? "open" : ""}>
       <summary>${T.simula}</summary>
       <div class="quiz-test-corpo">
@@ -263,6 +283,8 @@ function home() {
   $("#inizia").onclick = () => inizia(domandeDi(cfg.test).filter(nelFiltro), { modo: cfg.modo });
   const ripasso = $("#ripasso");
   if (ripasso) ripasso.onclick = () => inizia(giroDiRipasso().giro, { modo: RIPASSO });
+  const ancora = $("#ancora");
+  if (ancora) ancora.onclick = () => inizia(giroExtra(), { modo: RIPASSO, extra: true });
   $("#azzera").onclick = () => {
     if (!confirm(t().azzeraConferma)) return;
     store.del("srs");
@@ -272,7 +294,7 @@ function home() {
 }
 
 // qs: le domande del giro; modo: "studio", "esame" o "ripasso"; errori: true se è il "rifai solo gli errori"
-function inizia(qs, { modo, errori = false }) {
+function inizia(qs, { modo, errori = false, extra = false }) {
   if (!qs.length) return;
   // Nel ripasso l'ordine delle risposte si mescola sempre: si impara il contenuto, non la posizione
   const mescolaRisposte = modo === RIPASSO || cfg.mescolaRisposte;
@@ -284,6 +306,7 @@ function inizia(qs, { modo, errori = false }) {
     incerte: [],
     modo,
     errori,
+    extra,
     mescolaRisposte,
   };
   mostra();
@@ -405,7 +428,13 @@ function fine() {
   const ripassa = $("#ripassa");
   // Gli errori si rifanno sempre con la correzione subito, per leggere la spiegazione
   if (ripassa) ripassa.onclick = () => inizia(errori.map((v) => ({ ...v.q.orig, id: v.q.id })), { modo: "studio", errori: true });
-  $("#ancora").onclick = () => (S.modo === RIPASSO ? inizia(giroDiRipasso().giro, { modo: RIPASSO }) : inizia(domandeDi(cfg.test).filter(nelFiltro), { modo: S.modo }));
+  // Ricomincia: un altro giro dello stesso tipo (ripasso di oggi, giro extra o test scelto)
+  $("#ancora").onclick = () => {
+    if (S.modo !== RIPASSO) return inizia(domandeDi(cfg.test).filter(nelFiltro), { modo: S.modo });
+    const giro = S.extra ? giroExtra() : giroDiRipasso().giro;
+    if (giro.length) inizia(giro, { modo: RIPASSO, extra: S.extra });
+    else home();
+  };
   $("#menu").onclick = home;
 }
 

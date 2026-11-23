@@ -1021,7 +1021,8 @@ section.attuale > h2::before {
 .quiz-testa { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 10px; }
 .quiz-testa .quiz-label { margin: 0; }
 .quiz-testa-nota, .quiz-testa .link { font-size: var(--t-1); font-family: var(--mono); color: var(--muted); }
-.argomenti { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); column-gap: 32px; border-top: 1px solid var(--line); }
+.quiz-argomenti-nota { display: block; margin: 10px 0 0; }
+.argomenti { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); column-gap: 40px; border-top: 1px solid var(--line); }
 .argomenti li { border-bottom: 1px solid var(--line); }
 .argomento {
   display: grid;
