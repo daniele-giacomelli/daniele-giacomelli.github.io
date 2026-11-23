@@ -69,6 +69,10 @@ const TESTI = {
     sbagliato: (l) => `Sbagliato: la risposta giusta è la ${l}.`,
     perche: "Perché",
     indietro: "← Indietro", avanti: "Avanti →", termina: "Termina",
+    mancano: (n) => `Ne mancano ${n}: vai alla prima`,
+    caselleNome: "Domande del giro",
+    casella: (i, stato) => `Domanda ${i}${stato ? `, ${stato}` : ""}`,
+    statoGiusta: "giusta", statoSbagliata: "sbagliata", statoRisposta: "risposta data", statoRipetuta: "ripresentata",
     percentuale: (p) => `${p}% di risposte corrette`,
     daRivedere: (n) => `${n} da rivedere`,
     tuttoGiusto: "tutto giusto",
@@ -124,6 +128,10 @@ const TESTI = {
     sbagliato: (l) => `Wrong: the right answer is ${l}.`,
     perche: "Why",
     indietro: "← Back", avanti: "Next →", termina: "Finish",
+    mancano: (n) => `${n} left: go to the first`,
+    caselleNome: "Questions in this round",
+    casella: (i, stato) => `Question ${i}${stato ? `, ${stato}` : ""}`,
+    statoGiusta: "right", statoSbagliata: "wrong", statoRisposta: "answered", statoRipetuta: "repeated",
     percentuale: (p) => `${p}% correct`,
     daRivedere: (n) => `${n} to review`,
     tuttoGiusto: "all correct",
@@ -386,11 +394,12 @@ function mostra() {
   const nascoste = cfg.nascondi && S.modo === RIPASSO && r == null && !S.aperte[S.i];
   app.innerHTML = `
     <div class="quiz-meta"><span>${T.domandaDi(S.i + 1, n)}${q.t ? ` · ${esc(nomeArgomento(q.t))}` : ""}${q.ripetuta ? ` · ${T.ripetuta}` : ""}</span><button type="button" class="link" id="esci">${T.esci}</button></div>
-    <span class="giro-caselle" aria-hidden="true">${S.qs.map((x, i) => {
+    <nav class="giro-caselle" aria-label="${T.caselleNome}">${S.qs.map((x, i) => {
       const ri = S.risposte[i];
-      const stato = i === S.i ? "attuale" : ri == null ? "" : !correzioneSubito() ? "visto" : ri === x.a ? "giusto" : "sbagliato";
-      return `<i class="${stato}"></i>`;
-    }).join("")}</span>
+      const stato = ri == null ? "" : !correzioneSubito() ? "visto" : ri === x.a ? "giusto" : "sbagliato";
+      const detto = [{ visto: T.statoRisposta, giusto: T.statoGiusta, sbagliato: T.statoSbagliata }[stato], x.ripetuta && T.statoRipetuta].filter(Boolean).join(", ");
+      return `<button type="button" class="${[stato, x.ripetuta ? "ripetuta" : ""].join(" ").trim()}" data-vai="${i}" aria-label="${T.casella(i + 1, detto)}"${i === S.i ? ' aria-current="step"' : ""}>${i + 1}</button>`;
+    }).join("")}</nav>
     <p class="quiz-q" id="domanda" tabindex="-1" lang="en">${esc(q.q)}</p>
     ${nascoste ? `<p class="note">${T.pensaPrima}</p>
     <p class="quiz-actions"><button type="button" class="btn ghost" id="apri">${T.mostraOpzioni}</button></p>` : `<div role="group" aria-labelledby="domanda" lang="en">
@@ -406,7 +415,7 @@ function mostra() {
     ${bloccata && q.e ? `<p class="quiz-why"><b>${T.perche}.</b> <span lang="en">${esc(q.e)}</span></p>` : ""}
     <div class="quiz-nav">
       <button type="button" class="btn ghost" id="prev" ${S.i ? "" : "disabled"}>${T.indietro}</button>
-      <button type="button" class="btn" id="next" ${r == null ? "disabled" : ""}>${S.i === n - 1 ? T.termina : T.avanti}</button>
+      <button type="button" class="btn" id="next" ${r == null ? "disabled" : ""}>${S.i < n - 1 ? T.avanti : mancanti() ? T.mancano(mancanti()) : T.termina}</button>
     </div>`;
   $("#esci").onclick = () => { if (confirm(t().esciConferma)) home(); };
   app.querySelectorAll(".ans").forEach((b) => (b.onclick = () => scegli(+b.dataset.i)));
@@ -415,6 +424,16 @@ function mostra() {
   if (apri) apri.onclick = apriOpzioni;
   $("#prev").onclick = () => { S.i--; mostra(); $("#domanda").focus(); };
   $("#next").onclick = avanti;
+  app.querySelectorAll("[data-vai]").forEach((b) => (b.onclick = () => vaiA(+b.dataset.vai)));
+}
+
+const mancanti = () => S.qs.filter((_, i) => S.risposte[i] == null).length;
+
+function vaiA(i) {
+  if (i === S.i) return;
+  S.i = i;
+  mostra();
+  $("#domanda").focus();
 }
 
 function apriOpzioni() {
@@ -448,7 +467,11 @@ function scegli(i) {
 
 function avanti() {
   if (S.risposte[S.i] == null) return;
-  if (S.i === S.qs.length - 1) return fine();
+  if (S.i === S.qs.length - 1) {
+    // Saltando tra le caselle si possono lasciare domande indietro: prima di chiudere si torna lì
+    const prima = S.qs.findIndex((_, i) => S.risposte[i] == null);
+    return prima === -1 ? fine() : vaiA(prima);
+  }
   S.i++;
   mostra();
   $("#domanda").focus();

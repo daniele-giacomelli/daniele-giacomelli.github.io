@@ -1330,12 +1330,15 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 /* La domanda */
 #quiz[data-vista="domanda"], #quiz[data-vista="fine"] { max-width: 760px; }
 .quiz-meta { display: flex; justify-content: space-between; gap: 12px; font-size: 0.875rem; color: var(--grigio); }
-.giro-caselle { display: flex; flex-wrap: wrap; gap: 3px; margin: 10px 0 22px; }
-.giro-caselle i { width: 10px; height: 10px; border: 1px solid var(--bordo-app); border-radius: 2px; background: var(--superficie); }
-.giro-caselle i.visto { background: var(--tinta-chiara); border-color: var(--tinta-chiara); }
-.giro-caselle i.giusto { background: var(--ok); border-color: var(--ok); }
-.giro-caselle i.sbagliato { background: var(--bad); border-color: var(--bad); }
-.giro-caselle i.attuale { border: 2px solid var(--inchiostro); }
+/* Le domande del giro: pulsanti numerati tutti uguali, in righe ordinate; si salta a quella che vuoi */
+.giro-caselle { display: grid; grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); gap: 4px; margin: 12px 0 24px; }
+.giro-caselle button { height: 32px; padding: 0; background: var(--superficie); border: 1.5px solid var(--bordo-app); font-family: var(--mono); font-size: 0.75rem; font-variant-numeric: tabular-nums; color: var(--grigio); cursor: pointer; transition: background-color 0.15s, border-color 0.15s; }
+.giro-caselle button:hover { border-color: var(--inchiostro); color: var(--inchiostro); }
+.giro-caselle button.visto { background: var(--tinta-chiara); border-color: var(--tinta); color: var(--inchiostro); }
+.giro-caselle button.giusto { background: var(--ok-soft); border-color: var(--ok); color: var(--inchiostro); }
+.giro-caselle button.sbagliato { background: var(--bad-soft); border-color: var(--bad); color: var(--inchiostro); }
+.giro-caselle button.ripetuta { border-style: dashed; }
+.giro-caselle button[aria-current="step"] { background: var(--pulsante); border-color: var(--pulsante); color: var(--su-pulsante); font-weight: 700; box-shadow: 2px 2px 0 var(--ombra); }
 .appunti .ans.sel { background: var(--scelta); color: var(--fg); }
 .appunti .ans.sel .l { color: var(--fg); }
 .quiz-incerto { margin: 8px 0 0; }
