@@ -38,8 +38,7 @@ const TESTI = {
     contoNuove: "Mai viste", contoImparate: "Imparate", contoStima: "Se l'esame fosse oggi",
     su: (n) => `su ${n}`,
     compito: "Il compito d'esame",
-    compitoSotto: (n, s) => `Ogni quadratino è una delle ${n} domande dell'esame e si colora man mano che impari l'argomento. Oggi ne sapresti circa ${s}.`,
-    caselleLabel: (p, s) => `${s} su ${p} domande d'esame`,
+    compitoSotto: (n, s) => `Quanto hai imparato di ogni argomento, e quante delle ${n} domande dell'esame vale. Con quello che sai oggi ne faresti circa ${s}.`,
     imparateBreve: (c, n) => `${c} su ${n}`,
     materiali: "Materiali", scheda: "Scheda di confronto", schedaSotto: "I concetti che all'esame si confondono, uno accanto all'altro.",
     imparate: (c, n) => `${c} di ${n} imparate`,
@@ -91,8 +90,7 @@ const TESTI = {
     contoNuove: "Never seen", contoImparate: "Learned", contoStima: "If the exam were today",
     su: (n) => `of ${n}`,
     compito: "The exam paper",
-    compitoSotto: (n, s) => `Each square is one of the ${n} exam questions and fills in as you learn the topic. Today you would know about ${s}.`,
-    caselleLabel: (p, s) => `${s} of ${p} exam questions`,
+    compitoSotto: (n, s) => `How much of each topic you have learned, and how many of the ${n} exam questions it is worth. With what you know today you would get about ${s}.`,
     imparateBreve: (c, n) => `${c} of ${n}`,
     materiali: "Materials", scheda: "Comparison sheet", schedaSotto: "The concepts that are easy to mix up in the exam, side by side.",
     imparate: (c, n) => `${c} of ${n} learned`,
@@ -222,7 +220,7 @@ function giroDiRipasso() {
 // La pagina iniziale è un cruscotto in quattro righe, sulla griglia a 12 colonne del foglio di stile:
 // quattro conti (3+3+3+3), il compito d'esame (8) accanto a una colonna con ripasso di oggi e materiali (4),
 // poi la simulazione di un test a tutta larghezza.
-// L'unico colore è sul dato principale: le caselle del compito, una per domanda d'esame
+// L'unico colore è sul dato principale: le barre di quanto hai imparato di ogni argomento
 function home() {
   S = null;
   vista = home;
@@ -242,13 +240,11 @@ function home() {
   const righe = dati.argomenti.map((a) => {
     const qs = tutte.filter((q) => q.t === a.id);
     const imp = qs.filter(imparata).length;
-    const piene = qs.length ? Math.round((a.peso * imp) / qs.length) : 0;
-    return { a, qs, imp, piene, stima: qs.length ? (a.peso * imp) / qs.length : 0 };
+    return { a, qs, imp, stima: qs.length ? (a.peso * imp) / qs.length : 0 };
   });
   const totaleEsame = righe.reduce((n, r) => n + r.a.peso, 0);
   const stima = Math.round(righe.reduce((n, r) => n + r.stima, 0));
   const imparateTutte = tutte.filter(imparata).length;
-  console.assert(righe.every((r) => r.piene <= r.a.peso), "caselle oltre il peso dell'argomento");
   const conto = (etichetta, valore, nota) =>
     `<div class="conto"><dt>${etichetta}</dt><dd><span class="conto-valore${valore === 0 ? " zero" : ""}">${valore}</span> <span class="conto-nota">${nota}</span></dd></div>`;
   app.innerHTML = `
@@ -266,9 +262,9 @@ function home() {
       <p class="pannello-sotto">${T.compitoSotto(totaleEsame, stima)}</p>
       <ul class="righe-argomenti">
         ${righe.map((r) => `<li><button type="button" class="riga-argomento" data-gruppo="argomento" data-k="${r.a.id}" aria-pressed="${cfg.argomenti.includes(r.a.id)}">
-          <span class="riga-nome">${esc(r.a[inglese() ? "en" : "it"])}</span>
-          <span class="caselle" role="img" aria-label="${T.caselleLabel(r.a.peso, r.piene)}">${Array.from({ length: r.a.peso }, (_, i) => `<i class="${i < r.piene ? "piena" : ""}"></i>`).join("")}</span>
-          <span class="riga-conto${r.imp === 0 ? " zero" : ""}">${T.imparateBreve(r.imp, r.qs.length)}</span>
+          <span class="riga-nome">${esc(r.a[inglese() ? "en" : "it"])}<small>${T.pesoEsame(r.a.peso)}</small></span>
+          <span class="riga-barra" aria-hidden="true"><i style="width:${r.qs.length ? Math.round((r.imp / r.qs.length) * 100) : 0}%"></i></span>
+          <span class="riga-conto${r.imp === 0 ? " zero" : ""}">${T.imparateBreve(r.imp, r.qs.length)}<span class="sr"> ${T.contoImparate.toLowerCase()}</span></span>
         </button></li>`).join("")}
       </ul>
       <p class="legenda">${T.argomentiNota}</p>
