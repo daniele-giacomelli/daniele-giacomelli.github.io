@@ -54,6 +54,9 @@ const TESTI = {
     esci: "Esci",
     esciConferma: "Uscire dal quiz? Le risposte già date restano nel ripasso.",
     incerto: "Non sono sicuro",
+    nascondi: "Rispondi prima di vedere le opzioni: le opzioni compaiono solo quando le chiedi",
+    mostraOpzioni: "Ho la mia risposta: mostra le opzioni",
+    pensaPrima: "Prova a rispondere a mente, poi apri le opzioni.",
     corretto: "Corretto.",
     correttoIncerto: "Corretto, ma la rivedi domani visto che non eri sicuro.",
     sbagliato: (l) => `Sbagliato: la risposta giusta è la ${l}.`,
@@ -99,6 +102,9 @@ const TESTI = {
     esci: "Quit",
     esciConferma: "Quit the quiz? Answers already given stay in the review.",
     incerto: "Not sure",
+    nascondi: "Answer before seeing the options: they appear only when you ask",
+    mostraOpzioni: "I have my answer: show the options",
+    pensaPrima: "Try to answer in your head, then open the options.",
     corretto: "Correct.",
     correttoIncerto: "Correct, but you'll see it again tomorrow since you weren't sure.",
     sbagliato: (l) => `Wrong: the right answer is ${l}.`,
@@ -153,7 +159,7 @@ async function avvia() {
   const chiavi = Object.keys(dati.test);
   scelte = chiavi.map((k) => [k, () => nome(k)]);
   if (chiavi.length > 1) scelte.push([TUTTI, () => t().tutte]);
-  cfg = Object.assign({ test: scelte[0][0], modo: "studio", mescolaDomande: false, mescolaRisposte: false, argomenti: [] }, store.get("cfg") || {});
+  cfg = Object.assign({ test: scelte[0][0], modo: "studio", mescolaDomande: false, mescolaRisposte: false, argomenti: [], nascondi: false }, store.get("cfg") || {});
   if (!scelte.some(([k]) => k === cfg.test)) cfg.test = scelte[0][0];
   cfg.argomenti = cfg.argomenti.filter((id) => dati.argomenti.some((a) => a.id === id));
   home();
@@ -230,6 +236,7 @@ function home() {
         ${extra.length ? `<button type="button" class="btn ${giro.length ? "ghost" : ""}" id="ancora">${T.ancora(extra.length)}</button>` : ""}
       </p>
       <p class="quiz-oggi-nota">${T.comeFunziona}${extra.length ? ` ${T.ancoraNota}` : ""}</p>
+      <label class="check quiz-nascondi"><input type="checkbox" id="nascondi" ${cfg.nascondi ? "checked" : ""}> ${T.nascondi}</label>
     </div>
     ${dati.argomenti.length ? `
     <div class="quiz-testa">
@@ -278,6 +285,7 @@ function home() {
   const tuttiArgomenti = $("#tutti");
   if (tuttiArgomenti) tuttiArgomenti.onclick = () => { cfg.argomenti = []; store.set("cfg", cfg); home(); app.querySelector(".argomento")?.focus(); };
   $(".quiz-test").ontoggle = (e) => { testAperto = e.target.open; };
+  $("#nascondi").onchange = (e) => { cfg.nascondi = e.target.checked; store.set("cfg", cfg); };
   $("#md").onchange = (e) => { cfg.mescolaDomande = e.target.checked; store.set("cfg", cfg); };
   $("#mr").onchange = (e) => { cfg.mescolaRisposte = e.target.checked; store.set("cfg", cfg); };
   $("#inizia").onclick = () => inizia(domandeDi(cfg.test).filter(nelFiltro), { modo: cfg.modo });
@@ -304,6 +312,7 @@ function inizia(qs, { modo, errori = false, extra = false }) {
     i: 0,
     risposte: [],
     incerte: [],
+    aperte: [],
     modo,
     errori,
     extra,
@@ -326,18 +335,21 @@ function mostra() {
   const n = S.qs.length, q = S.qs[S.i], r = S.risposte[S.i], incerta = !!S.incerte[S.i];
   const bloccata = correzioneSubito() && r != null;
   const esito = !bloccata ? "" : r !== q.a ? T.sbagliato(LETTERE[q.a]) : incerta ? T.correttoIncerto : T.corretto;
+  // Con "rispondi prima di vedere le opzioni" si mostra solo la domanda, finché non si apre (o se si è già risposto)
+  const nascoste = cfg.nascondi && r == null && !S.aperte[S.i];
   app.innerHTML = `
     <div class="quiz-meta"><span>${T.domandaDi(S.i + 1, n)}${q.t ? ` · ${esc(nomeArgomento(q.t))}` : ""}${q.ripetuta ? ` · ${T.ripetuta}` : ""}</span><button type="button" class="link" id="esci">${T.esci}</button></div>
     <div class="quiz-bar" aria-hidden="true"><i style="width:${(S.i / n) * 100}%"></i></div>
     <p class="quiz-q" id="domanda" tabindex="-1" lang="en">${esc(q.q)}</p>
-    <div role="group" aria-labelledby="domanda" lang="en">
+    ${nascoste ? `<p class="note">${T.pensaPrima}</p>
+    <p class="quiz-actions"><button type="button" class="btn ghost" id="apri">${T.mostraOpzioni}</button></p>` : `<div role="group" aria-labelledby="domanda" lang="en">
       ${q.o.map((t, i) => {
         let c = "ans";
         if (bloccata) { if (i === q.a) c += " ok"; else if (i === r) c += " bad"; }
         else if (i === r) c += " sel";
         return `<button type="button" class="${c}" data-i="${i}" ${bloccata ? "disabled" : ""} aria-pressed="${i === r}"><span class="l">${LETTERE[i]}</span><span>${esc(t)}</span></button>`;
       }).join("")}
-    </div>
+    </div>`}
     <p class="quiz-incerto"><button type="button" class="incerto" id="incerto" aria-pressed="${incerta}" ${bloccata ? "disabled" : ""}>${T.incerto}</button></p>
     <p class="quiz-fb ${bloccata ? (r === q.a ? "ok" : "bad") : ""}" role="status">${esito}</p>
     ${bloccata && q.e ? `<div class="quiz-why"><b>${T.perche}</b> <span lang="en">${esc(q.e)}</span></div>` : ""}
@@ -348,8 +360,16 @@ function mostra() {
   $("#esci").onclick = () => { if (confirm(t().esciConferma)) home(); };
   app.querySelectorAll(".ans").forEach((b) => (b.onclick = () => scegli(+b.dataset.i)));
   $("#incerto").onclick = cambiaIncerto;
+  const apri = $("#apri");
+  if (apri) apri.onclick = apriOpzioni;
   $("#prev").onclick = () => { S.i--; mostra(); $("#domanda").focus(); };
   $("#next").onclick = avanti;
+}
+
+function apriOpzioni() {
+  S.aperte[S.i] = true;
+  mostra();
+  app.querySelector(".ans")?.focus();
 }
 
 function cambiaIncerto() {
@@ -442,11 +462,16 @@ function fine() {
 document.addEventListener("lingua", () => { if (vista) vista(); });
 
 // Tastiera durante il quiz: A-D o 1-4 per rispondere, N per "non sono sicuro",
-// Invio o → per andare avanti, ← per tornare indietro
+// Invio o → per andare avanti, ← per tornare indietro; con le opzioni nascoste, Spazio o O le apre
 document.addEventListener("keydown", (e) => {
   if (!S || !$(".quiz-q") || e.ctrlKey || e.metaKey || e.altKey) return;
   const k = e.key.toUpperCase();
   const i = k.length === 1 ? Math.max(LETTERE.indexOf(k), "12345678".indexOf(k)) : -1;
+  if ($("#apri")) {
+    if (e.key === " " || k === "O") { e.preventDefault(); apriOpzioni(); }
+    else if (k === "N") cambiaIncerto();
+    return;
+  }
   if (i >= 0 && i < S.qs[S.i].o.length) scegli(i);
   else if (k === "N") cambiaIncerto();
   else if (e.key === "ArrowRight" || (e.key === "Enter" && !e.target.closest("button"))) avanti();
