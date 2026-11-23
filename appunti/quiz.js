@@ -27,15 +27,23 @@ const TESTI = {
     migliore: (n) => `migliore: ${n}`,
     tutte: "Tutte",
     oggi: "Ripasso di oggi",
-    oggiStato: (s, n) => `<b>${s}</b> da ripassare · <b>${n}</b> mai viste`,
+    oggiStato: (s, n) => `${s} in scadenza e ${n} mai viste. Il giro parte dagli argomenti che pesano di più.`,
     oggiVuoto: "Ripasso di oggi fatto. Se vuoi, continua con le domande più deboli.",
     ancora: (n) => `Ancora ${n} sulle più deboli`,
     ancoraNota: "Il giro sulle più deboli ripropone subito quelle che sbagli di più o segni come incerte.",
     iniziaRipasso: (n) => `Inizia il ripasso (${n})`,
     comeFunziona: "Sbagliate e incerte tornano domani, le giuste dopo 2, 4 e 7 giorni.",
     argomenti: "Argomenti",
-    argomentiTutti: "Tutti gli argomenti", argomentiNota: "Spunta uno o più argomenti per ripassare solo quelli.",
-    legenda: "A margine, quante domande vale l'argomento all'esame. Ogni quadretto è una domanda: chiaro se l'hai già vista, pieno quando l'hai imparata (giusta e sicura in due ripassi diversi).",
+    argomentiTutti: "Tutti gli argomenti", argomentiNota: "Tocca un argomento per ripassare solo quello.",
+    contoScadute: "Da ripassare oggi", contoScaduteNota: "in scadenza",
+    contoNuove: "Mai viste", contoImparate: "Imparate", contoStima: "Se l'esame fosse oggi",
+    su: (n) => `su ${n}`,
+    compito: "Il compito d'esame",
+    compitoSotto: (n, s) => `${n} domande, divise per argomento come nei test dell'anno scorso. Oggi ne sapresti con sicurezza circa ${s}.`,
+    caselleLabel: (p, s) => `${p} domande all'esame, ne sapresti ${s}`,
+    imparateBreve: (c, n) => `${c} di ${n}`,
+    legendaSai: "la sai", legendaViste: "vista, da consolidare", legendaDaVedere: "da vedere",
+    materiali: "Materiali", scheda: "Scheda di confronto", schedaSotto: "I concetti che all'esame si confondono, uno accanto all'altro.",
     imparate: (c, n) => `${c} di ${n} imparate`,
     simula: "Simula un test",
     soloSu: (a) => `Solo: ${a}`,
@@ -75,15 +83,23 @@ const TESTI = {
     migliore: (n) => `best: ${n}`,
     tutte: "All",
     oggi: "Today's review",
-    oggiStato: (s, n) => `<b>${s}</b> due · <b>${n}</b> never seen`,
+    oggiStato: (s, n) => `${s} due and ${n} never seen. The round starts from the topics that weigh most.`,
     oggiVuoto: "Today's review is done. If you like, keep going with your weakest questions.",
     ancora: (n) => `${n} more on the weakest`,
     ancoraNota: "The round on the weakest brings back right away the ones you miss most or mark as unsure.",
     iniziaRipasso: (n) => `Start the review (${n})`,
     comeFunziona: "Wrong and unsure answers come back tomorrow, right ones after 2, 4 and 7 days.",
     argomenti: "Topics",
-    argomentiTutti: "All topics", argomentiNota: "Tick one or more topics to review only those.",
-    legenda: "In the margin, how many exam questions the topic is worth. Each square is a question: light once you have seen it, filled when you have learned it (right and sure in two separate reviews).",
+    argomentiTutti: "All topics", argomentiNota: "Tap a topic to review only that one.",
+    contoScadute: "To review today", contoScaduteNota: "due",
+    contoNuove: "Never seen", contoImparate: "Learned", contoStima: "If the exam were today",
+    su: (n) => `of ${n}`,
+    compito: "The exam paper",
+    compitoSotto: (n, s) => `${n} questions, split by topic as in last year's tests. Today you would surely know about ${s}.`,
+    caselleLabel: (p, s) => `${p} exam questions, you would know ${s}`,
+    imparateBreve: (c, n) => `${c} of ${n}`,
+    legendaSai: "you know it", legendaViste: "seen, not yet learned", legendaDaVedere: "not seen",
+    materiali: "Materials", scheda: "Comparison sheet", schedaSotto: "The concepts that are easy to mix up in the exam, side by side.",
     imparate: (c, n) => `${c} of ${n} learned`,
     simula: "Simulate a test",
     soloSu: (a) => `Only: ${a}`,
@@ -209,70 +225,93 @@ function giroDiRipasso() {
   return { scadute, nuove, giro: [...scadute, ...nuove].slice(0, GIRO) };
 }
 
-// La pagina iniziale ha una sola azione principale, il ripasso di oggi. Gli argomenti filtrano sia il ripasso
-// sia i test; la simulazione di un test è un percorso secondario, chiuso finché non lo si apre
-let testAperto = false;
-
+// La pagina iniziale è un cruscotto in quattro righe, sulla griglia a 12 colonne del foglio di stile:
+// quattro conti (3+3+3+3), il compito d'esame (8) accanto a una colonna con ripasso di oggi e materiali (4),
+// poi la simulazione di un test a tutta larghezza.
+// L'unico colore è sul dato principale: le caselle del compito, una per domanda d'esame
 function home() {
   S = null;
   vista = home;
+  app.dataset.vista = "home";
   const T = t();
   const srs = store.get("srs") || {};
   const migliori = store.get("migliori") || {};
   const tutte = domandeDi(TUTTI);
   const { scadute, nuove, giro } = giroDiRipasso();
   const extra = giroExtra();
-  const consolidate = (qs) => qs.filter((q) => srs[q.id] && srs[q.id].b >= CONSOLIDATA).length;
+  const imparata = (q) => srs[q.id] && srs[q.id].b >= CONSOLIDATA;
   const contaTest = (k) => domandeDi(k).filter(nelFiltro).length;
   const scelta = (gruppo, k, testo, attivo) =>
     `<button type="button" data-gruppo="${gruppo}" data-k="${k}" aria-pressed="${attivo}">${testo}</button>`;
+  // Per ogni argomento: quante domande d'esame vale e quante di queste sapresti oggi, in proporzione
+  // alle domande imparate. La somma è la stima di quante domande d'esame sapresti con sicurezza
+  const righe = dati.argomenti.map((a) => {
+    const qs = tutte.filter((q) => q.t === a.id);
+    const imp = qs.filter(imparata).length;
+    const viste = qs.filter((q) => srs[q.id] && !imparata(q)).length;
+    const piene = qs.length ? Math.round((a.peso * imp) / qs.length) : 0;
+    const chiare = qs.length ? Math.min(a.peso - piene, Math.round((a.peso * viste) / qs.length)) : 0;
+    return { a, qs, imp, piene, chiare, stima: qs.length ? (a.peso * imp) / qs.length : 0 };
+  });
+  const totaleEsame = righe.reduce((n, r) => n + r.a.peso, 0);
+  const stima = Math.round(righe.reduce((n, r) => n + r.stima, 0));
+  const imparateTutte = tutte.filter(imparata).length;
+  console.assert(righe.every((r) => r.piene + r.chiare <= r.a.peso), "caselle oltre il peso dell'argomento");
+  const conto = (etichetta, valore, nota) =>
+    `<div class="conto"><dt>${etichetta}</dt><dd><span class="conto-valore${valore === 0 ? " zero" : ""}">${valore}</span> <span class="conto-nota">${nota}</span></dd></div>`;
   app.innerHTML = `
-    <div class="quiz-oggi">
-      <h3 class="quiz-titolo">${T.oggi}</h3>
-      <p class="quiz-oggi-stato">${giro.length ? T.oggiStato(scadute.length, nuove.length) : T.oggiVuoto}</p>
-      ${cfg.argomenti.length ? `<p class="quiz-oggi-filtro">${T.soloSu(cfg.argomenti.map((id) => esc(nomeArgomento(id))).join(", "))}</p>` : ""}
-      <p class="quiz-actions">
+    <dl class="conti">
+      ${conto(T.contoScadute, scadute.length, T.contoScaduteNota)}
+      ${conto(T.contoNuove, nuove.length, T.su(tutte.length))}
+      ${conto(T.contoImparate, imparateTutte, T.su(tutte.length))}
+      ${conto(T.contoStima, stima, T.su(totaleEsame))}
+    </dl>
+    <section class="pannello compito" aria-labelledby="titolo-compito">
+      <div class="pannello-testa">
+        <h2 class="pannello-titolo" id="titolo-compito">${T.compito}</h2>
+        ${cfg.argomenti.length ? `<button type="button" class="link" id="tutti">${T.argomentiTutti}</button>` : ""}
+      </div>
+      <p class="pannello-sotto">${T.compitoSotto(totaleEsame, stima)}</p>
+      <ul class="righe-argomenti">
+        ${righe.map((r) => `<li><button type="button" class="riga-argomento" data-gruppo="argomento" data-k="${r.a.id}" aria-pressed="${cfg.argomenti.includes(r.a.id)}">
+          <span class="riga-nome">${esc(r.a[inglese() ? "en" : "it"])}</span>
+          <span class="caselle" role="img" aria-label="${T.caselleLabel(r.a.peso, r.piene)}">${Array.from({ length: r.a.peso }, (_, i) => `<i class="${i < r.piene ? "piena" : i < r.piene + r.chiare ? "vista" : ""}"></i>`).join("")}</span>
+          <span class="riga-conto${r.imp === 0 ? " zero" : ""}">${T.imparateBreve(r.imp, r.qs.length)}</span>
+        </button></li>`).join("")}
+      </ul>
+      <p class="legenda"><span><i class="piena"></i>${T.legendaSai}</span> <span><i class="vista"></i>${T.legendaViste}</span> <span><i></i>${T.legendaDaVedere}</span> <span class="legenda-filtro">${T.argomentiNota}</span></p>
+    </section>
+    <div class="colonna">
+    <section class="pannello oggi" aria-labelledby="titolo-oggi">
+      <h2 class="pannello-titolo" id="titolo-oggi">${T.oggi}</h2>
+      <p class="pannello-sotto">${giro.length ? T.oggiStato(scadute.length, nuove.length) : T.oggiVuoto}</p>
+      ${cfg.argomenti.length ? `<p class="oggi-filtro">${T.soloSu(cfg.argomenti.map((id) => esc(nomeArgomento(id))).join(", "))}</p>` : ""}
+      <div class="oggi-azioni">
         ${giro.length ? `<button type="button" class="btn" id="ripasso">${T.iniziaRipasso(giro.length)}</button>` : ""}
         ${extra.length ? `<button type="button" class="btn ${giro.length ? "ghost" : ""}" id="ancora">${T.ancora(extra.length)}</button>` : ""}
-      </p>
-      <p class="quiz-oggi-nota">${T.comeFunziona}${extra.length ? ` ${T.ancoraNota}` : ""}</p>
-      <label class="check quiz-nascondi"><input type="checkbox" id="nascondi" ${cfg.nascondi ? "checked" : ""}> ${T.nascondi}</label>
-    </div>
-    ${dati.argomenti.length ? `
-    <div class="quiz-testa">
-      <h3 class="quiz-titolo">${T.argomenti}</h3>
-      ${cfg.argomenti.length ? `<button type="button" class="link" id="tutti">${T.argomentiTutti}</button>` : ""}
-    </div>
-    <p class="quiz-spiega">${T.argomentiNota}</p>
-    <ul class="argomenti">
-      ${dati.argomenti.map((a) => {
-        const qs = tutte.filter((q) => q.t === a.id);
-        const c = consolidate(qs);
-        return `<li><button type="button" class="argomento" data-gruppo="argomento" data-k="${a.id}" aria-pressed="${cfg.argomenti.includes(a.id)}">
-          <span class="argomento-peso" title="${T.pesoEsame(a.peso)}"><span aria-hidden="true">${a.peso}</span><span class="sr">${T.pesoEsame(a.peso)}</span></span>
-          <span class="argomento-nome">${esc(a[inglese() ? "en" : "it"])}</span>
-          <span class="quadretti" aria-hidden="true">${qs.map((q) => `<i class="${!srs[q.id] ? "" : srs[q.id].b >= CONSOLIDATA ? "pieno" : "visto"}"></i>`).join("")}</span>
-          <span class="sr">${T.imparate(c, qs.length)}</span>
-        </button></li>`;
-      }).join("")}
-    </ul>
-    <p class="quiz-spiega quiz-legenda">${T.legenda}</p>` : ""}
-    <details class="quiz-test" ${testAperto ? "open" : ""}>
-      <summary>${T.simula}</summary>
-      <div class="quiz-test-corpo">
-        <div class="seg" role="group" aria-label="Test">${scelte.map(([k, n]) => scelta("test", k, `${n()} <span>${contaTest(k)}</span>`, cfg.test === k)).join("")}</div>
-        <div class="seg" role="group" aria-label="${T.modalita}">
-          ${scelta("modo", "studio", T.studio, cfg.modo === "studio")}
-          ${scelta("modo", "esame", T.esame, cfg.modo === "esame")}
-        </div>
-        <p class="quiz-test-nota">${cfg.modo === "esame" ? T.esameSotto : T.studioSotto}${!cfg.argomenti.length && migliori[cfg.test] != null ? ` · ${T.migliore(migliori[cfg.test])}` : ""}</p>
-        <label class="check"><input type="checkbox" id="md" ${cfg.mescolaDomande ? "checked" : ""}> ${T.mescolaDomande}</label>
-        <label class="check"><input type="checkbox" id="mr" ${cfg.mescolaRisposte ? "checked" : ""}> ${T.mescolaRisposte}</label>
-        <p class="quiz-actions"><button type="button" class="btn ghost" id="inizia" ${contaTest(cfg.test) ? "" : "disabled"}>${T.inizia}</button></p>
-        ${contaTest(cfg.test) ? "" : `<p class="note">${T.nessunaDomanda}</p>`}
       </div>
-    </details>
-    <p class="quiz-azzera"><button type="button" class="link" id="azzera">${T.azzera}</button></p>`;
+      <label class="check"><input type="checkbox" id="nascondi" ${cfg.nascondi ? "checked" : ""}> ${T.nascondi}</label>
+    </section>
+    <section class="pannello materiali" aria-labelledby="titolo-materiali">
+      <h2 class="pannello-titolo" id="titolo-materiali">${T.materiali}</h2>
+      <p><a href="/appunti/onc0251/a/confronti/">${T.scheda}</a><br><span class="pannello-sotto">${T.schedaSotto}</span></p>
+      <p class="pannello-sotto">${T.comeFunziona} ${T.ancoraNota}</p>
+      <p><button type="button" class="link" id="azzera">${T.azzera}</button></p>
+    </section>
+    </div>
+    <section class="pannello test" aria-labelledby="titolo-test">
+      <h2 class="pannello-titolo" id="titolo-test">${T.simula}</h2>
+      <p class="pannello-sotto">${cfg.modo === "esame" ? T.esameSotto : T.studioSotto}${!cfg.argomenti.length && migliori[cfg.test] != null ? `. ${T.migliore(migliori[cfg.test])}` : ""}</p>
+      <div class="seg" role="group" aria-label="Test">${scelte.map(([k, n]) => scelta("test", k, `${n()} <span>${contaTest(k)}</span>`, cfg.test === k)).join("")}</div>
+      <div class="seg" role="group" aria-label="${T.modalita}">
+        ${scelta("modo", "studio", T.studio, cfg.modo === "studio")}
+        ${scelta("modo", "esame", T.esame, cfg.modo === "esame")}
+      </div>
+      <label class="check"><input type="checkbox" id="md" ${cfg.mescolaDomande ? "checked" : ""}> ${T.mescolaDomande}</label>
+      <label class="check"><input type="checkbox" id="mr" ${cfg.mescolaRisposte ? "checked" : ""}> ${T.mescolaRisposte}</label>
+      <p class="quiz-actions"><button type="button" class="btn ghost" id="inizia" ${contaTest(cfg.test) ? "" : "disabled"}>${T.inizia}</button></p>
+      ${contaTest(cfg.test) ? "" : `<p class="pannello-sotto">${T.nessunaDomanda}</p>`}
+    </section>`;
   app.querySelectorAll("[data-gruppo]").forEach((b) => {
     b.onclick = () => {
       const { gruppo, k } = b.dataset;
@@ -284,8 +323,7 @@ function home() {
     };
   });
   const tuttiArgomenti = $("#tutti");
-  if (tuttiArgomenti) tuttiArgomenti.onclick = () => { cfg.argomenti = []; store.set("cfg", cfg); home(); app.querySelector(".argomento")?.focus(); };
-  $(".quiz-test").ontoggle = (e) => { testAperto = e.target.open; };
+  if (tuttiArgomenti) tuttiArgomenti.onclick = () => { cfg.argomenti = []; store.set("cfg", cfg); home(); app.querySelector(".riga-argomento")?.focus(); };
   $("#nascondi").onchange = (e) => { cfg.nascondi = e.target.checked; store.set("cfg", cfg); };
   $("#md").onchange = (e) => { cfg.mescolaDomande = e.target.checked; store.set("cfg", cfg); };
   $("#mr").onchange = (e) => { cfg.mescolaRisposte = e.target.checked; store.set("cfg", cfg); };
@@ -332,6 +370,7 @@ const correzioneSubito = () => S.modo !== "esame";
 
 function mostra() {
   vista = mostra;
+  app.dataset.vista = "domanda";
   const T = t();
   const n = S.qs.length, q = S.qs[S.i], r = S.risposte[S.i], incerta = !!S.incerte[S.i];
   const bloccata = correzioneSubito() && r != null;
@@ -340,7 +379,7 @@ function mostra() {
   const nascoste = cfg.nascondi && r == null && !S.aperte[S.i];
   app.innerHTML = `
     <div class="quiz-meta"><span>${T.domandaDi(S.i + 1, n)}${q.t ? ` · ${esc(nomeArgomento(q.t))}` : ""}${q.ripetuta ? ` · ${T.ripetuta}` : ""}</span><button type="button" class="link" id="esci">${T.esci}</button></div>
-    <span class="quadretti percorso" aria-hidden="true">${S.qs.map((x, i) => {
+    <span class="percorso" aria-hidden="true">${S.qs.map((x, i) => {
       const ri = S.risposte[i];
       const stato = i === S.i ? "attuale" : ri == null ? "" : !correzioneSubito() ? "visto" : ri === x.a ? "giusto" : "sbagliato";
       return `<i class="${stato}"></i>`;
@@ -411,6 +450,7 @@ function avanti() {
 function fine() {
   const primaVolta = vista !== fine;
   vista = fine;
+  app.dataset.vista = "fine";
   const T = t();
   // Le ripresentate a fine giro non contano nel punteggio: sono già contate la prima volta
   const voci = S.qs.map((q, i) => ({ q, r: S.risposte[i], incerta: !!S.incerte[i] })).filter((v) => !v.q.ripetuta);
