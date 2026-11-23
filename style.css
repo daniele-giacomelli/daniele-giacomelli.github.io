@@ -1024,6 +1024,26 @@ section.attuale > h2::before {
 .quiz-rev { padding: 12px 0; border-bottom: 1px dashed var(--fg); }
 .quiz-rev p { margin: 0 0 4px; }
 
+/* Ripasso di oggi: il riquadro in cima al quiz, con le domande in scadenza */
+.quiz-oggi { padding: 4px 18px 16px; margin: 0 0 8px; background: var(--card); border: 2px solid var(--bordo); }
+.quiz-oggi .quiz-label { margin-top: 14px; }
+.quiz-oggi-stato { margin: 0; font-weight: 600; }
+.quiz-oggi .quiz-actions { margin-top: 12px; }
+.quiz-oggi .note { margin: 12px 0 0; font-size: var(--t-2); }
+/* Quanto di un argomento è consolidato */
+.tile-bar { display: block; height: 4px; margin-top: 8px; background: color-mix(in srgb, var(--accent) 15%, transparent); }
+.tile-bar i { display: block; height: 100%; background: var(--accent); }
+/* "Non sono sicuro": un interruttore piccolo sotto le risposte */
+.quiz-incerto { margin: 4px 0 0; }
+.incerto { padding: 4px 10px; background: none; border: 1.5px dashed var(--bordo); border-radius: 999px; font: inherit; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); cursor: pointer; }
+.incerto[aria-pressed="true"] { border-style: solid; border-color: var(--accent); color: var(--fg); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.incerto[aria-pressed="true"]::before { content: "? "; font-weight: 700; color: var(--accent); }
+.incerto:disabled { cursor: default; opacity: 0.7; }
+/* La spiegazione della risposta */
+.quiz-why { margin: 10px 0 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.quiz-rev .quiz-why { margin-top: 6px; }
+.quiz-azzera { margin: 28px 0 0; font-size: var(--t-2); color: var(--muted); }
+
 /* ---------- Pagina 404 ---------- */
 .not-found { padding: 80px 0 40px; }
 .not-found h1 {
