@@ -958,21 +958,6 @@ section.attuale > h2::before {
   color: var(--muted);
   margin: 24px 0 8px;
 }
-.tiles { display: flex; flex-wrap: wrap; gap: 12px; }
-.tile {
-  flex: 1 1 160px;
-  text-align: left;
-  background: var(--card);
-  border: 2px solid var(--bordo);
-  padding: 12px 14px;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-}
-.tile b { display: block; font-family: var(--mono); font-size: var(--t-2); }
-.tile span { font-size: var(--t-2); color: var(--muted); }
-.tile[aria-pressed="true"] { background: var(--holo); --h: 4px; }
-.tile[aria-pressed="true"] span { color: var(--fg); }
 .check { display: flex; gap: 8px; align-items: center; margin: 6px 0; cursor: pointer; }
 .check input { accent-color: var(--accent); }
 
@@ -1025,14 +1010,72 @@ section.attuale > h2::before {
 .quiz-rev p { margin: 0 0 4px; }
 
 /* Ripasso di oggi: il riquadro in cima al quiz, con le domande in scadenza */
-.quiz-oggi { padding: 4px 18px 16px; margin: 0 0 8px; background: var(--card); border: 2px solid var(--bordo); }
+.quiz-oggi { padding: 6px 22px 20px; margin: 0 0 36px; background: var(--card); border: 2px solid var(--bordo); }
 .quiz-oggi .quiz-label { margin-top: 14px; }
-.quiz-oggi-stato { margin: 0; font-weight: 600; }
-.quiz-oggi .quiz-actions { margin-top: 12px; }
-.quiz-oggi .note { margin: 12px 0 0; font-size: var(--t-2); }
-/* Quanto di un argomento è consolidato */
-.tile-bar { display: block; height: 4px; margin-top: 8px; background: color-mix(in srgb, var(--accent) 15%, transparent); }
-.tile-bar i { display: block; height: 100%; background: var(--accent); }
+.quiz-oggi-stato { margin: 0; font-family: var(--serif); font-size: var(--t-5); line-height: 1.25; }
+.quiz-oggi-filtro { margin: 6px 0 0; font-family: var(--mono); font-size: var(--t-1); color: var(--accent); }
+.quiz-oggi .quiz-actions { margin-top: 16px; }
+.quiz-oggi-nota { margin: 14px 0 0; font-size: var(--t-2); color: var(--muted); }
+
+/* Argomenti: un elenco di righe da spuntare (si possono sceglierne più d'uno) */
+.quiz-testa { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 10px; }
+.quiz-testa .quiz-label { margin: 0; }
+.quiz-testa-nota, .quiz-testa .link { font-size: var(--t-1); font-family: var(--mono); color: var(--muted); }
+.argomenti { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); column-gap: 32px; border-top: 1px solid var(--line); }
+.argomenti li { border-bottom: 1px solid var(--line); }
+.argomento {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  grid-template-areas: "spunta nome peso" ". barra conto";
+  align-items: center;
+  gap: 6px 10px;
+  width: 100%;
+  padding: 12px 6px;
+  text-align: left;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+/* La casella: vuota, oppure piena con il segno di spunta quando l'argomento è nel filtro */
+.argomento::before {
+  content: "";
+  grid-area: spunta;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--bordo);
+  background: var(--card);
+}
+.argomento { transition: background-color 0.15s; }
+.argomento:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.argomento[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.argomento[aria-pressed="true"]::before {
+  border-color: var(--accent);
+  background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M3 7.2l2.6 2.6L11 4.4' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat;
+}
+.argomento-nome { grid-area: nome; font-weight: 600; }
+.argomento-peso { grid-area: peso; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); white-space: nowrap; }
+.argomento-barra { grid-area: barra; height: 4px; background: color-mix(in srgb, var(--accent) 15%, transparent); }
+.argomento-barra i { display: block; height: 100%; background: var(--accent); }
+.argomento-conto { grid-area: conto; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); text-align: right; }
+
+/* Simula un test: chiuso finché non serve */
+.quiz-test { margin: 36px 0 0; border-top: 1.5px solid var(--bordo); border-bottom: 1.5px solid var(--bordo); }
+.quiz-test summary { padding: 14px 0; cursor: pointer; font-family: var(--serif); font-size: var(--t-4); font-weight: 600; list-style: none; }
+.quiz-test summary::-webkit-details-marker { display: none; }
+.quiz-test summary::after { content: "+"; float: right; font-family: var(--mono); color: var(--accent); }
+.quiz-test[open] summary::after { content: "−"; }
+.quiz-test-corpo { padding: 0 0 20px; display: grid; gap: 12px; justify-items: start; }
+.quiz-test-corpo .quiz-actions { margin: 4px 0 0; }
+.quiz-test-nota { margin: 0; font-size: var(--t-2); color: var(--muted); }
+/* Scelte del test e della modalità: una sola attiva per gruppo */
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button { padding: 6px 12px; background: var(--card); border: 1.5px solid var(--bordo); font: inherit; font-family: var(--mono); font-size: var(--t-1); color: inherit; cursor: pointer; }
+.seg button span { color: var(--muted); margin-left: 4px; }
+.seg button[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--bg); }
+.seg button[aria-pressed="true"] span { color: inherit; opacity: 0.75; }
+.seg button:not([aria-pressed="true"]):hover { background: color-mix(in srgb, var(--accent) 10%, var(--card)); }
 /* "Non sono sicuro": un interruttore piccolo sotto le risposte */
 .quiz-incerto { margin: 4px 0 0; }
 .incerto { padding: 4px 10px; background: none; border: 1.5px dashed var(--bordo); border-radius: 999px; font: inherit; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); cursor: pointer; }
@@ -1114,7 +1157,7 @@ section.attuale > h2::before {
 
 /* Testo sopra superfici olografiche o lime: scuro anche nel tema scuro.
    Sta in fondo perché deve vincere sui colori delle regole sopra */
-.kicker, .tile[aria-pressed="true"], .tile[aria-pressed="true"] span,
+.kicker,
 .ans.sel, .ans.sel .l, .sticker { color: var(--on-holo); }
 
 /* ---------- Tema scuro: rivista stampata su carta blu notte ----------
@@ -1201,9 +1244,7 @@ section.attuale > h2::before {
 .quaderno .theme-toggle { background: var(--bg); }
 .quaderno .theme-toggle .knob { background: var(--fg); border-color: var(--fg); }
 .quaderno .theme-toggle .knob::after { background: var(--bg); }
-.quaderno .tile[aria-pressed="true"],
 .quaderno .ans.sel { background: color-mix(in srgb, var(--accent) 16%, var(--card)); color: var(--fg); }
-.quaderno .tile[aria-pressed="true"] span,
 .quaderno .ans.sel .l { color: var(--fg); }
 .quaderno .quiz-bar i { background: var(--accent); }
 
@@ -1212,7 +1253,7 @@ section.attuale > h2::before {
       loro ombra; al passaggio si sollevano di 2px, al clic affondano di al massimo 3px (i blocchi alti
       non arrivano a terra) e tornano su con un rimbalzo leggero. Su touch il passaggio non c'è: resta la pressione.
    2. Testo (link, voci del menu, lingua, "Esci"): l'evidenziatore si stende da sinistra a destra. */
-.btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab {
+.btn, .links a[download], .window.shot, .ans, .nav-links a.tab {
   --molla: cubic-bezier(0.34, 1.3, 0.64, 1);
   --affondo: clamp(1px, var(--h), 3px);
   box-shadow: var(--h) var(--h) 0 var(--ombra-blocco, var(--ombra));
@@ -1220,19 +1261,19 @@ section.attuale > h2::before {
 }
 .btn, .links a[download] { --h: 3px; }
 .window.shot { --h: 8px; }
-.tile, .ans, .nav-links a.tab { --h: 0px; }
+.ans, .nav-links a.tab { --h: 0px; }
 @media (max-width: 560px) { .window.shot { --h: 5px; } }
 @media (hover: hover) {
-  :is(.btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab):hover:not(:disabled) {
+  :is(.btn, .links a[download], .window.shot, .ans, .nav-links a.tab):hover:not(:disabled) {
     transform: translate(-2px, -2px);
     box-shadow: calc(var(--h) + 2px) calc(var(--h) + 2px) 0 var(--ombra-blocco, var(--ombra));
   }
 }
-:is(.btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab):focus-visible {
+:is(.btn, .links a[download], .window.shot, .ans, .nav-links a.tab):focus-visible {
   transform: translate(-2px, -2px);
   box-shadow: calc(var(--h) + 2px) calc(var(--h) + 2px) 0 var(--ombra-blocco, var(--ombra));
 }
-:is(.btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab):active:not(:disabled) {
+:is(.btn, .links a[download], .window.shot, .ans, .nav-links a.tab):active:not(:disabled) {
   transform: translate(var(--affondo), var(--affondo));
   box-shadow: max(0px, var(--h) - var(--affondo)) max(0px, var(--h) - var(--affondo)) 0 var(--ombra-blocco, var(--ombra));
   transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
@@ -1247,13 +1288,15 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 }
 :is(a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link):is(:hover, :focus-visible),
 .nav-links a[aria-current] { background-size: 100% 100%; }
+/* Sotto l'evidenziatore il testo torna a pieno colore: un link grigio sul blu notturno non si leggerebbe */
+:is(a:not([class]):not([download]), .lang-switch a, .lang-switch button:not([aria-pressed="true"]), .link):is(:hover, :focus-visible) { color: var(--fg); }
 
 /* L'interruttore del tema: la manopola scorre con la stessa molla e si schiaccia al clic */
 .theme-toggle .knob { transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1), scale 0.12s ease-out; }
 .theme-toggle:active .knob { scale: 0.9; }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab,
+  .btn, .links a[download], .window.shot, .ans, .nav-links a.tab,
   a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link, .theme-toggle .knob { transition: none; }
-  :is(.btn, .links a[download], .window.shot, .tile, .ans, .nav-links a.tab):is(:hover, :focus-visible, :active) { transform: none; }
+  :is(.btn, .links a[download], .window.shot, .ans, .nav-links a.tab):is(:hover, :focus-visible, :active) { transform: none; }
 }
