@@ -34,12 +34,12 @@ const TESTI = {
     iniziaRipasso: (n) => `Inizia il ripasso (${n})`,
     comeFunziona: "Sbagliate e incerte tornano domani, le giuste dopo 2, 4 e 7 giorni.",
     argomenti: "Argomenti",
-    argomentiTutti: "Tutti gli argomenti", argomentiNota: "tocca per filtrare ripasso e test",
+    argomentiTutti: "Tutti gli argomenti", argomentiNota: "Spunta uno o più argomenti per ripassare solo quelli.",
+    legenda: "A margine, quante domande vale l'argomento all'esame. Ogni quadretto è una domanda: chiaro se l'hai già vista, pieno quando l'hai imparata (giusta e sicura in due ripassi diversi).",
     imparate: (c, n) => `${c} di ${n} imparate`,
-    imparateNota: "Imparata = risposta giusta e sicura in due ripassi diversi.",
     simula: "Simula un test",
     soloSu: (a) => `Solo: ${a}`,
-    pesoEsame: (p) => `${p} all'esame`,
+    pesoEsame: (p) => `${p} domande all'esame`,
     modalita: "Modalità",
     studio: "Studio", studioSotto: "Correzione e spiegazione dopo ogni risposta",
     esame: "Esame", esameSotto: "Correzione solo alla fine, come il giorno dell'esame",
@@ -82,12 +82,12 @@ const TESTI = {
     iniziaRipasso: (n) => `Start the review (${n})`,
     comeFunziona: "Wrong and unsure answers come back tomorrow, right ones after 2, 4 and 7 days.",
     argomenti: "Topics",
-    argomentiTutti: "All topics", argomentiNota: "tap to filter review and tests",
+    argomentiTutti: "All topics", argomentiNota: "Tick one or more topics to review only those.",
+    legenda: "In the margin, how many exam questions the topic is worth. Each square is a question: light once you have seen it, filled when you have learned it (right and sure in two separate reviews).",
     imparate: (c, n) => `${c} of ${n} learned`,
-    imparateNota: "Learned = answered right and sure in two separate reviews.",
     simula: "Simulate a test",
     soloSu: (a) => `Only: ${a}`,
-    pesoEsame: (p) => `${p} in the exam`,
+    pesoEsame: (p) => `${p} exam questions`,
     modalita: "Mode",
     studio: "Study", studioSotto: "Feedback and explanation after each answer",
     esame: "Exam", esameSotto: "Feedback only at the end, like on exam day",
@@ -228,7 +228,7 @@ function home() {
     `<button type="button" data-gruppo="${gruppo}" data-k="${k}" aria-pressed="${attivo}">${testo}</button>`;
   app.innerHTML = `
     <div class="quiz-oggi">
-      <h3 class="quiz-label">${T.oggi}</h3>
+      <h3 class="quiz-titolo">${T.oggi}</h3>
       <p class="quiz-oggi-stato">${giro.length ? T.oggiStato(scadute.length, nuove.length) : T.oggiVuoto}</p>
       ${cfg.argomenti.length ? `<p class="quiz-oggi-filtro">${T.soloSu(cfg.argomenti.map((id) => esc(nomeArgomento(id))).join(", "))}</p>` : ""}
       <p class="quiz-actions">
@@ -240,22 +240,23 @@ function home() {
     </div>
     ${dati.argomenti.length ? `
     <div class="quiz-testa">
-      <h3 class="quiz-label">${T.argomenti}</h3>
-      ${cfg.argomenti.length ? `<button type="button" class="link" id="tutti">${T.argomentiTutti}</button>` : `<span class="quiz-testa-nota">${T.argomentiNota}</span>`}
+      <h3 class="quiz-titolo">${T.argomenti}</h3>
+      ${cfg.argomenti.length ? `<button type="button" class="link" id="tutti">${T.argomentiTutti}</button>` : ""}
     </div>
+    <p class="quiz-spiega">${T.argomentiNota}</p>
     <ul class="argomenti">
       ${dati.argomenti.map((a) => {
         const qs = tutte.filter((q) => q.t === a.id);
         const c = consolidate(qs);
         return `<li><button type="button" class="argomento" data-gruppo="argomento" data-k="${a.id}" aria-pressed="${cfg.argomenti.includes(a.id)}">
+          <span class="argomento-peso" title="${T.pesoEsame(a.peso)}"><span aria-hidden="true">${a.peso}</span><span class="sr">${T.pesoEsame(a.peso)}</span></span>
           <span class="argomento-nome">${esc(a[inglese() ? "en" : "it"])}</span>
-          <span class="argomento-peso">${T.pesoEsame(a.peso)}</span>
-          <span class="argomento-barra" aria-hidden="true"><i style="width:${qs.length ? Math.round((c / qs.length) * 100) : 0}%"></i></span>
-          <span class="argomento-conto">${T.imparate(c, qs.length)}</span>
+          <span class="quadretti" aria-hidden="true">${qs.map((q) => `<i class="${!srs[q.id] ? "" : srs[q.id].b >= CONSOLIDATA ? "pieno" : "visto"}"></i>`).join("")}</span>
+          <span class="sr">${T.imparate(c, qs.length)}</span>
         </button></li>`;
       }).join("")}
     </ul>
-    <p class="quiz-testa-nota quiz-argomenti-nota">${T.imparateNota}</p>` : ""}
+    <p class="quiz-spiega quiz-legenda">${T.legenda}</p>` : ""}
     <details class="quiz-test" ${testAperto ? "open" : ""}>
       <summary>${T.simula}</summary>
       <div class="quiz-test-corpo">
@@ -339,7 +340,11 @@ function mostra() {
   const nascoste = cfg.nascondi && r == null && !S.aperte[S.i];
   app.innerHTML = `
     <div class="quiz-meta"><span>${T.domandaDi(S.i + 1, n)}${q.t ? ` · ${esc(nomeArgomento(q.t))}` : ""}${q.ripetuta ? ` · ${T.ripetuta}` : ""}</span><button type="button" class="link" id="esci">${T.esci}</button></div>
-    <div class="quiz-bar" aria-hidden="true"><i style="width:${(S.i / n) * 100}%"></i></div>
+    <span class="quadretti percorso" aria-hidden="true">${S.qs.map((x, i) => {
+      const ri = S.risposte[i];
+      const stato = i === S.i ? "attuale" : ri == null ? "" : !correzioneSubito() ? "visto" : ri === x.a ? "giusto" : "sbagliato";
+      return `<i class="${stato}"></i>`;
+    }).join("")}</span>
     <p class="quiz-q" id="domanda" tabindex="-1" lang="en">${esc(q.q)}</p>
     ${nascoste ? `<p class="note">${T.pensaPrima}</p>
     <p class="quiz-actions"><button type="button" class="btn ghost" id="apri">${T.mostraOpzioni}</button></p>` : `<div role="group" aria-labelledby="domanda" lang="en">
@@ -350,9 +355,9 @@ function mostra() {
         return `<button type="button" class="${c}" data-i="${i}" ${bloccata ? "disabled" : ""} aria-pressed="${i === r}"><span class="l">${LETTERE[i]}</span><span>${esc(t)}</span></button>`;
       }).join("")}
     </div>`}
-    <p class="quiz-incerto"><button type="button" class="incerto" id="incerto" aria-pressed="${incerta}" ${bloccata ? "disabled" : ""}>${T.incerto}</button></p>
+    <p class="quiz-incerto"><button type="button" class="spunta" id="incerto" aria-pressed="${incerta}" ${bloccata ? "disabled" : ""}>${T.incerto}</button></p>
     <p class="quiz-fb ${bloccata ? (r === q.a ? "ok" : "bad") : ""}" role="status">${esito}</p>
-    ${bloccata && q.e ? `<div class="quiz-why"><b>${T.perche}</b> <span lang="en">${esc(q.e)}</span></div>` : ""}
+    ${bloccata && q.e ? `<p class="quiz-why"><b>${T.perche}.</b> <span lang="en">${esc(q.e)}</span></p>` : ""}
     <div class="quiz-nav">
       <button type="button" class="btn ghost" id="prev" ${S.i ? "" : "disabled"}>${T.indietro}</button>
       <button type="button" class="btn" id="next" ${r == null ? "disabled" : ""}>${S.i === n - 1 ? T.termina : T.avanti}</button>
@@ -434,7 +439,7 @@ function fine() {
       <button type="button" class="btn ${errori.length ? "ghost" : ""}" id="ancora">${T.ricomincia}</button>
       <button type="button" class="btn ghost" id="menu">${T.menu}</button>
     </p>
-    ${daRivedere.length ? `<h3 class="quiz-label">${T.errori}</h3>
+    ${daRivedere.length ? `<h3 class="quiz-titolo">${T.errori}</h3>
       ${daRivedere.map(({ q, r }) => `
         <div class="quiz-rev">
           <p lang="en"><b>${q.id}.</b> ${esc(q.q)}</p>
@@ -442,7 +447,7 @@ function fine() {
             ? `<p class="ok">${T.giusta}: <span lang="en">${risposta(q, q.a)}</span> <span class="dim">(${T.eraIncerta})</span></p>`
             : `<p class="bad">${T.tua}: <span lang="en">${risposta(q, r)}</span></p>
                <p class="ok">${T.giusta}: <span lang="en">${risposta(q, q.a)}</span></p>`}
-          ${q.e ? `<p class="quiz-why"><b>${T.perche}</b> <span lang="en">${esc(q.e)}</span></p>` : ""}
+          ${q.e ? `<p class="quiz-why"><b>${T.perche}.</b> <span lang="en">${esc(q.e)}</span></p>` : ""}
         </div>`).join("")}` : ""}`;
   $("#punteggio").focus();
   const ripassa = $("#ripassa");

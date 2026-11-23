@@ -117,19 +117,36 @@ body::before {
 }
 @keyframes vento { to { transform: translateX(-1400px); } }
 
-/* Appunti: niente cielo, un foglio a quadretti come un quaderno. Righe sottili ogni 24px
-   e un po' più marcate ogni 5 quadretti; il colore viene dall'accento, quindi segue il tema */
+/* Appunti: niente cielo, un foglio di quaderno a quadretti, tutti uguali come quelli veri,
+   con la riga rossa del margine a sinistra della colonna. Il colore dei quadretti segue il tema */
+.quaderno {
+  --quadretto: 24px;
+  --margine: color-mix(in srgb, #d0453f 55%, transparent);
+}
 .quaderno::before {
-  --riga: color-mix(in srgb, var(--accent) 7%, transparent);
-  --riga-forte: color-mix(in srgb, var(--accent) 12%, transparent);
+  --riga: color-mix(in srgb, var(--accent) 9%, transparent);
   background:
-    linear-gradient(var(--riga-forte) 1px, transparent 1px) 0 0 / 120px 120px,
-    linear-gradient(90deg, var(--riga-forte) 1px, transparent 1px) 0 0 / 120px 120px,
-    linear-gradient(var(--riga) 1px, transparent 1px) 0 0 / 24px 24px,
-    linear-gradient(90deg, var(--riga) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(var(--riga) 1px, transparent 1px) 0 0 / var(--quadretto) var(--quadretto),
+    linear-gradient(90deg, var(--riga) 1px, transparent 1px) 0 0 / var(--quadretto) var(--quadretto),
     var(--bg);
 }
 .quaderno body::before { display: none; }
+.quaderno main, .quaderno .site-footer { padding-left: 88px; }
+.quaderno main { position: relative; }
+.quaderno main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: -200px;
+  left: 64px;
+  width: 1.5px;
+  background: var(--margine);
+  pointer-events: none;
+}
+@media (max-width: 700px) {
+  .quaderno main, .quaderno .site-footer { padding-left: 44px; }
+  .quaderno main::before { left: 28px; }
+}
 
 /* La goccia e gli adesivi possono sporgere dal bordo: niente scroll orizzontale */
 html, body { overflow-x: clip; }
@@ -949,15 +966,6 @@ section.attuale > h2::before {
 .modules .empty { color: var(--muted); }
 
 /* ---------- Quiz ---------- */
-.quiz-label {
-  font-family: var(--mono);
-  font-size: var(--t-1);
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--muted);
-  margin: 24px 0 8px;
-}
 .check { display: flex; gap: 8px; align-items: center; margin: 6px 0; cursor: pointer; }
 .check input { accent-color: var(--accent); }
 
@@ -976,9 +984,6 @@ section.attuale > h2::before {
 .link { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; cursor: pointer; }
 .quiz-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 0; }
 
-.quiz-meta { display: flex; justify-content: space-between; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); }
-.quiz-bar { height: 8px; background: var(--card); border: 1.5px solid var(--bordo); overflow: hidden; margin: 10px 0 22px; }
-.quiz-bar i { display: block; height: 100%; background: var(--holo); border-right: 1.5px solid var(--bordo); transition: width 0.2s; }
 .quiz-q { font-family: var(--serif); font-optical-sizing: auto; font-size: var(--t-5); font-weight: 600; line-height: 1.3; margin: 0 0 16px; }
 .quiz-q:focus { outline: none; }
 .ans {
@@ -1009,58 +1014,7 @@ section.attuale > h2::before {
 .quiz-rev { padding: 12px 0; border-bottom: 1px dashed var(--fg); }
 .quiz-rev p { margin: 0 0 4px; }
 
-/* Ripasso di oggi: il riquadro in cima al quiz, con le domande in scadenza */
-.quiz-oggi { padding: 6px 22px 20px; margin: 0 0 36px; background: var(--card); border: 2px solid var(--bordo); }
-.quiz-oggi .quiz-label { margin-top: 14px; }
-.quiz-oggi-stato { margin: 0; font-family: var(--serif); font-size: var(--t-5); line-height: 1.25; }
-.quiz-oggi-filtro { margin: 6px 0 0; font-family: var(--mono); font-size: var(--t-1); color: var(--accent); }
-.quiz-oggi .quiz-actions { margin-top: 16px; }
-.quiz-oggi-nota { margin: 14px 0 0; font-size: var(--t-2); color: var(--muted); }
-.quiz-nascondi { margin: 12px 0 0; font-size: var(--t-2); }
 
-/* Argomenti: un elenco di righe da spuntare (si possono sceglierne più d'uno) */
-.quiz-testa { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 10px; }
-.quiz-testa .quiz-label { margin: 0; }
-.quiz-testa-nota, .quiz-testa .link { font-size: var(--t-1); font-family: var(--mono); color: var(--muted); }
-.quiz-argomenti-nota { display: block; margin: 10px 0 0; }
-.argomenti { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); column-gap: 40px; border-top: 1px solid var(--line); }
-.argomenti li { border-bottom: 1px solid var(--line); }
-.argomento {
-  display: grid;
-  grid-template-columns: 16px minmax(0, 1fr) auto;
-  grid-template-areas: "spunta nome peso" ". barra conto";
-  align-items: center;
-  gap: 6px 10px;
-  width: 100%;
-  padding: 12px 6px;
-  text-align: left;
-  background: none;
-  border: 0;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-}
-/* La casella: vuota, oppure piena con il segno di spunta quando l'argomento è nel filtro */
-.argomento::before {
-  content: "";
-  grid-area: spunta;
-  width: 14px;
-  height: 14px;
-  border: 1.5px solid var(--bordo);
-  background: var(--card);
-}
-.argomento { transition: background-color 0.15s; }
-.argomento:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
-.argomento[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 12%, transparent); }
-.argomento[aria-pressed="true"]::before {
-  border-color: var(--accent);
-  background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M3 7.2l2.6 2.6L11 4.4' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat;
-}
-.argomento-nome { grid-area: nome; font-weight: 600; }
-.argomento-peso { grid-area: peso; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); white-space: nowrap; }
-.argomento-barra { grid-area: barra; height: 4px; background: color-mix(in srgb, var(--accent) 15%, transparent); }
-.argomento-barra i { display: block; height: 100%; background: var(--accent); }
-.argomento-conto { grid-area: conto; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); text-align: right; }
 
 /* Simula un test: chiuso finché non serve */
 .quiz-test { margin: 36px 0 0; border-top: 1.5px solid var(--bordo); border-bottom: 1.5px solid var(--bordo); }
@@ -1073,20 +1027,11 @@ section.attuale > h2::before {
 .quiz-test-nota { margin: 0; font-size: var(--t-2); color: var(--muted); }
 /* Scelte del test e della modalità: una sola attiva per gruppo */
 .seg { display: flex; flex-wrap: wrap; gap: 6px; }
-.seg button { padding: 6px 12px; background: var(--card); border: 1.5px solid var(--bordo); font: inherit; font-family: var(--mono); font-size: var(--t-1); color: inherit; cursor: pointer; }
+.seg button { padding: 6px 12px; background: var(--card); border: 1.5px solid var(--bordo); font: inherit; font-size: var(--t-2); color: inherit; cursor: pointer; }
 .seg button span { color: var(--muted); margin-left: 4px; }
 .seg button[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--bg); }
 .seg button[aria-pressed="true"] span { color: inherit; opacity: 0.75; }
 .seg button:not([aria-pressed="true"]):hover { background: color-mix(in srgb, var(--accent) 10%, var(--card)); }
-/* "Non sono sicuro": un interruttore piccolo sotto le risposte */
-.quiz-incerto { margin: 4px 0 0; }
-.incerto { padding: 4px 10px; background: none; border: 1.5px dashed var(--bordo); border-radius: 999px; font: inherit; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); cursor: pointer; }
-.incerto[aria-pressed="true"] { border-style: solid; border-color: var(--accent); color: var(--fg); background: color-mix(in srgb, var(--accent) 14%, transparent); }
-.incerto[aria-pressed="true"]::before { content: "? "; font-weight: 700; color: var(--accent); }
-.incerto:disabled { cursor: default; opacity: 0.7; }
-/* La spiegazione della risposta */
-.quiz-why { margin: 10px 0 0; padding: 10px 14px; border-left: 3px solid var(--accent); background: color-mix(in srgb, var(--accent) 7%, transparent); }
-.quiz-rev .quiz-why { margin-top: 6px; }
 .quiz-azzera { margin: 28px 0 0; font-size: var(--t-2); color: var(--muted); }
 
 /* ---------- Pagina 404 ---------- */
@@ -1248,7 +1193,6 @@ section.attuale > h2::before {
 .quaderno .theme-toggle .knob::after { background: var(--bg); }
 .quaderno .ans.sel { background: color-mix(in srgb, var(--accent) 16%, var(--card)); color: var(--fg); }
 .quaderno .ans.sel .l { color: var(--fg); }
-.quaderno .quiz-bar i { background: var(--accent); }
 
 /* ---------- Interazioni: due soli gesti per tutto il sito e gli appunti ----------
    1. Blocchi (pulsanti, CV, anteprime, scelte e risposte del quiz, scheda degli appunti): poggiano sulla
@@ -1303,18 +1247,112 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
   :is(.btn, .links a[download], .window.shot, .ans, .nav-links a.tab):is(:hover, :focus-visible, :active) { transform: none; }
 }
 
-/* ---------- Appunti: schede di confronto ---------- */
-.confronti-indice { margin: 18px 0 0; font-family: var(--mono); font-size: var(--t-1); line-height: 2; }
+/* ---------- Appunti: il quaderno ----------
+   Niente etichette sopra ai titoli e niente riquadri attorno a tutto: titoli veri, testo semplice,
+   e l'avanzamento disegnato con i quadretti del foglio stesso */
+.quaderno .note, .quaderno .lead { font-family: var(--sans); }
+.quaderno .hero .lead { margin-top: 12px; font-size: var(--t-3); }
+.quiz-titolo { margin: 0 0 6px; font-family: var(--serif); font-optical-sizing: auto; font-size: var(--t-5); font-weight: 600; line-height: 1.2; }
+.quiz-spiega { margin: 0 0 14px; font-size: var(--t-2); color: var(--muted); max-width: 62ch; }
+.quiz-link-confronti { margin: 0 0 8px; }
+
+/* Ripasso di oggi */
+.quiz-oggi { margin: 0 0 48px; }
+.quiz-oggi-stato { margin: 0; font-size: var(--t-3); }
+.quiz-oggi-filtro { margin: 4px 0 0; font-size: var(--t-2); color: var(--accent); }
+.quiz-oggi .quiz-actions { margin-top: 16px; }
+.quiz-oggi-nota { margin: 14px 0 0; font-size: var(--t-2); color: var(--muted); max-width: 62ch; }
+.quiz-nascondi { margin: 10px 0 0; font-size: var(--t-2); }
+
+/* Argomenti: righe da spuntare; il peso all'esame sta nel margine, come un voto a matita rossa */
+.quiz-testa { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.quiz-testa .link { font-size: var(--t-2); }
+.argomenti { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.argomenti li { border-bottom: 1px solid var(--line); }
+.argomento {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 12px;
+  width: 100%;
+  padding: 12px 6px;
+  text-align: left;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.argomento:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.argomento[aria-pressed="true"] { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.argomento-nome { font-weight: 600; }
+.argomento-peso {
+  position: absolute;
+  right: 100%;
+  margin-right: 30px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: var(--t-4);
+  line-height: 1;
+  color: #c0392b;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 700px) {
+  .argomento-peso { margin-right: 22px; font-size: var(--t-3); }
+  /* Sul telefono i quadretti vanno sotto il nome, così il nome resta intero */
+  .argomento .quadretti { grid-column: 2 / -1; justify-content: flex-start; max-width: none; }
+}
+.quiz-legenda { margin: 10px 0 0; }
+
+/* Casella di spunta disegnata: per gli argomenti e per "Non sono sicuro" */
+.argomento::before, .spunta::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--bordo);
+  background: var(--card);
+}
+:is(.argomento, .spunta)[aria-pressed="true"]::before {
+  border-color: var(--accent);
+  background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M3 7.2l2.6 2.6L11 4.4' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat;
+}
+.spunta { display: inline-flex; align-items: center; gap: 10px; padding: 4px 0; background: none; border: 0; font: inherit; font-size: var(--t-2); color: inherit; cursor: pointer; }
+.spunta:disabled { cursor: default; opacity: 0.6; }
+.quiz-incerto { margin: 6px 0 0; }
+
+/* Quadretti: uno per domanda. Vuoto = mai vista, chiaro = vista, pieno = imparata.
+   Nel giro di domande: verde giusta, rosso sbagliata, contornato quella attuale */
+.quadretti { display: flex; flex-wrap: wrap; gap: 3px; justify-content: flex-end; max-width: 260px; }
+.quadretti i { width: 8px; height: 8px; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+.quadretti i.visto { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+.quadretti i.pieno { background: var(--accent); border-color: var(--accent); }
+.percorso { justify-content: flex-start; max-width: none; margin: 10px 0 22px; }
+.percorso i { width: 10px; height: 10px; }
+.percorso i.giusto { background: var(--ok); border-color: var(--ok); }
+.percorso i.sbagliato { background: var(--bad); border-color: var(--bad); }
+.percorso i.attuale { border: 2px solid var(--fg); }
+.quiz-meta { display: flex; justify-content: space-between; gap: 12px; font-size: var(--t-2); color: var(--muted); }
+
+/* La spiegazione: una frase scritta sotto la risposta, senza riquadro */
+.quiz-why { margin: 12px 0 0; max-width: 68ch; }
+.quiz-why b { color: var(--accent); }
+.quiz-rev .quiz-why { margin-top: 6px; }
+
+/* ---------- Appunti: la scheda di confronto ---------- */
+.quiz-indietro { margin: 0 0 12px; font-size: var(--t-2); }
+.confronti-indice ol { margin: 18px 0 0; padding-left: 1.4em; columns: 2 220px; column-gap: 32px; }
+.confronti-indice li { margin: 0 0 4px; break-inside: avoid; }
 .confronti h2 { margin-bottom: 18px; }
 .confronti h2::before { content: none; }
-/* Le tabelle larghe scorrono dentro il loro riquadro sul telefono, mai la pagina intera */
-.tabella { overflow-x: auto; margin: 0 0 20px; background: var(--card); border: 1.5px solid var(--bordo); }
+/* Le tabelle sono scritte sul foglio: righe, niente riquadro.
+   Sul telefono quelle larghe scorrono da sole, mai la pagina intera */
+.tabella { overflow-x: auto; margin: 0 0 28px; }
 .tabella table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: var(--t-2); line-height: 1.45; }
-.tabella caption { padding: 10px 12px; text-align: left; font-family: var(--serif); font-size: var(--t-4); font-weight: 600; border-bottom: 1.5px solid var(--bordo); }
-.tabella th, .tabella td { padding: 8px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
-.tabella thead th { font-family: var(--mono); font-size: var(--t-1); font-weight: 400; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-.tabella tbody th { font-weight: 700; white-space: nowrap; }
-.tabella tbody tr:last-child > * { border-bottom: 0; }
+.tabella caption { padding: 0 0 8px; text-align: left; font-family: var(--serif); font-size: var(--t-4); font-weight: 600; }
+.tabella th, .tabella td { padding: 8px 12px 8px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.tabella thead th { font-size: var(--t-2); font-weight: 600; color: var(--muted); border-bottom: 1.5px solid var(--bordo); }
+.tabella tbody th { font-weight: 700; }
 .regole { margin: 0 0 8px; padding-left: 1.2em; }
 .regole li { margin: 0 0 6px; max-width: 75ch; }
-.quiz-link-confronti { margin: 0 0 24px; }
