@@ -38,12 +38,9 @@ const TESTI = {
     contoNuove: "Mai viste", contoImparate: "Imparate", contoStima: "Se l'esame fosse oggi",
     su: (n) => `su ${n}`,
     compito: "Il compito d'esame",
-    compitoSotto: (n, s) => `L'esame ha ${n} domande e ogni argomento ne vale sempre lo stesso numero. Oggi ne sapresti con sicurezza circa ${s}.`,
+    compitoSotto: (n, s) => `Ogni quadratino è una delle ${n} domande dell'esame e si colora man mano che impari l'argomento. Oggi ne sapresti circa ${s}.`,
     caselleLabel: (p, s) => `${s} su ${p} domande d'esame`,
-    caselleConto: (p, s) => `${s} su ${p}`,
     imparateBreve: (c, n) => `${c} su ${n}`,
-    colonnaArgomento: "Argomento", colonnaEsame: "Domande all'esame", colonnaImparate: "Imparate",
-    legenda: "Ogni quadratino è una domanda dell'esame. Si colora in proporzione alle domande dell'argomento che hai imparato: se di Lipidi ne hai imparate metà, sapresti circa 3 delle sue 6.",
     materiali: "Materiali", scheda: "Scheda di confronto", schedaSotto: "I concetti che all'esame si confondono, uno accanto all'altro.",
     imparate: (c, n) => `${c} di ${n} imparate`,
     simula: "Simula un test",
@@ -94,12 +91,9 @@ const TESTI = {
     contoNuove: "Never seen", contoImparate: "Learned", contoStima: "If the exam were today",
     su: (n) => `of ${n}`,
     compito: "The exam paper",
-    compitoSotto: (n, s) => `The exam has ${n} questions and each topic is always worth the same number. Today you would surely know about ${s}.`,
+    compitoSotto: (n, s) => `Each square is one of the ${n} exam questions and fills in as you learn the topic. Today you would know about ${s}.`,
     caselleLabel: (p, s) => `${s} of ${p} exam questions`,
-    caselleConto: (p, s) => `${s} of ${p}`,
     imparateBreve: (c, n) => `${c} of ${n}`,
-    colonnaArgomento: "Topic", colonnaEsame: "Exam questions", colonnaImparate: "Learned",
-    legenda: "Each square is an exam question. It fills in proportion to the questions of that topic you have learned: if you have learned half of Lipids, you would know about 3 of its 6.",
     materiali: "Materials", scheda: "Comparison sheet", schedaSotto: "The concepts that are easy to mix up in the exam, side by side.",
     imparate: (c, n) => `${c} of ${n} learned`,
     simula: "Simulate a test",
@@ -270,15 +264,14 @@ function home() {
         ${cfg.argomenti.length ? `<button type="button" class="link" id="tutti">${T.argomentiTutti}</button>` : ""}
       </div>
       <p class="pannello-sotto">${T.compitoSotto(totaleEsame, stima)}</p>
-      <div class="righe-testa" aria-hidden="true"><span>${T.colonnaArgomento}</span><span>${T.colonnaEsame}</span><span>${T.colonnaImparate}</span></div>
       <ul class="righe-argomenti">
         ${righe.map((r) => `<li><button type="button" class="riga-argomento" data-gruppo="argomento" data-k="${r.a.id}" aria-pressed="${cfg.argomenti.includes(r.a.id)}">
           <span class="riga-nome">${esc(r.a[inglese() ? "en" : "it"])}</span>
-          <span class="riga-esame"><span class="caselle" role="img" aria-label="${T.caselleLabel(r.a.peso, r.piene)}">${Array.from({ length: r.a.peso }, (_, i) => `<i class="${i < r.piene ? "piena" : ""}"></i>`).join("")}</span><span class="caselle-conto" aria-hidden="true">${T.caselleConto(r.a.peso, r.piene)}</span></span>
+          <span class="caselle" role="img" aria-label="${T.caselleLabel(r.a.peso, r.piene)}">${Array.from({ length: r.a.peso }, (_, i) => `<i class="${i < r.piene ? "piena" : ""}"></i>`).join("")}</span>
           <span class="riga-conto${r.imp === 0 ? " zero" : ""}">${T.imparateBreve(r.imp, r.qs.length)}</span>
         </button></li>`).join("")}
       </ul>
-      <p class="legenda">${T.legenda} ${T.argomentiNota}</p>
+      <p class="legenda">${T.argomentiNota}</p>
     </section>
     <div class="colonna">
     <section class="pannello oggi" aria-labelledby="titolo-oggi">
