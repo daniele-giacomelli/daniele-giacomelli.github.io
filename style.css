@@ -1209,110 +1209,67 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
   :is(.btn, .links a[download], .window.shot, .ans, .nav-links a.tab):is(:hover, :focus-visible, :active) { transform: none; }
 }
 
-/* ---------- Appunti: uno strumento di studio, non una pagina della rivista ----------
-   Stile "achromatic-ledger" (design-taste-frontend, seme 338190054): niente colore nell'interfaccia,
-   tutto in inchiostro; l'unica tinta, il blu del CV, sta sul dato principale (le caselle del compito
-   d'esame) e i colori di stato solo su giusto e sbagliato. Superfici bianche su un fondo grigio-azzurro,
-   bordi da 1px, raggi 8 e 6, nessuna ombra. Il cielo, gli adesivi e le ombre piene restano al portfolio */
+/* ---------- Appunti: ordine da strumento, personalità del sito ----------
+   La disposizione viene da design-taste-frontend (achromatic-ledger: conti, compito d'esame e pannelli sulla
+   griglia, colore solo sui dati); colori, caratteri, barra in alto, pulsanti e ombre sono quelli del sito */
 .appunti {
-  --fondo: #f2f4f7;
-  --superficie: #ffffff;
-  --sopra: #f6f7f9;
-  --bordo-app: #e3e6eb;
-  --riga-app: #eceef2;
-  --inchiostro: #16181d;
-  --grigio: #5b616e;
-  --tinta: #17365d;
-  --tinta-chiara: color-mix(in srgb, #17365d 26%, #ffffff);
-  --pillola: #e5e5e5;
-  --scelta: #e9e9e9;
-  --raggio: 8px;
-  --raggio-piccolo: 6px;
-  /* Negli appunti nessun monospace: i numeri usano le cifre tabellari del carattere di testo */
-  --mono: var(--sans);
-  --bg: var(--fondo);
-  --fg: var(--inchiostro);
-  --muted: var(--grigio);
-  --card: var(--superficie);
-  --bordo: var(--bordo-app);
-  --line: var(--riga-app);
-  --accent: var(--tinta);
-  --ombra: transparent;
+  --superficie: var(--card);
+  --sopra: color-mix(in srgb, var(--accent) 6%, var(--card));
+  --bordo-app: var(--bordo);
+  --riga-app: var(--line);
+  --inchiostro: var(--fg);
+  --grigio: var(--muted);
+  --tinta: var(--accent);
+  --tinta-chiara: color-mix(in srgb, var(--accent) 28%, var(--card));
+  --scelta: color-mix(in srgb, var(--accent) 12%, var(--card));
 }
-/* Scuro: neutri veri, non blu notte; la tinta si schiarisce per restare leggibile */
-@media (prefers-color-scheme: dark) {
-  :root.appunti:not([data-theme="light"]) {
-    --fondo: #111111; --superficie: #1a1a1a; --sopra: #222222; --bordo-app: #2e2e2e; --riga-app: #262626;
-    --inchiostro: #e8e8e8; --grigio: #a3a3a3; --tinta: #8fb0e6; --tinta-chiara: color-mix(in srgb, #8fb0e6 32%, #1a1a1a);
-    --pillola: #2e2e2e; --scelta: #333333;
-  }
+/* Il foglio a quadretti, leggero */
+.appunti::before {
+  --riga: color-mix(in srgb, var(--accent) 7%, transparent);
+  background:
+    linear-gradient(var(--riga) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--riga) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--bg);
 }
-:root.appunti[data-theme="dark"] {
-  --fondo: #111111; --superficie: #1a1a1a; --sopra: #222222; --bordo-app: #2e2e2e; --riga-app: #262626;
-  --inchiostro: #e8e8e8; --grigio: #a3a3a3; --tinta: #8fb0e6; --tinta-chiara: color-mix(in srgb, #8fb0e6 32%, #1a1a1a);
-  --pillola: #2e2e2e; --scelta: #333333;
-}
-.appunti::before { background: var(--fondo); }
 .appunti body::before { display: none; }
-.appunti body { background: var(--fondo); color: var(--inchiostro); }
+/* L'interruttore del tema piatto, senza olografico né cromo (come chiesto per gli appunti) */
+.appunti .theme-toggle { background: var(--bg); }
+.appunti .theme-toggle .knob { background: var(--fg); border-color: var(--fg); }
+.appunti .theme-toggle .knob::after { background: var(--bg); }
 
-/* Barra in alto: piatta, sul fondo, senza riquadro né ombra */
-.appunti .site-header nav { background: var(--fondo); border: 0; border-radius: 0; box-shadow: none; backdrop-filter: none; padding-left: 0; padding-right: 0; }
-.appunti .theme-toggle { background: var(--superficie); border-color: var(--bordo-app); }
-.appunti .theme-toggle .knob { background: var(--inchiostro); border-color: var(--inchiostro); }
-.appunti .theme-toggle .knob::after { background: var(--fondo); }
-.appunti .lang-switch { border-color: var(--bordo-app); }
-.appunti .lang-switch button[aria-pressed="true"] { background: var(--inchiostro); color: var(--fondo); }
-
-/* Titolo: un solo serif, per il titolo della pagina; il resto nel carattere di testo */
-.appunti .hero { padding: 40px 0 24px; }
-.appunti .hero .page-title { font-size: clamp(1.625rem, 3vw, 2rem); line-height: 1.1; letter-spacing: -0.02em; margin: 0; }
-.appunti .hero .lead { margin: 8px 0 0; font-family: var(--sans); font-size: 1rem; color: var(--grigio); }
+/* Titolo: Fraunces come nel resto del sito */
+.appunti .hero { padding: 48px 0 28px; }
+.appunti .hero .page-title { font-size: clamp(2.25rem, 5vw, 3.25rem); line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
+.appunti .hero .lead { margin: 10px 0 0; font-family: var(--sans); font-size: 1rem; color: var(--grigio); }
 .appunti main > section[id] { border-top: 0; margin-top: 0; padding-top: 8px; }
 .appunti h2::before { content: none; }
 .appunti .note { font-family: var(--sans); font-size: 0.875rem; }
 .appunti .site-footer { color: var(--grigio); }
 
-/* Pulsanti: il principale quasi nero, il secondario una pillola grigia; niente ombre, si premono di 1px */
-.appunti .btn {
-  background: var(--inchiostro);
-  color: var(--fondo);
-  border: 0;
-  border-radius: var(--raggio-piccolo);
-  padding: 10px 14px;
-  font-family: var(--sans);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-.appunti .btn.ghost { background: var(--pillola); color: var(--inchiostro); border-radius: 999px; }
-.appunti :is(.btn, .ans) { --h: 0px; box-shadow: none; }
-.appunti :is(.btn, .ans):is(:hover, :focus-visible):not(:disabled) { transform: none; box-shadow: none; }
-.appunti .btn:hover:not(:disabled) { background: color-mix(in srgb, var(--inchiostro) 85%, var(--fondo)); }
-.appunti .btn.ghost:hover:not(:disabled) { background: color-mix(in srgb, var(--pillola) 80%, var(--inchiostro)); }
-.appunti :is(.btn, .ans):active:not(:disabled) { transform: translateY(1px); box-shadow: none; }
-.appunti .link { font-size: 0.875rem; color: var(--grigio); }
-.appunti .check { font-size: 0.875rem; color: var(--inchiostro); }
-.appunti .check input { accent-color: var(--inchiostro); }
+/* Pulsanti: quelli del sito. Nei pannelli stretti occupano tutta la larghezza */
+.appunti .link { font-size: 0.875rem; }
+.appunti .check { font-size: 0.875rem; }
+.appunti .check input { accent-color: var(--accent); }
 
 /* La pagina iniziale: griglia a 12 colonne, gutter 16px.
    Righe: 3+3+3+3 (i conti), 9+3 (compito e ripasso), 6+6 (test e materiali): ogni bordo interno
    cade su una linea di colonna di quella sopra */
-#quiz[data-vista="home"] { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; align-items: start; }
-.conti { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 0; }
-.conto { display: flex; flex-direction: column; justify-content: space-between; gap: 12px; min-height: 112px; padding: 16px; background: var(--superficie); border: 1px solid var(--bordo-app); border-radius: var(--raggio); }
+#quiz[data-vista="home"] { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
+.conti { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; }
+.conto { display: flex; flex-direction: column; justify-content: space-between; gap: 12px; min-height: 112px; padding: 16px; background: var(--superficie); border: 1.5px solid var(--bordo); box-shadow: 4px 4px 0 var(--ombra); }
 .conto dt { font-size: 0.8125rem; color: var(--grigio); }
 .conto dd { margin: 0; }
-.conto-valore { font-size: 1.875rem; font-weight: 400; line-height: 1; font-variant-numeric: tabular-nums; }
+.conto-valore { font-family: var(--serif); font-optical-sizing: auto; font-size: 2.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .conto-valore.zero { color: var(--grigio); }
 .conto-nota { font-size: 0.8125rem; color: var(--grigio); }
-.pannello { padding: 20px; background: var(--superficie); border: 1px solid var(--bordo-app); border-radius: var(--raggio); }
+.pannello { padding: 20px 22px; background: var(--superficie); border: 1.5px solid var(--bordo); box-shadow: 6px 6px 0 var(--ombra); }
 .compito { grid-column: span 8; }
-.colonna { grid-column: span 4; display: grid; gap: 16px; }
+.colonna { grid-column: span 4; display: grid; gap: 24px; }
 .test { grid-column: 1 / -1; }
 .test .seg { display: inline-flex; margin-right: 16px; }
 .test .check { display: inline-flex; margin-right: 20px; }
-.pannello-testa { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.pannello-titolo { margin: 0; font-family: var(--sans); font-style: normal; font-size: 0.9375rem; font-weight: 600; letter-spacing: 0; }
+.pannello-testa { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+.pannello-titolo { margin: 0; font-family: var(--serif); font-optical-sizing: auto; font-style: normal; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
 .pannello-sotto { margin: 4px 0 14px; font-size: 0.875rem; color: var(--grigio); max-width: 62ch; }
 .pannello p { margin: 0 0 12px; }
 .pannello > :last-child { margin-bottom: 0; }
@@ -1330,7 +1287,6 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
   padding: 6px 8px;
   background: none;
   border: 0;
-  border-radius: var(--raggio-piccolo);
   font: inherit;
   font-size: 0.875rem;
   color: var(--inchiostro);
@@ -1342,12 +1298,12 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 .riga-conto { text-align: right; font-variant-numeric: tabular-nums; }
 .riga-conto.zero { color: var(--grigio); }
 .caselle { display: flex; gap: 4px; }
-.caselle i, .legenda i { display: inline-block; width: 14px; height: 14px; border: 1px solid var(--bordo-app); border-radius: 3px; background: var(--superficie); }
+.caselle i, .legenda i { display: inline-block; width: 14px; height: 14px; border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent); background: var(--superficie); }
 .caselle i.piena, .legenda i.piena { background: var(--tinta); border-color: var(--tinta); }
 .caselle i.vista, .legenda i.vista { background: var(--tinta-chiara); border-color: var(--tinta-chiara); }
 .legenda { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin: 12px 0 0; font-size: 0.8125rem; color: var(--grigio); }
 .legenda span { display: inline-flex; align-items: center; gap: 6px; }
-.legenda i { width: 10px; height: 10px; border-radius: 2px; }
+.legenda i { width: 10px; height: 10px; }
 .legenda-filtro { margin-left: auto; }
 
 /* Ripasso di oggi */
@@ -1357,29 +1313,23 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 
 /* Simula un test: scelte a segmenti neutre */
 .seg { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
-.seg button { padding: 6px 12px; background: var(--superficie); border: 1px solid var(--bordo-app); border-radius: var(--raggio-piccolo); font: inherit; font-size: 0.875rem; color: var(--inchiostro); cursor: pointer; }
+.seg button { padding: 6px 12px; background: var(--superficie); border: 1.5px solid var(--bordo); font: inherit; font-family: var(--mono); font-size: var(--t-1); color: var(--inchiostro); cursor: pointer; }
 .seg button span { color: var(--grigio); margin-left: 4px; font-variant-numeric: tabular-nums; }
-.seg button[aria-pressed="true"] { background: var(--inchiostro); border-color: var(--inchiostro); color: var(--fondo); }
+.seg button[aria-pressed="true"] { background: var(--pulsante); border-color: var(--pulsante); color: var(--su-pulsante); }
 .seg button[aria-pressed="true"] span { color: inherit; opacity: 0.7; }
 .seg button:not([aria-pressed="true"]):hover { background: var(--sopra); }
 
 /* La domanda */
 #quiz[data-vista="domanda"], #quiz[data-vista="fine"] { max-width: 760px; }
 .quiz-meta { display: flex; justify-content: space-between; gap: 12px; font-size: 0.875rem; color: var(--grigio); }
-.percorso { display: flex; flex-wrap: wrap; gap: 3px; margin: 10px 0 22px; }
-.percorso i { width: 10px; height: 10px; border: 1px solid var(--bordo-app); border-radius: 2px; background: var(--superficie); }
-.percorso i.visto { background: var(--tinta-chiara); border-color: var(--tinta-chiara); }
-.percorso i.giusto { background: var(--ok); border-color: var(--ok); }
-.percorso i.sbagliato { background: var(--bad); border-color: var(--bad); }
-.percorso i.attuale { border: 2px solid var(--inchiostro); }
-.appunti .quiz-q { font-family: var(--sans); font-size: 1.25rem; font-weight: 600; line-height: 1.35; }
-.appunti .ans { background: var(--superficie); border: 1px solid var(--bordo-app); border-radius: var(--raggio-piccolo); margin: 8px 0; }
-.appunti .ans:hover:not(:disabled) { background: var(--sopra); }
-.appunti .ans .l { font-family: var(--sans); font-weight: 600; color: var(--grigio); }
-.appunti .ans.sel { background: var(--scelta); border-color: var(--inchiostro); color: var(--inchiostro); }
-.appunti .ans.sel .l { color: var(--inchiostro); }
-.appunti .ans.ok { background: color-mix(in srgb, var(--ok) 10%, var(--superficie)); border-color: var(--ok); }
-.appunti .ans.bad { background: color-mix(in srgb, var(--bad) 10%, var(--superficie)); border-color: var(--bad); }
+.giro-caselle { display: flex; flex-wrap: wrap; gap: 3px; margin: 10px 0 22px; }
+.giro-caselle i { width: 10px; height: 10px; border: 1px solid var(--bordo-app); border-radius: 2px; background: var(--superficie); }
+.giro-caselle i.visto { background: var(--tinta-chiara); border-color: var(--tinta-chiara); }
+.giro-caselle i.giusto { background: var(--ok); border-color: var(--ok); }
+.giro-caselle i.sbagliato { background: var(--bad); border-color: var(--bad); }
+.giro-caselle i.attuale { border: 2px solid var(--inchiostro); }
+.appunti .ans.sel { background: var(--scelta); color: var(--fg); }
+.appunti .ans.sel .l { color: var(--fg); }
 .quiz-incerto { margin: 8px 0 0; }
 .spunta { display: inline-flex; align-items: center; gap: 8px; padding: 4px 0; background: none; border: 0; font: inherit; font-size: 0.875rem; color: var(--inchiostro); cursor: pointer; }
 .spunta::before { content: ""; width: 14px; height: 14px; border: 1px solid var(--grigio); border-radius: 3px; background: var(--superficie); }
@@ -1387,25 +1337,25 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 .spunta:disabled { cursor: default; opacity: 0.6; }
 .quiz-why { margin: 12px 0 0; max-width: 68ch; font-size: 0.9375rem; }
 .quiz-why b { font-weight: 600; }
-.appunti .quiz-score { font-family: var(--sans); font-size: 2.5rem; font-weight: 400; font-variant-numeric: tabular-nums; }
+
 .appunti .quiz-rev { border-bottom: 1px solid var(--riga-app); }
 .quiz-rev .quiz-why { margin-top: 6px; }
-.appunti .quiz-label, .appunti h3.quiz-titolo { font-family: var(--sans); font-size: 0.9375rem; font-weight: 600; margin: 28px 0 8px; }
+.appunti h3.quiz-titolo { font-family: var(--serif); font-size: 1.375rem; font-weight: 700; margin: 28px 0 8px; }
 
 /* Elenco degli esami */
 .appunti .exam { border-bottom: 1px solid var(--riga-app); }
-.appunti .exam h3 { font-family: var(--sans); font-size: 1.125rem; font-weight: 600; }
-.appunti .exam .code, .appunti .modules .letter, .appunti .modules .status { font-family: var(--sans); font-variant-numeric: tabular-nums; color: var(--grigio); }
+.appunti .exam h3 { font-family: var(--serif); font-size: var(--t-5); font-weight: 700; }
+
 
 /* La scheda di confronto: tabelle vere, su superfici bianche */
 .quiz-indietro { margin: 0 0 12px; font-size: 0.875rem; }
 .confronti-indice ol { margin: 16px 0 0; padding-left: 1.4em; columns: 2 220px; column-gap: 32px; font-size: 0.9375rem; }
 .confronti-indice li { margin: 0 0 4px; break-inside: avoid; }
 .confronti { padding-top: 32px; }
-.confronti h2 { margin: 0 0 14px; font-family: var(--sans); font-style: normal; font-size: 1.375rem; font-weight: 600; letter-spacing: 0; }
-.tabella { overflow-x: auto; margin: 0 0 16px; background: var(--superficie); border: 1px solid var(--bordo-app); border-radius: var(--raggio); }
+.confronti h2 { margin: 0 0 16px; font-family: var(--serif); font-style: italic; font-size: var(--t-6); font-weight: 500; letter-spacing: -0.02em; }
+.tabella { overflow-x: auto; margin: 0 0 24px; background: var(--superficie); border: 1.5px solid var(--bordo); box-shadow: 6px 6px 0 var(--ombra); }
 .tabella table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 0.875rem; line-height: 1.45; }
-.tabella caption { padding: 14px 16px 6px; text-align: left; font-size: 0.9375rem; font-weight: 600; }
+.tabella caption { padding: 14px 16px 6px; text-align: left; font-family: var(--serif); font-size: 1.25rem; font-weight: 700; }
 .tabella th, .tabella td { padding: 9px 16px; text-align: left; vertical-align: top; border-top: 1px solid var(--riga-app); }
 .tabella thead th { font-size: 0.8125rem; font-weight: 400; color: var(--grigio); border-top: 0; }
 .tabella tbody th { font-weight: 600; }
@@ -1422,10 +1372,3 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
   .legenda-filtro { margin-left: 0; }
   .conto-valore { font-size: 1.5rem; }
 }
-
-/* Il nome in alto negli appunti: testo normale e un marchio disegnato (quattro caselle, una piena, come il compito d'esame) */
-.appunti .brand { font-family: var(--sans); font-size: 0.9375rem; font-weight: 600; gap: 8px; align-items: center; }
-.appunti .brand-dove { font-weight: 400; color: var(--grigio); font-variant-numeric: tabular-nums; }
-.marchio { width: 16px; height: 16px; fill: var(--bordo-app); }
-.marchio .piena { fill: var(--tinta); }
-.appunti .lang-switch button { font-family: var(--sans); }

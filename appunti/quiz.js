@@ -25,7 +25,6 @@ const TESTI = {
     errore: `Non riesco a caricare il quiz. In locale avvia un server con <code>python -m http.server</code>.`,
     domande: (n) => `${n} domande`,
     migliore: (n) => `migliore: ${n}`,
-    tutte: "Tutte",
     oggi: "Ripasso di oggi",
     oggiStato: (s, n) => `${s} in scadenza e ${n} mai viste. Il giro parte dagli argomenti che pesano di più.`,
     oggiVuoto: "Ripasso di oggi fatto. Se vuoi, continua con le domande più deboli.",
@@ -54,7 +53,6 @@ const TESTI = {
     mescolaDomande: "Mescola l'ordine delle domande",
     mescolaRisposte: "Mescola l'ordine delle risposte",
     inizia: "Inizia",
-    nessunaDomanda: "Nessuna domanda con questi filtri.",
     azzera: "Azzera i progressi",
     azzeraConferma: "Cancellare tutti i progressi del ripasso e i punteggi migliori di questo modulo?",
     domandaDi: (i, n) => `Domanda ${i} di ${n}`,
@@ -81,7 +79,6 @@ const TESTI = {
     errore: `Couldn't load the quiz. Locally, start a server with <code>python -m http.server</code>.`,
     domande: (n) => `${n} questions`,
     migliore: (n) => `best: ${n}`,
-    tutte: "All",
     oggi: "Today's review",
     oggiStato: (s, n) => `${s} due and ${n} never seen. The round starts from the topics that weigh most.`,
     oggiVuoto: "Today's review is done. If you like, keep going with your weakest questions.",
@@ -110,7 +107,6 @@ const TESTI = {
     mescolaDomande: "Shuffle the questions",
     mescolaRisposte: "Shuffle the answers",
     inizia: "Start",
-    nessunaDomanda: "No questions match these filters.",
     azzera: "Reset progress",
     azzeraConferma: "Delete all review progress and best scores for this module?",
     domandaDi: (i, n) => `Question ${i} of ${n}`,
@@ -173,8 +169,8 @@ async function avvia() {
   }
   dati.argomenti = dati.argomenti || [];
   const chiavi = Object.keys(dati.test);
-  scelte = chiavi.map((k) => [k, () => nome(k)]);
-  if (chiavi.length > 1) scelte.push([TUTTI, () => t().tutte]);
+  // Da simulare ci sono solo i test veri; le raccolte con un nome (le domande nuove) servono al ripasso
+  scelte = chiavi.filter((k) => !(dati.nomi && dati.nomi[k])).map((k) => [k, () => nome(k)]);
   cfg = Object.assign({ test: scelte[0][0], modo: "studio", mescolaDomande: false, mescolaRisposte: false, argomenti: [], nascondi: false }, store.get("cfg") || {});
   if (!scelte.some(([k]) => k === cfg.test)) cfg.test = scelte[0][0];
   cfg.argomenti = cfg.argomenti.filter((id) => dati.argomenti.some((a) => a.id === id));
@@ -240,7 +236,7 @@ function home() {
   const { scadute, nuove, giro } = giroDiRipasso();
   const extra = giroExtra();
   const imparata = (q) => srs[q.id] && srs[q.id].b >= CONSOLIDATA;
-  const contaTest = (k) => domandeDi(k).filter(nelFiltro).length;
+  const contaTest = (k) => dati.test[k].length;
   const scelta = (gruppo, k, testo, attivo) =>
     `<button type="button" data-gruppo="${gruppo}" data-k="${k}" aria-pressed="${attivo}">${testo}</button>`;
   // Per ogni argomento: quante domande d'esame vale e quante di queste sapresti oggi, in proporzione
@@ -301,7 +297,7 @@ function home() {
     </div>
     <section class="pannello test" aria-labelledby="titolo-test">
       <h2 class="pannello-titolo" id="titolo-test">${T.simula}</h2>
-      <p class="pannello-sotto">${cfg.modo === "esame" ? T.esameSotto : T.studioSotto}${!cfg.argomenti.length && migliori[cfg.test] != null ? `. ${T.migliore(migliori[cfg.test])}` : ""}</p>
+      <p class="pannello-sotto">${cfg.modo === "esame" ? T.esameSotto : T.studioSotto}${migliori[cfg.test] != null ? `. ${T.migliore(migliori[cfg.test])}` : ""}</p>
       <div class="seg" role="group" aria-label="Test">${scelte.map(([k, n]) => scelta("test", k, `${n()} <span>${contaTest(k)}</span>`, cfg.test === k)).join("")}</div>
       <div class="seg" role="group" aria-label="${T.modalita}">
         ${scelta("modo", "studio", T.studio, cfg.modo === "studio")}
@@ -309,8 +305,7 @@ function home() {
       </div>
       <label class="check"><input type="checkbox" id="md" ${cfg.mescolaDomande ? "checked" : ""}> ${T.mescolaDomande}</label>
       <label class="check"><input type="checkbox" id="mr" ${cfg.mescolaRisposte ? "checked" : ""}> ${T.mescolaRisposte}</label>
-      <p class="quiz-actions"><button type="button" class="btn ghost" id="inizia" ${contaTest(cfg.test) ? "" : "disabled"}>${T.inizia}</button></p>
-      ${contaTest(cfg.test) ? "" : `<p class="pannello-sotto">${T.nessunaDomanda}</p>`}
+      <p class="quiz-actions"><button type="button" class="btn ghost" id="inizia">${T.inizia}</button></p>
     </section>`;
   app.querySelectorAll("[data-gruppo]").forEach((b) => {
     b.onclick = () => {
@@ -327,7 +322,7 @@ function home() {
   $("#nascondi").onchange = (e) => { cfg.nascondi = e.target.checked; store.set("cfg", cfg); };
   $("#md").onchange = (e) => { cfg.mescolaDomande = e.target.checked; store.set("cfg", cfg); };
   $("#mr").onchange = (e) => { cfg.mescolaRisposte = e.target.checked; store.set("cfg", cfg); };
-  $("#inizia").onclick = () => inizia(domandeDi(cfg.test).filter(nelFiltro), { modo: cfg.modo });
+  $("#inizia").onclick = () => inizia(domandeDi(cfg.test), { modo: cfg.modo });
   const ripasso = $("#ripasso");
   if (ripasso) ripasso.onclick = () => inizia(giroDiRipasso().giro, { modo: RIPASSO });
   const ancora = $("#ancora");
@@ -379,7 +374,7 @@ function mostra() {
   const nascoste = cfg.nascondi && r == null && !S.aperte[S.i];
   app.innerHTML = `
     <div class="quiz-meta"><span>${T.domandaDi(S.i + 1, n)}${q.t ? ` · ${esc(nomeArgomento(q.t))}` : ""}${q.ripetuta ? ` · ${T.ripetuta}` : ""}</span><button type="button" class="link" id="esci">${T.esci}</button></div>
-    <span class="percorso" aria-hidden="true">${S.qs.map((x, i) => {
+    <span class="giro-caselle" aria-hidden="true">${S.qs.map((x, i) => {
       const ri = S.risposte[i];
       const stato = i === S.i ? "attuale" : ri == null ? "" : !correzioneSubito() ? "visto" : ri === x.a ? "giusto" : "sbagliato";
       return `<i class="${stato}"></i>`;
@@ -461,7 +456,7 @@ function fine() {
   if (primaVolta) {
     // In modalità esame la correzione (e quindi il ripasso) arriva solo adesso
     if (!correzioneSubito()) voci.forEach((v) => registra(v.q.id, v.r === v.q.a, v.incerta));
-    if (S.modo !== RIPASSO && !S.errori && !cfg.argomenti.length) {
+    if (S.modo !== RIPASSO && !S.errori) {
       const migliori = store.get("migliori") || {};
       if (migliori[cfg.test] == null || giuste > migliori[cfg.test]) {
         migliori[cfg.test] = giuste;
@@ -495,7 +490,7 @@ function fine() {
   if (ripassa) ripassa.onclick = () => inizia(errori.map((v) => ({ ...v.q.orig, id: v.q.id })), { modo: "studio", errori: true });
   // Ricomincia: un altro giro dello stesso tipo (ripasso di oggi, giro extra o test scelto)
   $("#ancora").onclick = () => {
-    if (S.modo !== RIPASSO) return inizia(domandeDi(cfg.test).filter(nelFiltro), { modo: S.modo });
+    if (S.modo !== RIPASSO) return inizia(domandeDi(cfg.test), { modo: S.modo });
     const giro = S.extra ? giroExtra() : giroDiRipasso().giro;
     if (giro.length) inizia(giro, { modo: RIPASSO, extra: S.extra });
     else home();
