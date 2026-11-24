@@ -1257,6 +1257,10 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 .tick:disabled { cursor: default; opacity: 0.6; }
 .quiz-why { margin: 12px 0 0; max-width: 68ch; font-size: 0.9375rem; }
 .quiz-why b { font-weight: 600; }
+.quiz-why-not { color: var(--ink); }
+.quiz-hook { margin: 12px 0 0; padding: 10px 14px; max-width: 68ch; font-size: 0.9375rem; background: var(--tint-soft); border-left: 3px solid var(--tint); }
+.quiz-hook b { font-weight: 600; }
+.quiz-see { margin: 10px 0 0; font-size: 0.875rem; }
 
 .notes .quiz-rev { border-bottom: 1px solid var(--rule); }
 .quiz-rev .quiz-why { margin-top: 6px; }

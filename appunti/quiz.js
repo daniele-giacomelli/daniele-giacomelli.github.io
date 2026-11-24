@@ -5,7 +5,9 @@
 //   "topics": [ { "id": "lipids", "it": "Lipidi", "en": "Lipids", "weight": 6 } ],    weight = questions in the exam
 //   "names": { "N": { "it": "Domande nuove", "en": "New questions" } },                named sets are review-only
 //   "tests": { "A": [ { "question": "...", "options": ["...", ...], "answer": 1,
-//                       "topic": "lipids", "explanation": "..." } ], "B": [...] } }
+//                       "topic": "lipids", "explanation": "...",
+//                       "why": [null, "why option B is wrong", ...], "hook": "...", "see": "lipids" } ] } }
+// why, hook and see are optional; see is a section id of the comparison sheet.
 //
 // Spaced repetition uses Leitner boxes 0-4. A wrong or unsure answer goes to box 1 (back tomorrow);
 // a sure right answer moves up one box. Boxes 3 and 4 count as learned.
@@ -63,6 +65,9 @@ const TEXT = {
     correctUnsure: "Corretto, ma la rivedi domani visto che non eri sicuro.",
     wrong: (letter) => `Sbagliato: la risposta giusta è la ${letter}.`,
     why: "Perché",
+    whyNot: "Perché non la tua",
+    remember: "Per ricordarlo",
+    seeSheet: "Rivedilo nella scheda di confronto ↗",
     back: "← Indietro", next: "Avanti →", finish: "Termina",
     missing: (n) => `Ne mancano ${n}: vai alla prima`,
     stepsLabel: "Domande del giro",
@@ -118,6 +123,9 @@ const TEXT = {
     correctUnsure: "Correct, but you'll see it again tomorrow since you weren't sure.",
     wrong: (letter) => `Wrong: the right answer is ${letter}.`,
     why: "Why",
+    whyNot: "Why not yours",
+    remember: "To remember it",
+    seeSheet: "See it in the comparison sheet ↗",
     back: "← Back", next: "Next →", finish: "Finish",
     missing: (n) => `${n} left: go to the first`,
     stepsLabel: "Questions in this round",
@@ -376,10 +384,23 @@ function begin(questions, { mode, retry = false, extra = false }) {
 function prepare(q, shuffleAnswers) {
   const order = q.options.map((_, i) => i);
   const idx = shuffleAnswers ? shuffle(order) : order;
-  return { ...q, options: idx.map((i) => q.options[i]), answer: idx.indexOf(q.answer), original: q };
+  return { ...q, options: idx.map((i) => q.options[i]), why: q.why && idx.map((i) => q.why[i]), answer: idx.indexOf(q.answer), original: q };
 }
 
 const instantFeedback = () => session.mode !== "exam";
+// Explanation, why the chosen option is wrong, a memory hook and a link to the comparison sheet
+function feedbackDetails(q, answer, unsure) {
+  const T = text();
+  const missed = answer !== q.answer;
+  const whyNot = missed && answer != null && q.why && q.why[answer];
+  return [
+    whyNot ? `<p class="quiz-why quiz-why-not"><b>${T.whyNot}.</b> <span lang="en">${escape(whyNot)}</span></p>` : "",
+    q.explanation ? `<p class="quiz-why"><b>${T.why}.</b> <span lang="en">${escape(q.explanation)}</span></p>` : "",
+    q.hook && (missed || unsure) ? `<p class="quiz-hook"><b>${T.remember}.</b> <span lang="en">${escape(q.hook)}</span></p>` : "",
+    q.see && (missed || unsure) ? `<p class="quiz-see"><a href="confronti/#${encodeURIComponent(q.see)}" target="_blank" rel="noopener">${T.seeSheet}</a></p>` : "",
+  ].join("");
+}
+
 const unanswered = () => session.questions.filter((_, i) => session.answers[i] == null).length;
 
 function showQuestion() {
@@ -411,7 +432,7 @@ function showQuestion() {
     </div>`}
     <p class="quiz-unsure"><button type="button" class="tick" id="unsure" aria-pressed="${unsure}" ${locked ? "disabled" : ""}>${T.unsure}</button></p>
     <p class="quiz-fb ${locked ? (answer === q.answer ? "ok" : "bad") : ""}" role="status">${feedback}</p>
-    ${locked && q.explanation ? `<p class="quiz-why"><b>${T.why}.</b> <span lang="en">${escape(q.explanation)}</span></p>` : ""}
+    ${locked ? feedbackDetails(q, answer, unsure) : ""}
     <div class="quiz-nav">
       <button type="button" class="btn ghost" id="prev" ${index ? "" : "disabled"}>${T.back}</button>
       <button type="button" class="btn" id="next" ${answer == null ? "disabled" : ""}>${index < n - 1 ? T.next : unanswered() ? T.missing(unanswered()) : T.finish}</button>
@@ -509,7 +530,7 @@ function results() {
             ? `<p class="ok">${T.right}: <span lang="en">${optionText(q, q.answer)}</span> <span class="dim">(${T.wasUnsure})</span></p>`
             : `<p class="bad">${T.yours}: <span lang="en">${optionText(q, answer)}</span></p>
                <p class="ok">${T.right}: <span lang="en">${optionText(q, q.answer)}</span></p>`}
-          ${q.explanation ? `<p class="quiz-why"><b>${T.why}.</b> <span lang="en">${escape(q.explanation)}</span></p>` : ""}
+          ${feedbackDetails(q, answer, answer === q.answer)}
         </div>`).join("")}` : ""}`;
   $("#score").focus();
   const retry = $("#retry");
