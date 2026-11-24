@@ -1527,6 +1527,1326 @@
     "answer": 3,
     "topic": "enzymes",
     "explanation": "When all active sites are busy (saturation), adding substrate no longer raises the rate: it approaches Vmax."
+   },
+   {
+    "question": "Compared with the whole atom (about 10⁻¹⁰ m), the nucleus (about 10⁻¹⁵ m) is:",
+    "options": [
+     "About 1,000 times larger",
+     "About 100,000 times smaller",
+     "About the same size",
+     "About 10 times smaller"
+    ],
+    "answer": 1,
+    "topic": "atoms",
+    "explanation": "10⁻¹⁰ / 10⁻¹⁵ = 10⁵: the nucleus is about 100,000 times smaller, so the atom is almost entirely empty space."
+   },
+   {
+    "question": "Of the 118 known elements, how many occur naturally?",
+    "options": [
+     "118",
+     "64",
+     "26",
+     "92"
+    ],
+    "answer": 3,
+    "topic": "atoms",
+    "explanation": "92 elements exist in nature; the other 26 were made in the laboratory and are often unstable."
+   },
+   {
+    "question": "By mass, the most abundant element in the human body is:",
+    "options": [
+     "Hydrogen (about 65%)",
+     "Oxygen (about 65%)",
+     "Carbon (about 65%)",
+     "Nitrogen (about 18%)"
+    ],
+    "answer": 1,
+    "topic": "atoms",
+    "explanation": "Oxygen is about 65% of body mass, carbon about 18%, hydrogen about 9.5%: we are mostly water, and O is the heaviest atom in H₂O."
+   },
+   {
+    "question": "By type of molecule, the human body is made mostly of:",
+    "options": [
+     "Fats (about 62%)",
+     "Water (about 62%)",
+     "Proteins (about 62%)",
+     "Carbohydrates (about 62%)"
+    ],
+    "answer": 1,
+    "topic": "atoms",
+    "explanation": "Water is about 62%, proteins and fats about 16% each, minerals 6%, carbohydrates only about 1%."
+   },
+   {
+    "question": "In the current (quantum) model of the atom, an orbital is:",
+    "options": [
+     "The exact circular path of an electron",
+     "The fixed distance between two electrons",
+     "The space occupied by the nucleus",
+     "A region where the probability of finding the electron is high"
+    ],
+    "answer": 3,
+    "topic": "atoms",
+    "explanation": "Because of Heisenberg's uncertainty principle the electron's exact position can't be known; the orbital (from Schrödinger's wave function) describes where it is likely to be."
+   },
+   {
+    "question": "The magnetic quantum number mₗ defines:",
+    "options": [
+     "The shape of the orbital",
+     "The energy level of the orbital",
+     "The spin of the electron",
+     "The orientation of the orbital in space"
+    ],
+    "answer": 3,
+    "topic": "atoms",
+    "explanation": "mₗ goes from −l to +l: for l = 1 it gives the three p orbitals along x, y and z. n gives the level, l the shape, mₛ the spin."
+   },
+   {
+    "question": "The spin quantum number mₛ can take the values:",
+    "options": [
+     "Any positive integer",
+     "0, 1 or 2",
+     "+½ or −½",
+     "From −l to +l"
+    ],
+    "answer": 2,
+    "topic": "atoms",
+    "explanation": "mₛ distinguishes the two electrons that can share one orbital: one +½, one −½."
+   },
+   {
+    "question": "How many electrons can the n = 3 level hold at most?",
+    "options": [
+     "8",
+     "32",
+     "18",
+     "10"
+    ],
+    "answer": 2,
+    "topic": "atoms",
+    "explanation": "n = 3 has one 3s, three 3p and five 3d orbitals: 9 orbitals × 2 electrons = 18."
+   },
+   {
+    "question": "Which describes the shape of s and p orbitals?",
+    "options": [
+     "s has two lobes, p is spherical",
+     "s is spherical, p has two lobes",
+     "Both have four lobes",
+     "Both are spherical"
+    ],
+    "answer": 1,
+    "topic": "atoms",
+    "explanation": "s orbitals are spheres that grow with n; p orbitals are bilobed; d and f have more complex shapes."
+   },
+   {
+    "question": "Why does the 4s sublevel fill before 3d?",
+    "options": [
+     "4s has slightly lower energy than 3d",
+     "4s is closer to the nucleus than 3d",
+     "3d orbitals cannot hold electrons until period 5",
+     "Hund's rule requires it"
+    ],
+    "answer": 0,
+    "topic": "atoms",
+    "explanation": "Aufbau fills by increasing energy, and 4s is slightly lower than 3d. That's why the transition metals (filling 3d) sit in period 4."
+   },
+   {
+    "question": "Elements in the same column of the periodic table have:",
+    "options": [
+     "The same configuration of outer (valence) electrons",
+     "The same atomic mass",
+     "The same number of electron shells",
+     "The same number of protons"
+    ],
+    "answer": 0,
+    "topic": "atoms",
+    "explanation": "Chemistry is done by the outer electrons, so elements in the same group behave similarly. Along a row the number of outer electrons changes."
+   },
+   {
+    "question": "The d block of the periodic table contains:",
+    "options": [
+     "The lanthanides and actinides",
+     "The transition metals",
+     "The noble gases",
+     "The alkali metals"
+    ],
+    "answer": 1,
+    "topic": "atoms",
+    "explanation": "Blocks follow the last sublevel being filled: s (first two columns), p (six right columns), d (transition metals), f (lanthanides and actinides)."
+   },
+   {
+    "question": "Atomic radius in the periodic table:",
+    "options": [
+     "Depends only on the number of neutrons",
+     "Increases going up a group and to the right along a period",
+     "Increases going down a group and to the left along a period",
+     "Is the same for all elements of a period"
+    ],
+    "answer": 2,
+    "topic": "atoms",
+    "explanation": "Going down adds electron shells; going right adds protons that pull the same shell closer. Biggest atoms bottom-left (Cs), smallest top-right."
+   },
+   {
+    "question": "In successive ionization energies, a very large jump appears when:",
+    "options": [
+     "The atom becomes a negative ion",
+     "The first electron is removed",
+     "The atom has an odd number of protons",
+     "The electron to be removed belongs to a complete inner shell"
+    ],
+    "answer": 3,
+    "topic": "atoms",
+    "explanation": "Each electron costs more than the previous one, but the big jump (lithium at the 2nd, beryllium at the 3rd) shows that a complete shell is very stable."
+   },
+   {
+    "question": "Which group has the highest electron affinity?",
+    "options": [
+     "Halogens (F, Cl, Br, I)",
+     "Noble gases",
+     "Transition metals",
+     "Alkali metals"
+    ],
+    "answer": 0,
+    "topic": "atoms",
+    "explanation": "Halogens miss just one electron to complete their shell, so they gain one readily; noble gases are already complete."
+   },
+   {
+    "question": "Electronegativity in the periodic table increases:",
+    "options": [
+     "Up a group and to the right along a period",
+     "Only down a group",
+     "Down a group and to the left along a period",
+     "Only to the left along a period"
+    ],
+    "answer": 0,
+    "topic": "atoms",
+    "explanation": "Like ionization energy and electron affinity, it grows towards the top right (fluorine ≈ 4); atomic radius goes the opposite way."
+   },
+   {
+    "question": "A bond between two atoms with a very large electronegativity difference (as in NaCl, Δ ≈ 2.2) is:",
+    "options": [
+     "Polar covalent",
+     "Nonpolar covalent",
+     "Ionic",
+     "Metallic"
+    ],
+    "answer": 2,
+    "topic": "atoms",
+    "explanation": "Δ = 0 gives a nonpolar covalent bond (O₂), a moderate Δ a polar covalent bond (HCl, Δ ≈ 1), a large Δ an ionic bond where one atom takes the electron."
+   },
+   {
+    "question": "Krypton and xenon are noble gases, yet they can:",
+    "options": [
+     "Bond with any element at room temperature",
+     "Form ionic bonds with sodium",
+     "React with very electronegative elements such as F and O under special conditions",
+     "Lose electrons easily like alkali metals"
+    ],
+    "answer": 2,
+    "topic": "atoms",
+    "explanation": "Their outer electrons are far from the nucleus, so a very electronegative atom like fluorine can involve them: Xe + 3F₂ → XeF₆."
+   },
+   {
+    "question": "Which statement about σ and π bonds is correct?",
+    "options": [
+     "A σ bond allows rotation, a π bond blocks it",
+     "Both allow free rotation",
+     "Both block rotation",
+     "A π bond allows rotation, a σ bond blocks it"
+    ],
+    "answer": 0,
+    "topic": "carbon",
+    "explanation": "σ comes from head-on overlap along the axis and allows rotation; π comes from side overlap of unhybridized p orbitals and locks the bond."
+   },
+   {
+    "question": "A C=C double bond is made of:",
+    "options": [
+     "One σ bond and two π bonds",
+     "One σ bond and one π bond",
+     "Two π bonds",
+     "Two σ bonds"
+    ],
+    "answer": 1,
+    "topic": "carbon",
+    "explanation": "Double = 1σ + 1π (sp² carbons); triple = 1σ + 2π (sp carbons)."
+   },
+   {
+    "question": "The bond that links fatty acids to glycerol in fats is formed by which functional group?",
+    "options": [
+     "Amine (–NH₂)",
+     "Thiol (–SH)",
+     "Ester (–COO–)",
+     "Aldehyde (–CHO)"
+    ],
+    "answer": 2,
+    "topic": "carbon",
+    "explanation": "Alcohol + carboxylic acid → ester. Thiols are in cysteine, amines and amides in amino acids, aldehydes in aldoses."
+   },
+   {
+    "question": "The thiol group (–SH), which can form disulfide bridges, is found in:",
+    "options": [
+     "Glycerol",
+     "Cysteine",
+     "Glucose",
+     "Cholesterol"
+    ],
+    "answer": 1,
+    "topic": "carbon",
+    "explanation": "Two cysteine –SH groups can be oxidized to a –S–S– disulfide bridge, a covalent link in proteins."
+   },
+   {
+    "question": "Constitutional (structural) isomers differ in:",
+    "options": [
+     "The molecular formula",
+     "Only the spatial arrangement of the same connections",
+     "The order in which atoms are connected",
+     "Only rotation around single bonds"
+    ],
+    "answer": 2,
+    "topic": "carbon",
+    "explanation": "Same formula, different connections. In stereoisomers the connections are the same and only the arrangement in space differs."
+   },
+   {
+    "question": "Diastereomers are stereoisomers that:",
+    "options": [
+     "Are non-superimposable mirror images",
+     "Are not mirror images of each other",
+     "Interconvert by rotation around single bonds",
+     "Have different molecular formulas"
+    ],
+    "answer": 1,
+    "topic": "carbon",
+    "explanation": "Geometric isomers (cis/trans) and epimers are diastereomers; enantiomers are the mirror-image ones."
+   },
+   {
+    "question": "Oleic acid and elaidic acid (both C18 with one double bond at C9) differ in:",
+    "options": [
+     "The number of double bonds",
+     "Saturation",
+     "The number of carbon atoms",
+     "Cis versus trans configuration of the double bond"
+    ],
+    "answer": 3,
+    "topic": "carbon",
+    "explanation": "Oleic acid is cis (chain bent by about 30°), elaidic acid is trans (nearly straight, like stearic acid, which is saturated)."
+   },
+   {
+    "question": "Mannose and galactose are epimers of glucose at, respectively:",
+    "options": [
+     "C2 and C6",
+     "C2 and C4",
+     "C4 and C2",
+     "C1 and C2"
+    ],
+    "answer": 1,
+    "topic": "carbon",
+    "explanation": "Mannose differs from glucose only at carbon 2, galactose only at carbon 4."
+   },
+   {
+    "question": "In a Fischer projection:",
+    "options": [
+     "Horizontal bonds point towards the viewer and vertical bonds away",
+     "The carbonyl group is always at the bottom",
+     "All bonds lie in the plane of the page",
+     "Vertical bonds point towards the viewer and horizontal bonds away"
+    ],
+    "answer": 0,
+    "topic": "carbohydrates",
+    "explanation": "The tetrahedral carbon is rotated so the horizontal bonds come forward and the vertical ones go back; the aldehyde or ketone group goes at the top."
+   },
+   {
+    "question": "Whether a sugar is D or L is decided by:",
+    "options": [
+     "Whether it is an aldose or a ketose",
+     "The OH on carbon 1",
+     "The OH on the chiral carbon farthest from the carbonyl (the penultimate carbon)",
+     "The total number of carbons"
+    ],
+    "answer": 2,
+    "topic": "carbohydrates",
+    "explanation": "In the Fischer projection, OH on the right of the penultimate carbon = D, on the left = L, by comparison with D- and L-glyceraldehyde."
+   },
+   {
+    "question": "The reference molecule for the ketose series is:",
+    "options": [
+     "Dihydroxyacetone",
+     "Glucose",
+     "Glyceraldehyde",
+     "Ribose"
+    ],
+    "answer": 0,
+    "topic": "carbohydrates",
+    "explanation": "Aldoses derive from glyceraldehyde, ketoses from dihydroxyacetone, the simplest ketose."
+   },
+   {
+    "question": "Glucose is classified as an:",
+    "options": [
+     "Ketohexose",
+     "Aldohexose",
+     "Ketopentose",
+     "Aldopentose"
+    ],
+    "answer": 1,
+    "topic": "carbohydrates",
+    "explanation": "Six carbons with the C=O on carbon 1 (aldehyde). Fructose, with the C=O on carbon 2, is a ketohexose."
+   },
+   {
+    "question": "Why is β-D-glucose the most stable monosaccharide?",
+    "options": [
+     "It has no chiral centers",
+     "It cannot form a ring",
+     "Its ring is perfectly planar",
+     "In the chair conformation all its bulky groups are equatorial"
+    ],
+    "answer": 3,
+    "topic": "carbohydrates",
+    "explanation": "Rings fold into chair or boat shapes. Bulky groups clash less in equatorial positions, and β-D-glucose is the only monosaccharide with all of them equatorial."
+   },
+   {
+    "question": "An oligosaccharide contains:",
+    "options": [
+     "Only glucose units",
+     "Exactly 1 saccharide unit",
+     "2 to 10 saccharide units",
+     "More than 1,000 units only"
+    ],
+    "answer": 2,
+    "topic": "carbohydrates",
+    "explanation": "Monosaccharides have 1 unit, oligosaccharides 2-10 (disaccharides are the main ones), polysaccharides more than 10."
+   },
+   {
+    "question": "Lactose is made of:",
+    "options": [
+     "Glucose + fructose",
+     "Glucose + glucose, α(1→4) bond",
+     "Galactose + fructose",
+     "Galactose + glucose, β(1→4) bond"
+    ],
+    "answer": 3,
+    "topic": "carbohydrates",
+    "explanation": "Lactose (milk sugar) needs lactase to break its β bond; not all adults make it, hence lactose intolerance."
+   },
+   {
+    "question": "Sucrose (table sugar) is made of:",
+    "options": [
+     "Glucose + galactose",
+     "Glucose + glucose",
+     "Glucose + fructose",
+     "Fructose + galactose"
+    ],
+    "answer": 2,
+    "topic": "carbohydrates",
+    "explanation": "Sucrose = glucose + fructose; lactose = galactose + glucose; maltose = glucose + glucose."
+   },
+   {
+    "question": "Maltose, produced by the digestion of starch, is made of:",
+    "options": [
+     "Two glucose units, α(1→4) bond",
+     "Two fructose units",
+     "Glucose and fructose",
+     "Galactose and glucose, β(1→4) bond"
+    ],
+    "answer": 0,
+    "topic": "carbohydrates",
+    "explanation": "Maltose is two glucoses linked α(1→4), the same bond found in the chains of starch."
+   },
+   {
+    "question": "A homopolysaccharide is:",
+    "options": [
+     "Always branched",
+     "A polysaccharide made of a single type of monomer",
+     "A polysaccharide made of two or more types of monomer",
+     "Found only in plants"
+    ],
+    "answer": 1,
+    "topic": "carbohydrates",
+    "explanation": "Starch, glycogen and cellulose are all homopolysaccharides of glucose; heteropolysaccharides contain two or more monomer types."
+   },
+   {
+    "question": "Starch is made of:",
+    "options": [
+     "Amylose (80-90%) and amylopectin (10-20%)",
+     "Glycogen and cellulose",
+     "Amylose (10-20%) and amylopectin (80-90%)",
+     "Only amylose"
+    ],
+    "answer": 2,
+    "topic": "carbohydrates",
+    "explanation": "Two glucose polymers: mostly the branched amylopectin, with a smaller share of linear amylose."
+   },
+   {
+    "question": "The structure of amylose is:",
+    "options": [
+     "Linear β(1→4) chains forming straight fibers",
+     "Linear α(1→4) chain that coils into a left-handed helix of 6 glucoses per turn",
+     "Branched every 4-10 residues",
+     "A ring of 6 glucose units"
+    ],
+    "answer": 1,
+    "topic": "carbohydrates",
+    "explanation": "The α(1→4) bond bends the chain, so amylose coils into a helix. Straight fibers are cellulose, with β(1→4) bonds."
+   },
+   {
+    "question": "Muscle glycogen mainly serves to:",
+    "options": [
+     "Supply quick energy to the muscle itself during intense effort",
+     "Build the muscle fibers",
+     "Keep blood glucose stable for the whole body",
+     "Store water in muscle cells"
+    ],
+    "answer": 0,
+    "topic": "carbohydrates",
+    "explanation": "Muscle glycogen is fuel for the muscle and runs out in under an hour of intense effort; liver glycogen supplies the whole body and lasts 12-24 hours."
+   },
+   {
+    "question": "Why do cells store glucose as glycogen rather than as free glucose?",
+    "options": [
+     "Glycogen is more soluble than glucose",
+     "Glucose is toxic in any amount",
+     "Free glucose cannot be used for energy",
+     "Many free glucose molecules would draw water into the cell; one large polymer does not"
+    ],
+    "answer": 3,
+    "topic": "carbohydrates",
+    "explanation": "Osmotically, one big molecule counts as one particle. Its many branch ends also let enzymes add or remove glucose quickly, in parallel."
+   },
+   {
+    "question": "In N-glycosylation, the sugar binds to:",
+    "options": [
+     "The nitrogen of an asparagine side chain",
+     "The sulfur of a cysteine",
+     "The oxygen of a serine or threonine side chain",
+     "The phosphate of a phospholipid"
+    ],
+    "answer": 0,
+    "topic": "carbohydrates",
+    "explanation": "N-linked sugars (e.g. GlcNAc) attach to asparagine; O-linked sugars (e.g. GalNAc) attach to serine or threonine."
+   },
+   {
+    "question": "Lipids are classified as simple, complex and derived. Which are derived lipids?",
+    "options": [
+     "Triglycerides and waxes",
+     "Free fatty acids",
+     "Phospholipids and glycolipids",
+     "Steroids, sterols such as cholesterol, carotenoids"
+    ],
+    "answer": 3,
+    "topic": "lipids",
+    "explanation": "Simple: triglycerides and waxes. Complex (with an extra group): phospholipids and glycolipids. Derived: steroids, sterols, carotenoids."
+   },
+   {
+    "question": "Palmitic acid has 16 carbons. By chain length it is a:",
+    "options": [
+     "Very long-chain fatty acid",
+     "Long-chain fatty acid",
+     "Medium-chain fatty acid",
+     "Short-chain fatty acid"
+    ],
+    "answer": 1,
+    "topic": "lipids",
+    "explanation": "Short up to C5, medium C6-C12, long C13-C21, very long C22-C28."
+   },
+   {
+    "question": "A monounsaturated fatty acid has:",
+    "options": [
+     "Exactly one C=C double bond",
+     "One triple bond",
+     "Two or more double bonds",
+     "No double bonds"
+    ],
+    "answer": 0,
+    "topic": "lipids",
+    "explanation": "Saturated: none. Monounsaturated (monoenoic): one. Polyunsaturated (polyenoic): two or more."
+   },
+   {
+    "question": "How does a cis double bond affect a fatty acid chain?",
+    "options": [
+     "It makes the fatty acid water-soluble",
+     "It makes the chain shorter",
+     "It bends the chain, so chains pack less tightly and the fat is more fluid",
+     "It keeps the chain straight, like a saturated one"
+    ],
+    "answer": 2,
+    "topic": "lipids",
+    "explanation": "Cis bends the chain by about 30°. Trans keeps it nearly straight, so trans fats pack like saturated ones and are solid."
+   },
+   {
+    "question": "Brown adipocytes look dark because they contain:",
+    "options": [
+     "Large amounts of glycogen",
+     "One large lipid droplet",
+     "Melanin",
+     "Many mitochondria rich in cytochromes"
+    ],
+    "answer": 3,
+    "topic": "lipids",
+    "explanation": "Brown fat has small cells with many lipid droplets and many mitochondria; it produces heat. White fat has one big droplet per cell and stores energy."
+   },
+   {
+    "question": "Phosphatidic acid is made of:",
+    "options": [
+     "Cholesterol + phosphate",
+     "Sphingosine + a fatty acid + phosphate",
+     "Glycerol + three fatty acids",
+     "Glycerol + fatty acids + a phosphate group"
+    ],
+    "answer": 3,
+    "topic": "lipids",
+    "explanation": "It is the backbone of the glycerophospholipids; adding a second alcohol to its phosphate gives the phosphatidates."
+   },
+   {
+    "question": "The four alcohols that can be added to phosphatidic acid to form phosphatidates are:",
+    "options": [
+     "Ethanolamine, choline, serine, inositol",
+     "Ethanol, methanol, glycerol, inositol",
+     "Glycerol, sphingosine, choline, serine",
+     "Glucose, galactose, choline, serine"
+    ],
+    "answer": 0,
+    "topic": "lipids",
+    "explanation": "They give phosphatidylethanolamine (PE), phosphatidylcholine (PC), phosphatidylserine (PS) and phosphatidylinositol (PI)."
+   },
+   {
+    "question": "In the plasma membrane, phosphatidylethanolamine and phosphatidylcholine are found mainly in:",
+    "options": [
+     "Both only in the inner leaflet",
+     "Both only in the outer leaflet",
+     "PE in the inner leaflet, PC in the outer leaflet",
+     "PE in the outer leaflet, PC in the inner leaflet"
+    ],
+    "answer": 2,
+    "topic": "lipids",
+    "explanation": "Membrane lipids are asymmetric: PE, PS and PI mostly face the cytosol; PC, plasmalogens and sphingolipids mostly face outside."
+   },
+   {
+    "question": "Phosphatidylinositol is found mainly in the inner leaflet, where it is important for:",
+    "options": [
+     "Apoptosis signaling to macrophages",
+     "Myelin insulation",
+     "Intracellular signaling",
+     "Blood group recognition"
+    ],
+    "answer": 2,
+    "topic": "lipids",
+    "explanation": "PI faces the cytosol and takes part in signaling; PS is the one flipped outwards during apoptosis."
+   },
+   {
+    "question": "Thanks to their ether bond, plasmalogens:",
+    "options": [
+     "Make membranes more fluid and less stable",
+     "Scavenge reactive oxygen species and resist phospholipases",
+     "Cannot be part of membranes",
+     "Are more easily degraded by phospholipases"
+    ],
+    "answer": 1,
+    "topic": "lipids",
+    "explanation": "The ether bond gives antioxidant activity, more rigidity and stability (useful in nerves and heart) and resistance to phospholipases."
+   },
+   {
+    "question": "Globosides on red blood cells are:",
+    "options": [
+     "The main lipids of myelin",
+     "Acidic glycolipids with sialic acid",
+     "The receptors for cholera toxin",
+     "The antigens of the ABO blood group system"
+    ],
+    "answer": 3,
+    "topic": "lipids",
+    "explanation": "Globosides are neutral glycosphingolipids with two or more sugars; their terminal sugars define the blood group."
+   },
+   {
+    "question": "Compared with groups A and B, the blood group O antigen:",
+    "options": [
+     "Has no sugar chain at all",
+     "Has both the A and the B sugar",
+     "Has the base sugar chain without the extra terminal sugar",
+     "Has an extra sialic acid"
+    ],
+    "answer": 2,
+    "topic": "lipids",
+    "explanation": "A adds an N-acetylgalactosamine, B adds a galactose, AB has both; O has only the base chain."
+   },
+   {
+    "question": "In ganglioside names such as GM1, GD3 or GT1, the second letter indicates:",
+    "options": [
+     "The number of phosphate groups",
+     "The type of fatty acid",
+     "The tissue where it is found",
+     "How many sialic acid (NANA) residues there are: M = 1, D = 2, T = 3"
+    ],
+    "answer": 3,
+    "topic": "lipids",
+    "explanation": "M, D, T = mono-, di-, trisialo. The number is 5 minus the count of non-NANA sugars."
+   },
+   {
+    "question": "GM1 has 4 non-NANA sugars and GM2 has 3. Why is it called GM2?",
+    "options": [
+     "5 − 3 = 2: the number is 5 minus the count of non-NANA sugars",
+     "It has two fatty acids",
+     "It was the second one discovered",
+     "It has two sialic acids"
+    ],
+    "answer": 0,
+    "topic": "lipids",
+    "explanation": "Fewer neutral sugars means a higher number: GM1 (5 − 4), GM2 (5 − 3), GM3 (5 − 2)."
+   },
+   {
+    "question": "Glycosphingolipids on the cell surface can act as:",
+    "options": [
+     "Ion channels",
+     "Receptors used by toxins and pathogens, such as cholera toxin",
+     "Enzymes that digest fats",
+     "Energy stores"
+    ],
+    "answer": 1,
+    "topic": "lipids",
+    "explanation": "Cholera, tetanus and botulinum toxins, bacteria such as E. coli and the influenza virus bind specific glycolipids."
+   },
+   {
+    "question": "Sterane, the core of sterols, is made of:",
+    "options": [
+     "A glycerol backbone and two fatty acids",
+     "Four fused rings: three with 6 carbons and one with 5",
+     "Three rings of 6 carbons",
+     "Six isoprene units in a chain"
+    ],
+    "answer": 1,
+    "topic": "lipids",
+    "explanation": "Squalene, a triterpene, cyclizes into the four-ring steroid core that becomes cholesterol."
+   },
+   {
+    "question": "Cholesterol in the plasma membrane:",
+    "options": [
+     "Replaces the phospholipid bilayer",
+     "Is found only in the inner leaflet",
+     "Increases the barrier effect and makes the membrane less fluid near the polar heads",
+     "Makes the membrane more permeable"
+    ],
+    "answer": 2,
+    "topic": "lipids",
+    "explanation": "Its rigid rings stiffen the chains near the heads, while the center stays more fluid: cholesterol regulates membrane fluidity."
+   },
+   {
+    "question": "Which amino acids have negatively charged (acidic) side chains?",
+    "options": [
+     "Aspartate and glutamate",
+     "Leucine and isoleucine",
+     "Serine and threonine",
+     "Lysine and arginine"
+    ],
+    "answer": 0,
+    "topic": "proteins",
+    "explanation": "Acidic: Asp, Glu. Basic (positive): Lys, Arg, His. Polar uncharged: Ser, Thr, Tyr, Asn, Gln. The rest are nonpolar."
+   },
+   {
+    "question": "In a folded globular protein, nonpolar side chains such as Leu, Val and Phe are mostly found:",
+    "options": [
+     "Bound to the solvent by hydrogen bonds",
+     "In the interior, away from water",
+     "On the surface, in contact with water",
+     "Only at the N-terminus"
+    ],
+    "answer": 1,
+    "topic": "proteins",
+    "explanation": "Hydrophobic side chains cluster inside; polar and charged ones stay on the surface."
+   },
+   {
+    "question": "Forming a peptide bond between two amino acids:",
+    "options": [
+     "Requires adding a molecule of water (hydrolysis)",
+     "Joins two side chains",
+     "Releases a molecule of water (condensation)",
+     "Releases a molecule of CO₂"
+    ],
+    "answer": 2,
+    "topic": "proteins",
+    "explanation": "The carboxyl of one amino acid and the amino group of the next join with loss of H₂O. Breaking it is a hydrolysis."
+   },
+   {
+    "question": "The central dogma of biology describes the flow of information:",
+    "options": [
+     "DNA → RNA → protein",
+     "Protein → RNA → DNA",
+     "RNA → DNA → protein",
+     "DNA → protein → RNA"
+    ],
+    "answer": 0,
+    "topic": "proteins",
+    "explanation": "DNA is transcribed into RNA, which the ribosome translates into protein."
+   },
+   {
+    "question": "In the genetic code, the codon AUG:",
+    "options": [
+     "Codes for methionine and is the start codon",
+     "Has no meaning",
+     "Is a stop codon",
+     "Codes for glycine"
+    ],
+    "answer": 0,
+    "topic": "proteins",
+    "explanation": "Every protein starts from AUG (Met). UAA, UAG and UGA are stop codons. Most amino acids have several codons: the code is redundant."
+   },
+   {
+    "question": "Ferritin, casein and ovalbumin are examples of:",
+    "options": [
+     "Storage proteins",
+     "Defense proteins",
+     "Hormones",
+     "Contractile proteins"
+    ],
+    "answer": 0,
+    "topic": "proteins",
+    "explanation": "Storage: ferritin, casein, ovalbumin. Transport: hemoglobin, albumin. Contractile: actin, myosin. Structural: collagen, keratin."
+   },
+   {
+    "question": "Hemoglobin and myoglobin belong to which class of conjugated proteins?",
+    "options": [
+     "Lipoproteins",
+     "Glycoproteins",
+     "Flavoproteins",
+     "Hemoproteins"
+    ],
+    "answer": 3,
+    "topic": "proteins",
+    "explanation": "Their prosthetic group is heme. Glycoproteins carry sugars (e.g. immunoglobulins), flavoproteins flavin nucleotides."
+   },
+   {
+    "question": "Which peptide bonds are found in the cis form in about 5-10% of cases?",
+    "options": [
+     "Bonds between two cysteines",
+     "Bonds preceding a glycine",
+     "Bonds in α-helices",
+     "Bonds preceding a proline"
+    ],
+    "answer": 3,
+    "topic": "proteins",
+    "explanation": "Proline's nitrogen is closed in its ring, so cis and trans are similarly crowded. These cis bonds create kinks in the chain."
+   },
+   {
+    "question": "The primary structure of insulin consists of:",
+    "options": [
+     "Two chains (A and B) joined by disulfide bridges",
+     "A triple helix",
+     "Four identical subunits",
+     "A single chain with no disulfide bridges"
+    ],
+    "answer": 0,
+    "topic": "proteins",
+    "explanation": "Chain A has 21 amino acids and chain B 30, joined by two disulfide bridges (plus one inside chain A)."
+   },
+   {
+    "question": "The α-helix of proteins is:",
+    "options": [
+     "Left-handed, with side chains pointing outwards",
+     "Right-handed, with side chains pointing inwards",
+     "Left-handed, with side chains pointing inwards",
+     "Right-handed, with side chains pointing outwards"
+    ],
+    "answer": 3,
+    "topic": "proteins",
+    "explanation": "Its handedness follows from L amino acids. Side chains point out, roughly perpendicular to the helix axis."
+   },
+   {
+    "question": "Which amino acids favor the α-helix?",
+    "options": [
+     "Alanine and leucine",
+     "Proline and cysteine",
+     "Proline and glycine",
+     "Glycine and serine"
+    ],
+    "answer": 0,
+    "topic": "proteins",
+    "explanation": "Small hydrophobic residues fit the helix geometry well. Proline (rigid ring) and glycine (too flexible) break it."
+   },
+   {
+    "question": "Glycine destabilizes the α-helix because:",
+    "options": [
+     "Its ring blocks the φ angle",
+     "Its side chain is just H, so it is too flexible and prefers other conformations",
+     "It forms disulfide bridges",
+     "It has a charged side chain"
+    ],
+    "answer": 1,
+    "topic": "proteins",
+    "explanation": "In the helix propensity scale glycine costs about 4.6 kJ/mol more than alanine; proline is just as bad for a different reason (rigidity)."
+   },
+   {
+    "question": "In an antiparallel β-sheet:",
+    "options": [
+     "Adjacent strands run in opposite directions and the hydrogen bonds are straight",
+     "Strands are linked by disulfide bridges only",
+     "Adjacent strands run in the same direction",
+     "There are no hydrogen bonds between strands"
+    ],
+    "answer": 0,
+    "topic": "proteins",
+    "explanation": "Straight hydrogen bonds make antiparallel sheets usually more stable than parallel ones, where the bonds are angled."
+   },
+   {
+    "question": "In a Ramachandran plot, glycine:",
+    "options": [
+     "Cannot be plotted",
+     "Can only be in α-helices",
+     "Has the narrowest allowed region",
+     "Has much wider allowed regions than other residues"
+    ],
+    "answer": 3,
+    "topic": "proteins",
+    "explanation": "With no side chain, glycine has few clashes and is the most flexible; proline, locked by its ring at φ ≈ −60°, is the most restricted."
+   },
+   {
+    "question": "The empirical use of the Ramachandran plot is to:",
+    "options": [
+     "Measure protein mass",
+     "Predict the amino acid sequence",
+     "Check the quality of an experimentally determined structure",
+     "Count disulfide bridges"
+    ],
+    "answer": 2,
+    "topic": "proteins",
+    "explanation": "Theoretical use: predict which φ/ψ angles are possible. Empirical use: compare observed angles with expected ones to spot errors."
+   },
+   {
+    "question": "A protein domain is:",
+    "options": [
+     "A compact unit of secondary structure elements, often with its own function",
+     "A complex of several proteins",
+     "A single α-helix",
+     "The amino acid sequence"
+    ],
+    "answer": 0,
+    "topic": "proteins",
+    "explanation": "Domains sit between secondary and tertiary structure and recur in different proteins, like reusable modules."
+   },
+   {
+    "question": "In Anfinsen's experiment on ribonuclease:",
+    "options": [
+     "The denatured enzyme refolded on its own and recovered activity",
+     "The enzyme needed chaperones to refold",
+     "The disulfide bridges re-formed at random",
+     "The enzyme was permanently inactivated"
+    ],
+    "answer": 0,
+    "topic": "proteins",
+    "explanation": "After denaturation, removing the denaturants let it refold and re-form the right 4 disulfide bridges out of 105 possible pairings: the sequence holds the information."
+   },
+   {
+    "question": "In the energy funnel of protein folding, the native structure is:",
+    "options": [
+     "Any local minimum",
+     "The unfolded state",
+     "The highest-energy state",
+     "The global minimum of free energy"
+    ],
+    "answer": 3,
+    "topic": "proteins",
+    "explanation": "Unfolded forms are many and high in energy at the top of the funnel; the native state is one, at the bottom. Intermediates are local minima."
+   },
+   {
+    "question": "In 2020, AlphaFold:",
+    "options": [
+     "Determined structures by X-ray crystallography",
+     "Predicted protein 3D structures from sequence with near-experimental accuracy",
+     "Synthesized new amino acids",
+     "Proved Levinthal's paradox wrong experimentally"
+    ],
+    "answer": 1,
+    "topic": "proteins",
+    "explanation": "DeepMind's deep learning system solved a 50-year-old problem, measured at CASP14, a blind benchmark on unpublished structures."
+   },
+   {
+    "question": "Compared with globular proteins, fibrous proteins are generally:",
+    "options": [
+     "Soluble and catalytic",
+     "Soluble and functional",
+     "Insoluble and structural",
+     "Insoluble and catalytic"
+    ],
+    "answer": 2,
+    "topic": "fibrous",
+    "explanation": "Fibrous: insoluble, structural (keratin, collagen, elastin). Globular: soluble, functional (enzymes, hemoglobin)."
+   },
+   {
+    "question": "In α-keratin, two α-helices wrap around each other to form:",
+    "options": [
+     "A single straight rod",
+     "A β-sheet",
+     "A triple helix",
+     "A left-handed coiled coil"
+    ],
+    "answer": 3,
+    "topic": "fibrous",
+    "explanation": "Then two coiled coils form a protofilament and four protofilaments a filament, wound right-handed: alternating twists, like a rope."
+   },
+   {
+    "question": "Washing and drying hair changes its shape temporarily because:",
+    "options": [
+     "Water hydrolyzes the peptide bonds",
+     "Water breaks the hydrogen bonds between keratin chains, which re-form on drying",
+     "Water breaks the disulfide bridges",
+     "Water adds new disulfide bridges"
+    ],
+    "answer": 1,
+    "topic": "fibrous",
+    "explanation": "The change is temporary: the original shape is set by the stronger disulfide bridges, which only chemical treatments rearrange."
+   },
+   {
+    "question": "Collagen is synthesized by:",
+    "options": [
+     "Red blood cells",
+     "Fibroblasts, osteoblasts and chondroblasts",
+     "Hepatocytes only",
+     "Keratinocytes"
+    ],
+    "answer": 1,
+    "topic": "fibrous",
+    "explanation": "Fibroblasts in connective tissue, osteoblasts in bone, chondroblasts in cartilage. Keratin is made by keratinocytes."
+   },
+   {
+    "question": "Tropocollagen is made of:",
+    "options": [
+     "Three left-handed chains supercoiled with a right-handed twist",
+     "Three right-handed α-helices",
+     "Two β-sheets",
+     "Four left-handed chains"
+    ],
+    "answer": 0,
+    "topic": "fibrous",
+    "explanation": "Each chain is left-handed (about 3.3 residues per turn, not an α-helix); the three wind together the opposite way."
+   },
+   {
+    "question": "Vitamin C deficiency weakens collagen because vitamin C is needed for:",
+    "options": [
+     "The formation of peptide bonds",
+     "The hydroxylation of proline and lysine",
+     "Glycine synthesis",
+     "Collagen secretion only"
+    ],
+    "answer": 1,
+    "topic": "fibrous",
+    "explanation": "Without hydroxylation the triple helix is less stable and cross-links form poorly: this is scurvy."
+   },
+   {
+    "question": "Two allysine residues from different collagen chains form which cross-link?",
+    "options": [
+     "Merodesmosine",
+     "A disulfide bridge",
+     "Allysine aldol",
+     "Lysinonorleucine"
+    ],
+    "answer": 2,
+    "topic": "fibrous",
+    "explanation": "Allysine + lysine → lysinonorleucine (2 chains); allysine + allysine → allysine aldol (2 chains); aldol + His + OH-Lys → merodesmosine (4 chains)."
+   },
+   {
+    "question": "Which collagen cross-link joins four chains?",
+    "options": [
+     "Hydroxyproline",
+     "Lysinonorleucine",
+     "Merodesmosine",
+     "Allysine aldol"
+    ],
+    "answer": 2,
+    "topic": "fibrous",
+    "explanation": "Merodesmosine forms from an allysine aldol plus a histidine and a hydroxylysine. More of these knots make collagen more mature and stronger."
+   },
+   {
+    "question": "Under the electron microscope, fibrillar collagen (e.g. type I) shows bands repeating every:",
+    "options": [
+     "670 nm",
+     "6.7 µm",
+     "0.67 nm",
+     "67 nm (the D-period)"
+    ],
+    "answer": 3,
+    "topic": "fibrous",
+    "explanation": "The staggered arrangement of molecules creates the D-period; fibers can reach 1 µm in diameter."
+   },
+   {
+    "question": "FACIT collagens:",
+    "options": [
+     "Are found only in bone",
+     "Form the basement membrane network",
+     "Bind fibrillar collagen to other matrix molecules",
+     "Form large fibers on their own"
+    ],
+    "answer": 2,
+    "topic": "fibrous",
+    "explanation": "Fibril-Associated Collagens with Interrupted Triple helices link fibrils to other proteins and glycosaminoglycans in the same tissue."
+   },
+   {
+    "question": "Collagen type IV:",
+    "options": [
+     "Is a FACIT collagen",
+     "Forms the network of the basement membrane",
+     "Forms the thick fibers of tendons",
+     "Is found inside cells"
+    ],
+    "answer": 1,
+    "topic": "fibrous",
+    "explanation": "Network-forming collagens (IV, VI, VIII, X, XXVIII) make meshes; type IV is the sheet that all epithelia rest on."
+   },
+   {
+    "question": "The heme group is:",
+    "options": [
+     "Protoporphyrin IX with an Fe²⁺ ion at its center",
+     "A copper ion bound to histidines",
+     "A chain of four amino acids",
+     "A carbohydrate bound to iron"
+    ],
+    "answer": 0,
+    "topic": "globins",
+    "explanation": "Protoporphyrin IX is a tetrapyrrole; its four nitrogens hold the iron in the first four coordination sites."
+   },
+   {
+    "question": "In deoxyhemoglobin, the sixth coordination site of the heme iron:",
+    "options": [
+     "Binds a pyrrole nitrogen",
+     "Binds 2,3-BPG",
+     "Is empty",
+     "Binds the proximal histidine"
+    ],
+    "answer": 2,
+    "topic": "globins",
+    "explanation": "Sites 1-4: pyrrole N; site 5: proximal His; site 6: O₂ in the oxy form, empty in the deoxy form."
+   },
+   {
+    "question": "The coordination bonds of Fe²⁺ in heme have which geometry?",
+    "options": [
+     "Octahedral",
+     "Linear",
+     "Trigonal planar",
+     "Tetrahedral"
+    ],
+    "answer": 0,
+    "topic": "globins",
+    "explanation": "Six ligands around the iron: four in the plane, one above and one below."
+   },
+   {
+    "question": "Regarding the spin state of the heme iron:",
+    "options": [
+     "Both forms are high-spin",
+     "Deoxy forms are high-spin, oxy forms are low-spin",
+     "Spin does not change on O₂ binding",
+     "Deoxy forms are low-spin, oxy forms are high-spin"
+    ],
+    "answer": 1,
+    "topic": "globins",
+    "explanation": "Binding O₂ splits the d orbitals more, so electrons pair in the lower ones (low spin). This is why spectra and blood color change."
+   },
+   {
+    "question": "Methemoglobin:",
+    "options": [
+     "Contains Fe³⁺ and cannot bind O₂",
+     "Is fetal hemoglobin",
+     "Contains Fe²⁺ bound to CO",
+     "Is the normal oxygenated form"
+    ],
+    "answer": 0,
+    "topic": "globins",
+    "explanation": "Outside the cell Fe²⁺ slowly oxidizes to Fe³⁺: old meat and dried blood turn brown."
+   },
+   {
+    "question": "Why must O₂ not be released from heme as superoxide?",
+    "options": [
+     "Superoxide is a reactive species that damages macromolecules, and leaves Fe³⁺ behind",
+     "Superoxide binds CO",
+     "Superoxide cannot be exhaled",
+     "Superoxide lowers blood pH"
+    ],
+    "answer": 0,
+    "topic": "globins",
+    "explanation": "Binding partly transfers an electron from Fe²⁺ to O₂. The protein stabilizes the complex so O₂ leaves intact and the iron stays ferrous."
+   },
+   {
+    "question": "When O₂ binds, what starts the conformational change of hemoglobin?",
+    "options": [
+     "The β chains dissociate",
+     "The iron moves into the porphyrin plane, pulling the proximal histidine and its helix",
+     "The heme detaches from the protein",
+     "A disulfide bridge breaks"
+    ],
+    "answer": 1,
+    "topic": "globins",
+    "explanation": "The helix end sits at the dimer interface, so a movement under half an ångström spreads to the other subunits; the dimers rotate by 15°."
+   },
+   {
+    "question": "In the concerted (MWC) model of hemoglobin:",
+    "options": [
+     "There is no T state",
+     "Subunits change one at a time as they bind O₂",
+     "Only the β subunits change state",
+     "All four subunits switch between T and R together"
+    ],
+    "answer": 3,
+    "topic": "globins",
+    "explanation": "The sequential model instead has subunits change one by one, each easing the next. Both explain the sigmoid curve."
+   },
+   {
+    "question": "Fetal hemoglobin has a higher O₂ affinity than maternal hemoglobin because it:",
+    "options": [
+     "Binds 2,3-BPG less strongly",
+     "Is a monomer like myoglobin",
+     "Has no heme",
+     "Binds 2,3-BPG more strongly"
+    ],
+    "answer": 0,
+    "topic": "globins",
+    "explanation": "Less 2,3-BPG binding shifts its curve to the left, so O₂ passes from maternal to fetal blood across the placenta."
+   },
+   {
+    "question": "In red blood cells, bicarbonate (HCO₃⁻) leaves the cell:",
+    "options": [
+     "In exchange for Na⁺",
+     "In exchange for Cl⁻ (chloride shift)",
+     "Bound to hemoglobin",
+     "By simple diffusion with H⁺"
+    ],
+    "answer": 1,
+    "topic": "globins",
+    "explanation": "CO₂ + H₂O → H₂CO₃ (carbonic anhydrase) → HCO₃⁻ + H⁺. The H⁺ lowers Hb affinity (Bohr effect); HCO₃⁻ is exchanged for Cl⁻ (Hamburger phenomenon)."
+   },
+   {
+    "question": "At low pH, histidine 146 of hemoglobin:",
+    "options": [
+     "Is protonated and forms a salt bridge with Asp 94, stabilizing the T state",
+     "Loses a proton and stabilizes the R state",
+     "Breaks the bond with the heme iron",
+     "Binds O₂ directly"
+    ],
+    "answer": 0,
+    "topic": "globins",
+    "explanation": "Histidine changes charge near blood pH. One proton on one residue lowers the O₂ affinity of the whole protein."
+   },
+   {
+    "question": "CO₂ that binds directly to hemoglobin (about 14%) attaches to:",
+    "options": [
+     "The N-terminal amino groups, forming carbamates",
+     "The 2,3-BPG pocket",
+     "The heme iron",
+     "The distal histidine"
+    ],
+    "answer": 0,
+    "topic": "globins",
+    "explanation": "The negative carbamate forms a new salt bridge with the other dimer, another way CO₂ stabilizes the T state."
+   },
+   {
+    "question": "An enzyme that breaks a bond by adding a water molecule is a:",
+    "options": [
+     "Oxidoreductase",
+     "Isomerase",
+     "Ligase",
+     "Hydrolase"
+    ],
+    "answer": 3,
+    "topic": "enzymes",
+    "explanation": "The six classes: oxidoreductases, transferases, hydrolases, lyases, isomerases, ligases (OTHLIL)."
+   },
+   {
+    "question": "An enzyme that joins two molecules using the energy of ATP is a:",
+    "options": [
+     "Hydrolase",
+     "Ligase",
+     "Lyase",
+     "Transferase"
+    ],
+    "answer": 1,
+    "topic": "enzymes",
+    "explanation": "Ligases (synthetases) use ATP; lyases (synthases) break or form bonds without water, oxidation or ATP."
+   },
+   {
+    "question": "An epimerase, which converts a molecule into one of its isomers, belongs to the:",
+    "options": [
+     "Oxidoreductases",
+     "Transferases",
+     "Isomerases",
+     "Lyases"
+    ],
+    "answer": 2,
+    "topic": "enzymes",
+    "explanation": "Isomerases include epimerases and cis-trans isomerases; dehydrogenases and oxidases are oxidoreductases."
+   },
+   {
+    "question": "The EC number of an enzyme (e.g. EC 2.7.1.1, hexokinase):",
+    "options": [
+     "Counts its amino acids",
+     "Gives the enzyme's molecular weight",
+     "Has four parts: class, subclass, sub-subclass and the specific enzyme",
+     "Gives its optimal pH and temperature"
+    ],
+    "answer": 2,
+    "topic": "enzymes",
+    "explanation": "Hierarchical like a folder path: 2 = transferase, 7 = transfers phosphate, 1 = to an alcohol group, 1 = hexokinase."
+   },
+   {
+    "question": "The active site of an enzyme is:",
+    "options": [
+     "The site where allosteric effectors bind",
+     "The N-terminus of the chain",
+     "The region where the substrate binds and the reaction takes place",
+     "The whole surface of the enzyme"
+    ],
+    "answer": 2,
+    "topic": "enzymes",
+    "explanation": "Its shape and chemical environment let the enzyme recognize the substrate and make the reaction easier."
+   },
+   {
+    "question": "Trypsin cuts proteins only after lysine and arginine. This is an example of:",
+    "options": [
+     "Low specificity",
+     "Absolute specificity",
+     "Allosteric regulation",
+     "Group specificity"
+    ],
+    "answer": 3,
+    "topic": "enzymes",
+    "explanation": "Absolute: one substrate (glucokinase). Group: substrates with a common group (trypsin). Bond: one bond type (α-amylase). Low: many substrates (CYP3A4)."
+   },
+   {
+    "question": "Km (the Michaelis constant) is:",
+    "options": [
+     "The rate at zero substrate",
+     "The enzyme concentration",
+     "The substrate concentration at which the rate is half of Vmax",
+     "The maximum rate of the reaction"
+    ],
+    "answer": 2,
+    "topic": "enzymes",
+    "explanation": "Low Km means high affinity: the enzyme reaches half speed with little substrate."
+   },
+   {
+    "question": "A competitive inhibitor:",
+    "options": [
+     "Permanently destroys the enzyme",
+     "Binds a different site and cannot be overcome by substrate",
+     "Binds the active site in place of the substrate, and can be overcome by adding more substrate",
+     "Binds only the enzyme-substrate complex"
+    ],
+    "answer": 2,
+    "topic": "enzymes",
+    "explanation": "Non-competitive inhibitors bind elsewhere (to E or ES) and extra substrate does not help; uncompetitive ones bind only the ES complex."
+   },
+   {
+    "question": "A coenzyme differs from a prosthetic group because the coenzyme:",
+    "options": [
+     "Is a protein",
+     "Binds the enzyme with weak bonds and can detach",
+     "Is never derived from vitamins",
+     "Binds covalently and permanently"
+    ],
+    "answer": 1,
+    "topic": "enzymes",
+    "explanation": "Coenzymes bind with weak bonds and can come off; prosthetic groups are bound covalently or very tightly and stay part of the enzyme. Many coenzymes derive from vitamins."
+   },
+   {
+    "question": "Glycogen phosphorylase is regulated by:",
+    "options": [
+     "Both phosphorylation and allosteric effectors",
+     "Only phosphorylation",
+     "Only gene transcription",
+     "Only allosteric effectors"
+    ],
+    "answer": 0,
+    "topic": "enzymes",
+    "explanation": "Phosphorylation (b ↔ a forms, driven by hormones) and allostery (T ↔ R, driven by the cell's energy state) combine into four activity levels."
    }
   ]
  }
