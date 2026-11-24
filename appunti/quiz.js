@@ -1,556 +1,547 @@
-// Motore dei quiz, comune a tutti i moduli: legge quiz.json dalla cartella della pagina.
-// Formato di quiz.json:
-// { "titolo": "...", "descrizione": "...", "descrizione_en": "...",
-//   "argomenti": [ { "id": "lipidi", "it": "Lipidi", "en": "Lipids", "peso": 6 } ],   (facoltativo; peso = domande all'esame)
-//   "nomi": { "N": { "it": "Domande nuove", "en": "New questions" } },                  (facoltativo; senza nome è "Test X")
-//   "test": { "A": [ { "q": "domanda", "o": ["opzione", ...], "a": indice_della_giusta,
-//                      "t": "id argomento", "e": "spiegazione" } ], "B": [...] } }
-// Le domande restano nella lingua del corso; l'interfaccia segue la lingua della pagina (lingua.js).
+// Quiz engine shared by every module: it reads quiz.json from the page's folder.
 //
-// Ripetizione dilazionata (sistema a scatole di Leitner): ogni domanda ha una scatola da 0 a 4.
-// Sbagliata o indovinata con "non sono sicuro" → scatola 1, torna domani (e nel ripasso anche a fine giro).
-// Giusta e sicura → sale di una scatola e torna dopo 2, 4 o 7 giorni. Dalla scatola 3 in su è "consolidata".
+// quiz.json:
+// { "title": "...", "description": "...", "description_en": "...",
+//   "topics": [ { "id": "lipids", "it": "Lipidi", "en": "Lipids", "weight": 6 } ],    weight = questions in the exam
+//   "names": { "N": { "it": "Domande nuove", "en": "New questions" } },                named sets are review-only
+//   "tests": { "A": [ { "question": "...", "options": ["...", ...], "answer": 1,
+//                       "topic": "lipids", "explanation": "..." } ], "B": [...] } }
+//
+// Spaced repetition uses Leitner boxes 0-4. A wrong or unsure answer goes to box 1 (back tomorrow);
+// a sure right answer moves up one box. Boxes 3 and 4 count as learned.
 
 const app = document.getElementById("quiz");
-const $ = (s) => app.querySelector(s);
-const LETTERE = "ABCDEFGH";
-const TUTTI = "*";
-const RIPASSO = "ripasso";
-const INTERVALLI = [0, 1, 2, 4, 7]; // giorni prima di rivedere una domanda, per scatola
-const CONSOLIDATA = 3;
-const GIRO = 20; // domande per sessione di ripasso
+const $ = (selector) => app.querySelector(selector);
+const LETTERS = "ABCDEFGH";
+const ALL = "*";
+const REVIEW = "review";
+const INTERVALS = [0, 1, 2, 4, 7]; // days until a question is due again, by box
+const LEARNED_BOX = 3;
+const ROUND_SIZE = 20;
 
-const TESTI = {
+const TEXT = {
   it: {
-    errore: `Non riesco a caricare il quiz. In locale avvia un server con <code>python -m http.server</code>.`,
-    domande: (n) => `${n} domande`,
-    migliore: (n) => `migliore: ${n}`,
-    oggi: "Ripasso di oggi",
-    oggiStato: (s, n) => `${s} in scadenza e ${n} mai viste. Il giro parte dagli argomenti che pesano di più.`,
-    oggiVuoto: "Ripasso di oggi fatto. Se vuoi, continua con le domande più deboli.",
-    ancora: (n) => `Ancora ${n} sulle più deboli`,
-    ancoraNota: "Il giro sulle più deboli ripropone subito quelle che sbagli di più o segni come incerte.",
-    iniziaRipasso: (n) => `Inizia il ripasso (${n})`,
-    comeFunziona: "Sbagliate e incerte tornano domani, le giuste dopo 2, 4 e 7 giorni.",
-    argomenti: "Argomenti",
-    argomentiTutti: "Tutti gli argomenti", argomentiNota: "Tocca un argomento per ripassare solo quello.",
-    contoScadute: "Da ripassare oggi", contoScaduteNota: "in scadenza",
-    contoNuove: "Mai viste", contoImparate: "Imparate", contoStima: "Se l'esame fosse oggi",
-    su: (n) => `su ${n}`,
-    compito: "Il compito d'esame",
-    compitoSotto: (n, s) => `Quanto hai imparato di ogni argomento, e quante delle ${n} domande dell'esame vale. Con quello che sai oggi ne faresti circa ${s}.`,
-    imparateBreve: (c, n) => `${c} su ${n}`,
-    materiali: "Materiali", scheda: "Scheda di confronto", schedaSotto: "I concetti che all'esame si confondono, uno accanto all'altro.",
-    imparate: (c, n) => `${c} di ${n} imparate`,
-    simula: "Simula un test",
-    soloSu: (a) => `Solo: ${a}`,
-    pesoEsame: (p) => `${p} domande all'esame`,
-    modalita: "Modalità",
-    studio: "Studio", studioSotto: "Correzione e spiegazione dopo ogni risposta",
-    esame: "Esame", esameSotto: "Correzione solo alla fine, come il giorno dell'esame",
-    mescolaDomande: "Mescola l'ordine delle domande",
-    mescolaRisposte: "Mescola l'ordine delle risposte",
-    inizia: "Inizia",
-    testSotto: "I test A e B dell'anno scorso, interi, come all'esame.",
-    opzioni: "Opzioni",
-    iniziaTest: (nome) => `Inizia il ${nome}`,
-    azzera: "Azzera i progressi",
-    azzeraConferma: "Cancellare tutti i progressi del ripasso e i punteggi migliori di questo modulo?",
-    domandaDi: (i, n) => `Domanda ${i} di ${n}`,
-    ripetuta: "di nuovo, dopo un errore",
-    esci: "Esci",
-    esciConferma: "Uscire dal quiz? Le risposte già date restano nel ripasso.",
-    incerto: "Non sono sicuro",
-    nascondi: "Rispondi prima di vedere le opzioni: le opzioni compaiono solo quando le chiedi",
-    mostraOpzioni: "Ho la mia risposta: mostra le opzioni",
-    pensaPrima: "Prova a rispondere a mente, poi apri le opzioni.",
-    corretto: "Corretto.",
-    correttoIncerto: "Corretto, ma la rivedi domani visto che non eri sicuro.",
-    sbagliato: (l) => `Sbagliato: la risposta giusta è la ${l}.`,
-    perche: "Perché",
-    indietro: "← Indietro", avanti: "Avanti →", termina: "Termina",
-    mancano: (n) => `Ne mancano ${n}: vai alla prima`,
-    caselleNome: "Domande del giro",
-    casella: (i, stato) => `Domanda ${i}${stato ? `, ${stato}` : ""}`,
-    statoGiusta: "giusta", statoSbagliata: "sbagliata", statoRisposta: "risposta data", statoRipetuta: "ripresentata",
-    percentuale: (p) => `${p}% di risposte corrette`,
-    daRivedere: (n) => `${n} da rivedere`,
-    tuttoGiusto: "tutto giusto",
-    incerte: (n) => `${n} giuste ma incerte`,
-    rifaiErrori: "Rifai solo gli errori", ricomincia: "Ricomincia", menu: "Menu",
-    errori: "Da rivedere", tua: "La tua", giusta: "Giusta", nessuna: "nessuna", eraIncerta: "giusta, ma non eri sicuro",
+    loadError: `Non riesco a caricare il quiz. In locale avvia un server con <code>python -m http.server</code>.`,
+    best: (n) => `migliore: ${n}`,
+    today: "Ripasso di oggi",
+    todayStatus: (due, unseen) => `${due} in scadenza e ${unseen} mai viste. Il giro parte dagli argomenti che pesano di più.`,
+    todayDone: "Ripasso di oggi fatto. Se vuoi, continua con le domande più deboli.",
+    extraRound: (n) => `Ancora ${n} sulle più deboli`,
+    extraRoundNote: "Il giro sulle più deboli ripropone subito quelle che sbagli di più o segni come incerte.",
+    startReview: (n) => `Inizia il ripasso (${n})`,
+    howItWorks: "Sbagliate e incerte tornano domani, le giuste dopo 2, 4 e 7 giorni.",
+    allTopics: "Tutti gli argomenti", topicsHint: "Tocca un argomento per ripassare solo quello.",
+    statDue: "Da ripassare oggi", statDueNote: "in scadenza",
+    statUnseen: "Mai viste", statLearned: "Imparate", statEstimate: "Se l'esame fosse oggi",
+    outOf: (n) => `su ${n}`,
+    examPaper: "Il compito d'esame",
+    examPaperSub: (n, s) => `Quanto hai imparato di ogni argomento, e quante delle ${n} domande dell'esame vale. Con quello che sai oggi ne faresti circa ${s}.`,
+    learnedShort: (c, n) => `${c} su ${n}`,
+    examWeight: (w) => `${w} domande all'esame`,
+    materials: "Materiali", sheet: "Scheda di confronto", sheetNote: "I concetti che all'esame si confondono, uno accanto all'altro.",
+    onlyTopics: (list) => `Solo: ${list}`,
+    simulate: "Simula un test",
+    simulateSub: "I test A e B dell'anno scorso, interi, come all'esame.",
+    mode: "Modalità",
+    study: "Studio", studyNote: "Correzione e spiegazione dopo ogni risposta",
+    exam: "Esame", examNote: "Correzione solo alla fine, come il giorno dell'esame",
+    options: "Opzioni",
+    shuffleQuestions: "Mescola l'ordine delle domande",
+    shuffleAnswers: "Mescola l'ordine delle risposte",
+    startTest: (name) => `Inizia il ${name}`,
+    reset: "Azzera i progressi",
+    resetConfirm: "Cancellare tutti i progressi del ripasso e i punteggi migliori di questo modulo?",
+    questionOf: (i, n) => `Domanda ${i} di ${n}`,
+    repeatedNote: "di nuovo, dopo un errore",
+    quit: "Esci",
+    quitConfirm: "Uscire dal quiz? Le risposte già date restano nel ripasso.",
+    unsure: "Non sono sicuro",
+    hideOptions: "Rispondi prima di vedere le opzioni: le opzioni compaiono solo quando le chiedi",
+    showOptions: "Ho la mia risposta: mostra le opzioni",
+    thinkFirst: "Prova a rispondere a mente, poi apri le opzioni.",
+    correct: "Corretto.",
+    correctUnsure: "Corretto, ma la rivedi domani visto che non eri sicuro.",
+    wrong: (letter) => `Sbagliato: la risposta giusta è la ${letter}.`,
+    why: "Perché",
+    back: "← Indietro", next: "Avanti →", finish: "Termina",
+    missing: (n) => `Ne mancano ${n}: vai alla prima`,
+    stepsLabel: "Domande del giro",
+    step: (i, state) => `Domanda ${i}${state ? `, ${state}` : ""}`,
+    stateCorrect: "giusta", stateWrong: "sbagliata", stateAnswered: "risposta data", stateRepeated: "ripresentata",
+    percent: (p) => `${p}% di risposte corrette`,
+    toReview: (n) => `${n} da rivedere`,
+    allCorrect: "tutto giusto",
+    unsureCount: (n) => `${n} giuste ma incerte`,
+    retryMistakes: "Rifai solo gli errori", again: "Ricomincia", menu: "Menu",
+    reviewHeading: "Da rivedere", yours: "La tua", right: "Giusta", none: "nessuna", wasUnsure: "giusta, ma non eri sicuro",
   },
   en: {
-    errore: `Couldn't load the quiz. Locally, start a server with <code>python -m http.server</code>.`,
-    domande: (n) => `${n} questions`,
-    migliore: (n) => `best: ${n}`,
-    oggi: "Today's review",
-    oggiStato: (s, n) => `${s} due and ${n} never seen. The round starts from the topics that weigh most.`,
-    oggiVuoto: "Today's review is done. If you like, keep going with your weakest questions.",
-    ancora: (n) => `${n} more on the weakest`,
-    ancoraNota: "The round on the weakest brings back right away the ones you miss most or mark as unsure.",
-    iniziaRipasso: (n) => `Start the review (${n})`,
-    comeFunziona: "Wrong and unsure answers come back tomorrow, right ones after 2, 4 and 7 days.",
-    argomenti: "Topics",
-    argomentiTutti: "All topics", argomentiNota: "Tap a topic to review only that one.",
-    contoScadute: "To review today", contoScaduteNota: "due",
-    contoNuove: "Never seen", contoImparate: "Learned", contoStima: "If the exam were today",
-    su: (n) => `of ${n}`,
-    compito: "The exam paper",
-    compitoSotto: (n, s) => `How much of each topic you have learned, and how many of the ${n} exam questions it is worth. With what you know today you would get about ${s}.`,
-    imparateBreve: (c, n) => `${c} of ${n}`,
-    materiali: "Materials", scheda: "Comparison sheet", schedaSotto: "The concepts that are easy to mix up in the exam, side by side.",
-    imparate: (c, n) => `${c} of ${n} learned`,
-    simula: "Simulate a test",
-    soloSu: (a) => `Only: ${a}`,
-    pesoEsame: (p) => `${p} exam questions`,
-    modalita: "Mode",
-    studio: "Study", studioSotto: "Feedback and explanation after each answer",
-    esame: "Exam", esameSotto: "Feedback only at the end, like on exam day",
-    mescolaDomande: "Shuffle the questions",
-    mescolaRisposte: "Shuffle the answers",
-    inizia: "Start",
-    testSotto: "Last year's Test A and B, whole, as on exam day.",
-    opzioni: "Options",
-    iniziaTest: (nome) => `Start ${nome}`,
-    azzera: "Reset progress",
-    azzeraConferma: "Delete all review progress and best scores for this module?",
-    domandaDi: (i, n) => `Question ${i} of ${n}`,
-    ripetuta: "again, after a mistake",
-    esci: "Quit",
-    esciConferma: "Quit the quiz? Answers already given stay in the review.",
-    incerto: "Not sure",
-    nascondi: "Answer before seeing the options: they appear only when you ask",
-    mostraOpzioni: "I have my answer: show the options",
-    pensaPrima: "Try to answer in your head, then open the options.",
-    corretto: "Correct.",
-    correttoIncerto: "Correct, but you'll see it again tomorrow since you weren't sure.",
-    sbagliato: (l) => `Wrong: the right answer is ${l}.`,
-    perche: "Why",
-    indietro: "← Back", avanti: "Next →", termina: "Finish",
-    mancano: (n) => `${n} left: go to the first`,
-    caselleNome: "Questions in this round",
-    casella: (i, stato) => `Question ${i}${stato ? `, ${stato}` : ""}`,
-    statoGiusta: "right", statoSbagliata: "wrong", statoRisposta: "answered", statoRipetuta: "repeated",
-    percentuale: (p) => `${p}% correct`,
-    daRivedere: (n) => `${n} to review`,
-    tuttoGiusto: "all correct",
-    incerte: (n) => `${n} right but unsure`,
-    rifaiErrori: "Retry the mistakes", ricomincia: "Start over", menu: "Menu",
-    errori: "To review", tua: "Yours", giusta: "Right", nessuna: "none", eraIncerta: "right, but you weren't sure",
+    loadError: `Couldn't load the quiz. Locally, start a server with <code>python -m http.server</code>.`,
+    best: (n) => `best: ${n}`,
+    today: "Today's review",
+    todayStatus: (due, unseen) => `${due} due and ${unseen} never seen. The round starts from the topics that weigh most.`,
+    todayDone: "Today's review is done. If you like, keep going with your weakest questions.",
+    extraRound: (n) => `${n} more on the weakest`,
+    extraRoundNote: "The round on the weakest brings back right away the ones you miss most or mark as unsure.",
+    startReview: (n) => `Start the review (${n})`,
+    howItWorks: "Wrong and unsure answers come back tomorrow, right ones after 2, 4 and 7 days.",
+    allTopics: "All topics", topicsHint: "Tap a topic to review only that one.",
+    statDue: "To review today", statDueNote: "due",
+    statUnseen: "Never seen", statLearned: "Learned", statEstimate: "If the exam were today",
+    outOf: (n) => `of ${n}`,
+    examPaper: "The exam paper",
+    examPaperSub: (n, s) => `How much of each topic you have learned, and how many of the ${n} exam questions it is worth. With what you know today you would get about ${s}.`,
+    learnedShort: (c, n) => `${c} of ${n}`,
+    examWeight: (w) => `${w} exam questions`,
+    materials: "Materials", sheet: "Comparison sheet", sheetNote: "The concepts that are easy to mix up in the exam, side by side.",
+    onlyTopics: (list) => `Only: ${list}`,
+    simulate: "Simulate a test",
+    simulateSub: "Last year's Test A and B, whole, as on exam day.",
+    mode: "Mode",
+    study: "Study", studyNote: "Feedback and explanation after each answer",
+    exam: "Exam", examNote: "Feedback only at the end, like on exam day",
+    options: "Options",
+    shuffleQuestions: "Shuffle the questions",
+    shuffleAnswers: "Shuffle the answers",
+    startTest: (name) => `Start ${name}`,
+    reset: "Reset progress",
+    resetConfirm: "Delete all review progress and best scores for this module?",
+    questionOf: (i, n) => `Question ${i} of ${n}`,
+    repeatedNote: "again, after a mistake",
+    quit: "Quit",
+    quitConfirm: "Quit the quiz? Answers already given stay in the review.",
+    unsure: "Not sure",
+    hideOptions: "Answer before seeing the options: they appear only when you ask",
+    showOptions: "I have my answer: show the options",
+    thinkFirst: "Try to answer in your head, then open the options.",
+    correct: "Correct.",
+    correctUnsure: "Correct, but you'll see it again tomorrow since you weren't sure.",
+    wrong: (letter) => `Wrong: the right answer is ${letter}.`,
+    why: "Why",
+    back: "← Back", next: "Next →", finish: "Finish",
+    missing: (n) => `${n} left: go to the first`,
+    stepsLabel: "Questions in this round",
+    step: (i, state) => `Question ${i}${state ? `, ${state}` : ""}`,
+    stateCorrect: "right", stateWrong: "wrong", stateAnswered: "answered", stateRepeated: "repeated",
+    percent: (p) => `${p}% correct`,
+    toReview: (n) => `${n} to review`,
+    allCorrect: "all correct",
+    unsureCount: (n) => `${n} right but unsure`,
+    retryMistakes: "Retry the mistakes", again: "Start over", menu: "Menu",
+    reviewHeading: "To review", yours: "Yours", right: "Right", none: "none", wasUnsure: "right, but you weren't sure",
   },
 };
-const inglese = () => document.documentElement.lang === "en";
-const t = () => TESTI[inglese() ? "en" : "it"];
+const english = () => document.documentElement.lang === "en";
+const text = () => TEXT[english() ? "en" : "it"];
+const localized = (item) => item[english() ? "en" : "it"];
 
-// Preferenze, punteggi migliori e scatole del ripasso restano nel browser, separati per modulo
-const prefisso = "quiz:" + location.pathname + ":";
+// Settings, best scores and boxes are kept per module in localStorage
+const prefix = "quiz:" + location.pathname + ":";
 const store = {
-  get(k) { try { return JSON.parse(localStorage.getItem(prefisso + k)); } catch { return null; } },
-  set(k, v) { try { localStorage.setItem(prefisso + k, JSON.stringify(v)); } catch {} },
-  del(k) { try { localStorage.removeItem(prefisso + k); } catch {} },
+  get(key) { try { return JSON.parse(localStorage.getItem(prefix + key)); } catch { return null; } },
+  set(key, value) { try { localStorage.setItem(prefix + key, JSON.stringify(value)); } catch {} },
+  remove(key) { try { localStorage.removeItem(prefix + key); } catch {} },
 };
-const mescola = (a) => {
-  a = a.slice();
+
+// Settings and best scores were saved with Italian keys before the code was translated
+function migrateStorage() {
+  const legacyBest = store.get("migliori");
+  if (legacyBest) { store.set("best", { ...legacyBest, ...store.get("best") }); store.remove("migliori"); }
+  const settings = store.get("cfg");
+  if (settings && "modo" in settings) {
+    store.set("cfg", {
+      test: settings.test,
+      mode: settings.modo === "esame" ? "exam" : "study",
+      shuffleQuestions: !!settings.mescolaDomande,
+      shuffleAnswers: !!settings.mescolaRisposte,
+      hideOptions: !!settings.nascondi,
+    });
+  }
+}
+
+const shuffle = (list) => {
+  const a = list.slice();
   for (let i = a.length - 1; i > 0; i--) {
     const j = (Math.random() * (i + 1)) | 0;
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
 };
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-// Il giorno di oggi come numero intero, nel fuso del browser: le scadenze cambiano a mezzanotte locale
-const oggi = () => Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);
+const escape = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+// Local day number, so questions fall due at local midnight
+const today = () => Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);
 
-// vista: la funzione che ha disegnato la schermata attuale, per ridisegnarla quando cambia la lingua
-let dati, scelte, cfg, vista, S = null;
+let data, tests, settings, view, session = null;
 
-async function avvia() {
+async function start() {
   try {
-    // no-cache: il browser chiede sempre se il file è cambiato, così chi riapre il quiz vede subito le domande aggiornate
-    const r = await fetch("quiz.json", { cache: "no-cache" });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    dati = await r.json();
-  } catch (errore) {
-    // fetch non legge i file aperti con doppio clic (file://): serve un server, anche locale
-    app.innerHTML = `<p class="note">${t().errore}</p>`;
-    console.error("Quiz non caricato:", errore);
+    const response = await fetch("quiz.json", { cache: "no-cache" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    data = await response.json();
+  } catch (error) {
+    app.innerHTML = `<p class="note">${text().loadError}</p>`;
+    console.error("Quiz not loaded:", error);
     return;
   }
-  dati.argomenti = dati.argomenti || [];
-  const chiavi = Object.keys(dati.test);
-  // Da simulare ci sono solo i test veri; le raccolte con un nome (le domande nuove) servono al ripasso
-  scelte = chiavi.filter((k) => !(dati.nomi && dati.nomi[k])).map((k) => [k, () => nome(k)]);
-  cfg = Object.assign({ test: scelte[0][0], modo: "studio", mescolaDomande: false, mescolaRisposte: false, argomenti: [], nascondi: false }, store.get("cfg") || {});
-  if (!scelte.some(([k]) => k === cfg.test)) cfg.test = scelte[0][0];
-  cfg.argomenti = cfg.argomenti.filter((id) => dati.argomenti.some((a) => a.id === id));
+  data.topics = data.topics || [];
+  tests = Object.keys(data.tests).filter((k) => !(data.names && data.names[k]));
+  migrateStorage();
+  settings = { test: tests[0], mode: "study", shuffleQuestions: false, shuffleAnswers: false, topics: [], hideOptions: false, ...store.get("cfg") };
+  if (!tests.includes(settings.test)) settings.test = tests[0];
+  settings.topics = (settings.topics || []).filter((id) => data.topics.some((t) => t.id === id));
   home();
 }
 
-const nome = (k) => (dati.nomi && dati.nomi[k] ? dati.nomi[k][inglese() ? "en" : "it"] : `Test ${k}`);
-const argomento = (id) => dati.argomenti.find((a) => a.id === id);
-const nomeArgomento = (id) => { const a = argomento(id); return a ? a[inglese() ? "en" : "it"] : ""; };
-const nelFiltro = (q) => !cfg.argomenti.length || cfg.argomenti.includes(q.t);
+const saveSettings = () => store.set("cfg", settings);
+const testName = (key) => (data.names && data.names[key] ? localized(data.names[key]) : `Test ${key}`);
+const topic = (id) => data.topics.find((t) => t.id === id);
+const topicName = (id) => { const t = topic(id); return t ? localized(t) : ""; };
+const inFilter = (q) => !settings.topics.length || settings.topics.includes(q.topic);
 
-function domandeDi(k) {
-  const chiavi = k === TUTTI ? Object.keys(dati.test) : [k];
-  return chiavi.flatMap((t) => dati.test[t].map((q, i) => ({ ...q, id: `${t}${i + 1}` })));
+function questionsOf(key) {
+  const keys = key === ALL ? Object.keys(data.tests) : [key];
+  return keys.flatMap((k) => data.tests[k].map((q, i) => ({ ...q, id: `${k}${i + 1}` })));
 }
 
-// Aggiorna la scatola di una domanda dopo una risposta
-function registra(id, giusta, incerta) {
-  const srs = store.get("srs") || {};
-  const s = srs[id] || { b: 0, n: 0, e: 0 };
-  s.n++;
-  if (!giusta) { s.b = 1; s.e++; }
-  else if (incerta) s.b = 1;
-  else s.b = Math.min(s.b === 0 ? 2 : s.b + 1, INTERVALLI.length - 1);
-  s.d = oggi() + INTERVALLI[s.b];
-  srs[id] = s;
-  store.set("srs", srs);
+function record(id, correct, unsure) {
+  const boxes = store.get("srs") || {};
+  const entry = boxes[id] || { b: 0, n: 0, e: 0 }; // box, answers, errors; d = due day
+  entry.n++;
+  if (!correct) { entry.b = 1; entry.e++; }
+  else if (unsure) entry.b = 1;
+  else entry.b = Math.min(entry.b === 0 ? 2 : entry.b + 1, INTERVALS.length - 1);
+  entry.d = today() + INTERVALS[entry.b];
+  boxes[id] = entry;
+  store.set("srs", boxes);
 }
 
-// Il giro extra, quando si vuole continuare oggi stesso: le domande già viste più fragili
-// (scatola più bassa, più errori), anche se non sono in scadenza. Con l'esame vicino ha senso insistere
-function giroExtra() {
-  const srs = store.get("srs") || {};
-  return mescola(domandeDi(TUTTI).filter(nelFiltro).filter((q) => srs[q.id] && srs[q.id].b < INTERVALLI.length - 1))
-    .sort((a, b) => srs[a.id].b - srs[b.id].b || srs[b.id].e - srs[a.id].e)
-    .slice(0, GIRO);
+const weakestFirst = (boxes) => (a, b) => boxes[a.id].b - boxes[b.id].b || boxes[b.id].e - boxes[a.id].e;
+
+// Extra round for the same day: seen questions not yet in the top box, weakest first
+function extraRound() {
+  const boxes = store.get("srs") || {};
+  return shuffle(questionsOf(ALL).filter(inFilter).filter((q) => boxes[q.id] && boxes[q.id].b < INTERVALS.length - 1))
+    .sort(weakestFirst(boxes))
+    .slice(0, ROUND_SIZE);
 }
 
-// Il giro di ripasso: prima le scadute (le più fragili per prime), poi le mai viste,
-// partendo dagli argomenti che pesano di più all'esame
-function giroDiRipasso() {
-  const srs = store.get("srs") || {};
-  const tutte = domandeDi(TUTTI).filter(nelFiltro);
-  const scadute = tutte.filter((q) => srs[q.id] && srs[q.id].d <= oggi())
-    .sort((a, b) => srs[a.id].b - srs[b.id].b || srs[b.id].e - srs[a.id].e);
-  const peso = (q) => (argomento(q.t) || {}).peso || 0;
-  const nuove = mescola(tutte.filter((q) => !srs[q.id])).sort((a, b) => peso(b) - peso(a));
-  return { scadute, nuove, giro: [...scadute, ...nuove].slice(0, GIRO) };
+// Today's round: due questions (weakest first), then unseen ones from the heaviest topics
+function reviewRound() {
+  const boxes = store.get("srs") || {};
+  const all = questionsOf(ALL).filter(inFilter);
+  const due = all.filter((q) => boxes[q.id] && boxes[q.id].d <= today()).sort(weakestFirst(boxes));
+  const weight = (q) => (topic(q.topic) || {}).weight || 0;
+  const unseen = shuffle(all.filter((q) => !boxes[q.id])).sort((a, b) => weight(b) - weight(a));
+  return { due, unseen, round: [...due, ...unseen].slice(0, ROUND_SIZE) };
 }
 
-// La pagina iniziale è un cruscotto in quattro righe, sulla griglia a 12 colonne del foglio di stile:
-// quattro conti (3+3+3+3), il compito d'esame (8) accanto a una colonna con ripasso di oggi e materiali (4),
-// poi la simulazione di un test a tutta larghezza.
-// L'unico colore è sul dato principale: le barre di quanto hai imparato di ogni argomento
 function home() {
-  S = null;
-  vista = home;
-  app.dataset.vista = "home";
-  const T = t();
-  const srs = store.get("srs") || {};
-  const migliori = store.get("migliori") || {};
-  const tutte = domandeDi(TUTTI);
-  const { scadute, nuove, giro } = giroDiRipasso();
-  const extra = giroExtra();
-  const imparata = (q) => srs[q.id] && srs[q.id].b >= CONSOLIDATA;
-  const contaTest = (k) => dati.test[k].length;
-  const scelta = (gruppo, k, testo, attivo) =>
-    `<button type="button" data-gruppo="${gruppo}" data-k="${k}" aria-pressed="${attivo}">${testo}</button>`;
-  // Per ogni argomento: quante domande d'esame vale e quante di queste sapresti oggi, in proporzione
-  // alle domande imparate. La somma è la stima di quante domande d'esame sapresti con sicurezza
-  const righe = dati.argomenti.map((a) => {
-    const qs = tutte.filter((q) => q.t === a.id);
-    const imp = qs.filter(imparata).length;
-    return { a, qs, imp, stima: qs.length ? (a.peso * imp) / qs.length : 0 };
+  session = null;
+  view = home;
+  app.dataset.view = "home";
+  const T = text();
+  const boxes = store.get("srs") || {};
+  const best = store.get("best") || {};
+  const all = questionsOf(ALL);
+  const { due, unseen, round } = reviewRound();
+  const extra = extraRound();
+  const isLearned = (q) => boxes[q.id] && boxes[q.id].b >= LEARNED_BOX;
+  const choice = (group, key, label, pressed) =>
+    `<button type="button" data-group="${group}" data-key="${key}" aria-pressed="${pressed}">${label}</button>`;
+  // Exam estimate: each topic contributes its exam weight times the share of its questions learned
+  const rows = data.topics.map((t) => {
+    const questions = all.filter((q) => q.topic === t.id);
+    const learned = questions.filter(isLearned).length;
+    return { topic: t, questions, learned, estimate: questions.length ? (t.weight * learned) / questions.length : 0 };
   });
-  const totaleEsame = righe.reduce((n, r) => n + r.a.peso, 0);
-  const stima = Math.round(righe.reduce((n, r) => n + r.stima, 0));
-  const imparateTutte = tutte.filter(imparata).length;
-  const conto = (etichetta, valore, nota) =>
-    `<div class="conto"><dt>${etichetta}</dt><dd><span class="conto-valore${valore === 0 ? " zero" : ""}">${valore}</span> <span class="conto-nota">${nota}</span></dd></div>`;
+  const examTotal = rows.reduce((n, r) => n + r.topic.weight, 0);
+  const estimate = Math.round(rows.reduce((n, r) => n + r.estimate, 0));
+  const learnedTotal = all.filter(isLearned).length;
+  const stat = (label, value, note) =>
+    `<div class="stat"><dt>${label}</dt><dd><span class="stat-value${value === 0 ? " zero" : ""}">${value}</span> <span class="stat-note">${note}</span></dd></div>`;
   app.innerHTML = `
-    <dl class="conti">
-      ${conto(T.contoScadute, scadute.length, T.contoScaduteNota)}
-      ${conto(T.contoNuove, nuove.length, T.su(tutte.length))}
-      ${conto(T.contoImparate, imparateTutte, T.su(tutte.length))}
-      ${conto(T.contoStima, stima, T.su(totaleEsame))}
+    <dl class="stats">
+      ${stat(T.statDue, due.length, T.statDueNote)}
+      ${stat(T.statUnseen, unseen.length, T.outOf(all.length))}
+      ${stat(T.statLearned, learnedTotal, T.outOf(all.length))}
+      ${stat(T.statEstimate, estimate, T.outOf(examTotal))}
     </dl>
-    <section class="pannello compito" aria-labelledby="titolo-compito">
-      <div class="pannello-testa">
-        <h2 class="pannello-titolo" id="titolo-compito">${T.compito}</h2>
-        ${cfg.argomenti.length ? `<button type="button" class="link" id="tutti">${T.argomentiTutti}</button>` : ""}
+    <section class="panel exam-paper" aria-labelledby="exam-paper-title">
+      <div class="panel-head">
+        <h2 class="panel-title" id="exam-paper-title">${T.examPaper}</h2>
+        ${settings.topics.length ? `<button type="button" class="link" id="all-topics">${T.allTopics}</button>` : ""}
       </div>
-      <p class="pannello-sotto">${T.compitoSotto(totaleEsame, stima)}</p>
-      <ul class="righe-argomenti">
-        ${righe.map((r) => `<li><button type="button" class="riga-argomento" data-gruppo="argomento" data-k="${r.a.id}" aria-pressed="${cfg.argomenti.includes(r.a.id)}">
-          <span class="riga-nome">${esc(r.a[inglese() ? "en" : "it"])}<small>${T.pesoEsame(r.a.peso)}</small></span>
-          <span class="riga-barra" aria-hidden="true"><i style="width:${r.qs.length ? Math.round((r.imp / r.qs.length) * 100) : 0}%"></i></span>
-          <span class="riga-conto${r.imp === 0 ? " zero" : ""}">${T.imparateBreve(r.imp, r.qs.length)}<span class="sr"> ${T.contoImparate.toLowerCase()}</span></span>
+      <p class="panel-sub">${T.examPaperSub(examTotal, estimate)}</p>
+      <ul class="topic-rows">
+        ${rows.map((r) => `<li><button type="button" class="topic-row" data-group="topic" data-key="${r.topic.id}" aria-pressed="${settings.topics.includes(r.topic.id)}">
+          <span class="topic-name">${escape(localized(r.topic))}<small>${T.examWeight(r.topic.weight)}</small></span>
+          <span class="topic-bar" aria-hidden="true"><i style="width:${r.questions.length ? Math.round((r.learned / r.questions.length) * 100) : 0}%"></i></span>
+          <span class="topic-count${r.learned === 0 ? " zero" : ""}">${T.learnedShort(r.learned, r.questions.length)}<span class="sr"> ${T.statLearned.toLowerCase()}</span></span>
         </button></li>`).join("")}
       </ul>
-      <p class="legenda">${T.argomentiNota}</p>
+      <p class="hint">${T.topicsHint}</p>
     </section>
-    <div class="colonna">
-    <section class="pannello oggi" aria-labelledby="titolo-oggi">
-      <h2 class="pannello-titolo" id="titolo-oggi">${T.oggi}</h2>
-      <p class="pannello-sotto">${giro.length ? T.oggiStato(scadute.length, nuove.length) : T.oggiVuoto}</p>
-      ${cfg.argomenti.length ? `<p class="oggi-filtro">${T.soloSu(cfg.argomenti.map((id) => esc(nomeArgomento(id))).join(", "))}</p>` : ""}
-      <div class="oggi-azioni">
-        ${giro.length ? `<button type="button" class="btn" id="ripasso">${T.iniziaRipasso(giro.length)}</button>` : ""}
-        ${extra.length ? `<button type="button" class="btn ${giro.length ? "ghost" : ""}" id="ancora">${T.ancora(extra.length)}</button>` : ""}
+    <div class="side-column">
+    <section class="panel today" aria-labelledby="today-title">
+      <h2 class="panel-title" id="today-title">${T.today}</h2>
+      <p class="panel-sub">${round.length ? T.todayStatus(due.length, unseen.length) : T.todayDone}</p>
+      ${settings.topics.length ? `<p class="today-filter">${T.onlyTopics(settings.topics.map((id) => escape(topicName(id))).join(", "))}</p>` : ""}
+      <div class="today-actions">
+        ${round.length ? `<button type="button" class="btn" id="start-review">${T.startReview(round.length)}</button>` : ""}
+        ${extra.length ? `<button type="button" class="btn ${round.length ? "ghost" : ""}" id="start-extra">${T.extraRound(extra.length)}</button>` : ""}
       </div>
-      <label class="check"><input type="checkbox" id="nascondi" ${cfg.nascondi ? "checked" : ""}> ${T.nascondi}</label>
-      <p class="pannello-sotto oggi-nota">${T.comeFunziona} ${T.ancoraNota}</p>
+      <label class="check"><input type="checkbox" id="hide-options" ${settings.hideOptions ? "checked" : ""}> ${T.hideOptions}</label>
+      <p class="panel-sub today-note">${T.howItWorks} ${T.extraRoundNote}</p>
     </section>
-    <section class="pannello materiali" aria-labelledby="titolo-materiali">
-      <h2 class="pannello-titolo" id="titolo-materiali">${T.materiali}</h2>
-      <p><a href="/appunti/onc0251/a/confronti/">${T.scheda}</a><br><span class="pannello-sotto">${T.schedaSotto}</span></p>
+    <section class="panel materials" aria-labelledby="materials-title">
+      <h2 class="panel-title" id="materials-title">${T.materials}</h2>
+      <p><a href="confronti/">${T.sheet}</a><br><span class="panel-sub">${T.sheetNote}</span></p>
     </section>
     </div>
-    <section class="pannello test" aria-labelledby="titolo-test">
-      <h2 class="pannello-titolo" id="titolo-test">${T.simula}</h2>
-      <p class="pannello-sotto">${T.testSotto}</p>
-      <div class="campi">
-        <div class="campo">
-          <span class="campo-nome" id="campo-test">Test</span>
-          <div class="seg" role="group" aria-labelledby="campo-test">${scelte.map(([k, n]) => scelta("test", k, `${n()} <span>${contaTest(k)}</span>`, cfg.test === k)).join("")}</div>
-          ${migliori[cfg.test] != null ? `<span class="campo-nota">${T.migliore(migliori[cfg.test])}</span>` : ""}
+    <section class="panel test" aria-labelledby="test-title">
+      <h2 class="panel-title" id="test-title">${T.simulate}</h2>
+      <p class="panel-sub">${T.simulateSub}</p>
+      <div class="test-fields">
+        <div class="test-field">
+          <span class="test-field-label" id="test-label">Test</span>
+          <div class="seg" role="group" aria-labelledby="test-label">${tests.map((k) => choice("test", k, `${testName(k)} <span>${data.tests[k].length}</span>`, settings.test === k)).join("")}</div>
+          ${best[settings.test] != null ? `<span class="test-field-note">${T.best(best[settings.test])}</span>` : ""}
         </div>
-        <div class="campo">
-          <span class="campo-nome" id="campo-modo">${T.modalita}</span>
-          <div class="seg" role="group" aria-labelledby="campo-modo">
-            ${scelta("modo", "studio", T.studio, cfg.modo === "studio")}
-            ${scelta("modo", "esame", T.esame, cfg.modo === "esame")}
+        <div class="test-field">
+          <span class="test-field-label" id="mode-label">${T.mode}</span>
+          <div class="seg" role="group" aria-labelledby="mode-label">
+            ${choice("mode", "study", T.study, settings.mode === "study")}
+            ${choice("mode", "exam", T.exam, settings.mode === "exam")}
           </div>
-          <span class="campo-nota">${cfg.modo === "esame" ? T.esameSotto : T.studioSotto}</span>
+          <span class="test-field-note">${settings.mode === "exam" ? T.examNote : T.studyNote}</span>
         </div>
-        <div class="campo">
-          <span class="campo-nome">${T.opzioni}</span>
-          <label class="check"><input type="checkbox" id="md" ${cfg.mescolaDomande ? "checked" : ""}> ${T.mescolaDomande}</label>
-          <label class="check"><input type="checkbox" id="mr" ${cfg.mescolaRisposte ? "checked" : ""}> ${T.mescolaRisposte}</label>
+        <div class="test-field">
+          <span class="test-field-label">${T.options}</span>
+          <label class="check"><input type="checkbox" id="shuffle-questions" ${settings.shuffleQuestions ? "checked" : ""}> ${T.shuffleQuestions}</label>
+          <label class="check"><input type="checkbox" id="shuffle-answers" ${settings.shuffleAnswers ? "checked" : ""}> ${T.shuffleAnswers}</label>
         </div>
       </div>
-      <p class="quiz-actions"><button type="button" class="btn" id="inizia">${T.iniziaTest(scelte.find(([k]) => k === cfg.test)[1]())}</button></p>
+      <p class="quiz-actions"><button type="button" class="btn" id="start-test">${T.startTest(testName(settings.test))}</button></p>
     </section>
-    <p class="azzera-riga"><button type="button" class="link" id="azzera">${T.azzera}</button></p>`;
-  app.querySelectorAll("[data-gruppo]").forEach((b) => {
+    <p class="reset-row"><button type="button" class="link" id="reset">${T.reset}</button></p>`;
+
+  app.querySelectorAll("[data-group]").forEach((b) => {
     b.onclick = () => {
-      const { gruppo, k } = b.dataset;
-      if (gruppo !== "argomento") cfg[gruppo] = k;
-      else cfg.argomenti = cfg.argomenti.includes(k) ? cfg.argomenti.filter((x) => x !== k) : [...cfg.argomenti, k];
-      store.set("cfg", cfg);
+      const { group, key } = b.dataset;
+      if (group !== "topic") settings[group] = key;
+      else settings.topics = settings.topics.includes(key) ? settings.topics.filter((x) => x !== key) : [...settings.topics, key];
+      saveSettings();
       home();
-      app.querySelector(`[data-gruppo="${gruppo}"][data-k="${k}"]`)?.focus();
+      app.querySelector(`[data-group="${group}"][data-key="${key}"]`)?.focus();
     };
   });
-  const tuttiArgomenti = $("#tutti");
-  if (tuttiArgomenti) tuttiArgomenti.onclick = () => { cfg.argomenti = []; store.set("cfg", cfg); home(); app.querySelector(".riga-argomento")?.focus(); };
-  $("#nascondi").onchange = (e) => { cfg.nascondi = e.target.checked; store.set("cfg", cfg); };
-  $("#md").onchange = (e) => { cfg.mescolaDomande = e.target.checked; store.set("cfg", cfg); };
-  $("#mr").onchange = (e) => { cfg.mescolaRisposte = e.target.checked; store.set("cfg", cfg); };
-  $("#inizia").onclick = () => inizia(domandeDi(cfg.test), { modo: cfg.modo });
-  const ripasso = $("#ripasso");
-  if (ripasso) ripasso.onclick = () => inizia(giroDiRipasso().giro, { modo: RIPASSO });
-  const ancora = $("#ancora");
-  if (ancora) ancora.onclick = () => inizia(giroExtra(), { modo: RIPASSO, extra: true });
-  $("#azzera").onclick = () => {
-    if (!confirm(t().azzeraConferma)) return;
-    store.del("srs");
-    store.del("migliori");
+  const allTopics = $("#all-topics");
+  if (allTopics) allTopics.onclick = () => { settings.topics = []; saveSettings(); home(); app.querySelector(".topic-row")?.focus(); };
+  $("#hide-options").onchange = (e) => { settings.hideOptions = e.target.checked; saveSettings(); };
+  $("#shuffle-questions").onchange = (e) => { settings.shuffleQuestions = e.target.checked; saveSettings(); };
+  $("#shuffle-answers").onchange = (e) => { settings.shuffleAnswers = e.target.checked; saveSettings(); };
+  $("#start-test").onclick = () => begin(questionsOf(settings.test), { mode: settings.mode });
+  const startReview = $("#start-review");
+  if (startReview) startReview.onclick = () => begin(reviewRound().round, { mode: REVIEW });
+  const startExtra = $("#start-extra");
+  if (startExtra) startExtra.onclick = () => begin(extraRound(), { mode: REVIEW, extra: true });
+  $("#reset").onclick = () => {
+    if (!confirm(text().resetConfirm)) return;
+    store.remove("srs");
+    store.remove("best");
     home();
   };
 }
 
-// qs: le domande del giro; modo: "studio", "esame" o "ripasso"; errori: true se è il "rifai solo gli errori"
-function inizia(qs, { modo, errori = false, extra = false }) {
-  if (!qs.length) return;
-  // Nel ripasso l'ordine delle risposte si mescola sempre: si impara il contenuto, non la posizione
-  const mescolaRisposte = modo === RIPASSO || cfg.mescolaRisposte;
-  if (modo !== RIPASSO && cfg.mescolaDomande) qs = mescola(qs);
-  S = {
-    qs: qs.map((q) => prepara(q, mescolaRisposte)),
-    i: 0,
-    risposte: [],
-    incerte: [],
-    aperte: [],
-    modo,
-    errori,
+// mode: "study", "exam" or "review"; retry: the "retry the mistakes" round
+function begin(questions, { mode, retry = false, extra = false }) {
+  if (!questions.length) return;
+  // Review always shuffles the answers, so you learn the content and not the position
+  const shuffleAnswers = mode === REVIEW || settings.shuffleAnswers;
+  if (mode !== REVIEW && settings.shuffleQuestions) questions = shuffle(questions);
+  session = {
+    questions: questions.map((q) => prepare(q, shuffleAnswers)),
+    index: 0,
+    answers: [],
+    unsure: [],
+    opened: [],
+    mode,
+    retry,
     extra,
-    mescolaRisposte,
+    shuffleAnswers,
   };
-  mostra();
+  showQuestion();
 }
 
-function prepara(q, mescolaRisposte) {
-  const ordine = q.o.map((_, i) => i);
-  const idx = mescolaRisposte ? mescola(ordine) : ordine;
-  return { id: q.id, q: q.q, t: q.t, e: q.e, o: idx.map((i) => q.o[i]), a: idx.indexOf(q.a), orig: q };
+function prepare(q, shuffleAnswers) {
+  const order = q.options.map((_, i) => i);
+  const idx = shuffleAnswers ? shuffle(order) : order;
+  return { ...q, options: idx.map((i) => q.options[i]), answer: idx.indexOf(q.answer), original: q };
 }
 
-const correzioneSubito = () => S.modo !== "esame";
+const instantFeedback = () => session.mode !== "exam";
+const unanswered = () => session.questions.filter((_, i) => session.answers[i] == null).length;
 
-function mostra() {
-  vista = mostra;
-  app.dataset.vista = "domanda";
-  const T = t();
-  const n = S.qs.length, q = S.qs[S.i], r = S.risposte[S.i], incerta = !!S.incerte[S.i];
-  const bloccata = correzioneSubito() && r != null;
-  const esito = !bloccata ? "" : r !== q.a ? T.sbagliato(LETTERE[q.a]) : incerta ? T.correttoIncerto : T.corretto;
-  // Con "rispondi prima di vedere le opzioni" si mostra solo la domanda, finché non si apre (o se si è già risposto).
-  // Vale solo per il ripasso, dove sta la casella: i test restano come all'esame
-  const nascoste = cfg.nascondi && S.modo === RIPASSO && r == null && !S.aperte[S.i];
+function showQuestion() {
+  view = showQuestion;
+  app.dataset.view = "question";
+  const T = text();
+  const { questions, index } = session;
+  const n = questions.length, q = questions[index], answer = session.answers[index], unsure = !!session.unsure[index];
+  const locked = instantFeedback() && answer != null;
+  const feedback = !locked ? "" : answer !== q.answer ? T.wrong(LETTERS[q.answer]) : unsure ? T.correctUnsure : T.correct;
+  const optionsHidden = settings.hideOptions && session.mode === REVIEW && answer == null && !session.opened[index];
   app.innerHTML = `
-    <div class="quiz-meta"><span>${T.domandaDi(S.i + 1, n)}${q.t ? ` · ${esc(nomeArgomento(q.t))}` : ""}${q.ripetuta ? ` · ${T.ripetuta}` : ""}</span><button type="button" class="link" id="esci">${T.esci}</button></div>
-    <nav class="giro-caselle" aria-label="${T.caselleNome}">${S.qs.map((x, i) => {
-      const ri = S.risposte[i];
-      const stato = ri == null ? "" : !correzioneSubito() ? "visto" : ri === x.a ? "giusto" : "sbagliato";
-      const detto = [{ visto: T.statoRisposta, giusto: T.statoGiusta, sbagliato: T.statoSbagliata }[stato], x.ripetuta && T.statoRipetuta].filter(Boolean).join(", ");
-      return `<button type="button" class="${[stato, x.ripetuta ? "ripetuta" : ""].join(" ").trim()}" data-vai="${i}" aria-label="${T.casella(i + 1, detto)}"${i === S.i ? ' aria-current="step"' : ""}>${i + 1}</button>`;
+    <div class="quiz-meta"><span>${T.questionOf(index + 1, n)}${q.topic ? ` · ${escape(topicName(q.topic))}` : ""}${q.repeated ? ` · ${T.repeatedNote}` : ""}</span><button type="button" class="link" id="quit">${T.quit}</button></div>
+    <nav class="round-steps" aria-label="${T.stepsLabel}">${questions.map((x, i) => {
+      const given = session.answers[i];
+      const state = given == null ? "" : !instantFeedback() ? "answered" : given === x.answer ? "correct" : "wrong";
+      const spoken = [{ answered: T.stateAnswered, correct: T.stateCorrect, wrong: T.stateWrong }[state], x.repeated && T.stateRepeated].filter(Boolean).join(", ");
+      return `<button type="button" class="${[state, x.repeated ? "repeated" : ""].join(" ").trim()}" data-go="${i}" aria-label="${T.step(i + 1, spoken)}"${i === index ? ' aria-current="step"' : ""}>${i + 1}</button>`;
     }).join("")}</nav>
-    <p class="quiz-q" id="domanda" tabindex="-1" lang="en">${esc(q.q)}</p>
-    ${nascoste ? `<p class="note">${T.pensaPrima}</p>
-    <p class="quiz-actions"><button type="button" class="btn ghost" id="apri">${T.mostraOpzioni}</button></p>` : `<div role="group" aria-labelledby="domanda" lang="en">
-      ${q.o.map((t, i) => {
-        let c = "ans";
-        if (bloccata) { if (i === q.a) c += " ok"; else if (i === r) c += " bad"; }
-        else if (i === r) c += " sel";
-        return `<button type="button" class="${c}" data-i="${i}" ${bloccata ? "disabled" : ""} aria-pressed="${i === r}"><span class="l">${LETTERE[i]}</span><span>${esc(t)}</span></button>`;
+    <p class="quiz-q" id="question" tabindex="-1" lang="en">${escape(q.question)}</p>
+    ${optionsHidden ? `<p class="note">${T.thinkFirst}</p>
+    <p class="quiz-actions"><button type="button" class="btn ghost" id="open-options">${T.showOptions}</button></p>` : `<div role="group" aria-labelledby="question" lang="en">
+      ${q.options.map((option, i) => {
+        let cls = "ans";
+        if (locked) { if (i === q.answer) cls += " ok"; else if (i === answer) cls += " bad"; }
+        else if (i === answer) cls += " sel";
+        return `<button type="button" class="${cls}" data-option="${i}" ${locked ? "disabled" : ""} aria-pressed="${i === answer}"><span class="l">${LETTERS[i]}</span><span>${escape(option)}</span></button>`;
       }).join("")}
     </div>`}
-    <p class="quiz-incerto"><button type="button" class="spunta" id="incerto" aria-pressed="${incerta}" ${bloccata ? "disabled" : ""}>${T.incerto}</button></p>
-    <p class="quiz-fb ${bloccata ? (r === q.a ? "ok" : "bad") : ""}" role="status">${esito}</p>
-    ${bloccata && q.e ? `<p class="quiz-why"><b>${T.perche}.</b> <span lang="en">${esc(q.e)}</span></p>` : ""}
+    <p class="quiz-unsure"><button type="button" class="tick" id="unsure" aria-pressed="${unsure}" ${locked ? "disabled" : ""}>${T.unsure}</button></p>
+    <p class="quiz-fb ${locked ? (answer === q.answer ? "ok" : "bad") : ""}" role="status">${feedback}</p>
+    ${locked && q.explanation ? `<p class="quiz-why"><b>${T.why}.</b> <span lang="en">${escape(q.explanation)}</span></p>` : ""}
     <div class="quiz-nav">
-      <button type="button" class="btn ghost" id="prev" ${S.i ? "" : "disabled"}>${T.indietro}</button>
-      <button type="button" class="btn" id="next" ${r == null ? "disabled" : ""}>${S.i < n - 1 ? T.avanti : mancanti() ? T.mancano(mancanti()) : T.termina}</button>
+      <button type="button" class="btn ghost" id="prev" ${index ? "" : "disabled"}>${T.back}</button>
+      <button type="button" class="btn" id="next" ${answer == null ? "disabled" : ""}>${index < n - 1 ? T.next : unanswered() ? T.missing(unanswered()) : T.finish}</button>
     </div>`;
-  $("#esci").onclick = () => { if (confirm(t().esciConferma)) home(); };
-  app.querySelectorAll(".ans").forEach((b) => (b.onclick = () => scegli(+b.dataset.i)));
-  $("#incerto").onclick = cambiaIncerto;
-  const apri = $("#apri");
-  if (apri) apri.onclick = apriOpzioni;
-  $("#prev").onclick = () => { S.i--; mostra(); $("#domanda").focus(); };
-  $("#next").onclick = avanti;
-  app.querySelectorAll("[data-vai]").forEach((b) => (b.onclick = () => vaiA(+b.dataset.vai)));
+  $("#quit").onclick = () => { if (confirm(text().quitConfirm)) home(); };
+  app.querySelectorAll(".ans").forEach((b) => (b.onclick = () => choose(+b.dataset.option)));
+  $("#unsure").onclick = toggleUnsure;
+  const open = $("#open-options");
+  if (open) open.onclick = openOptions;
+  $("#prev").onclick = () => goTo(session.index - 1);
+  $("#next").onclick = next;
+  app.querySelectorAll("[data-go]").forEach((b) => (b.onclick = () => goTo(+b.dataset.go)));
 }
 
-const mancanti = () => S.qs.filter((_, i) => S.risposte[i] == null).length;
-
-function vaiA(i) {
-  if (i === S.i) return;
-  S.i = i;
-  mostra();
-  $("#domanda").focus();
+function goTo(i) {
+  if (i === session.index || i < 0) return;
+  session.index = i;
+  showQuestion();
+  $("#question").focus();
 }
 
-function apriOpzioni() {
-  S.aperte[S.i] = true;
-  mostra();
+function openOptions() {
+  session.opened[session.index] = true;
+  showQuestion();
   app.querySelector(".ans")?.focus();
 }
 
-function cambiaIncerto() {
-  if (correzioneSubito() && S.risposte[S.i] != null) return;
-  S.incerte[S.i] = !S.incerte[S.i];
-  mostra();
-  $("#incerto").focus();
+function toggleUnsure() {
+  if (instantFeedback() && session.answers[session.index] != null) return;
+  session.unsure[session.index] = !session.unsure[session.index];
+  showQuestion();
+  $("#unsure").focus();
 }
 
-function scegli(i) {
-  if (correzioneSubito() && S.risposte[S.i] != null) return;
-  S.risposte[S.i] = i;
-  if (correzioneSubito()) {
-    const q = S.qs[S.i], giusta = i === q.a, incerta = !!S.incerte[S.i];
-    // Una domanda ripresentata a fine giro non sposta di nuovo la scatola: è già fissata per domani
-    if (!q.ripetuta) registra(q.id, giusta, incerta);
-    // Nel ripasso sbagliate e incerte tornano una volta a fine giro
-    if (S.modo === RIPASSO && !q.ripetuta && (!giusta || incerta)) {
-      S.qs.push({ ...prepara(q.orig, S.mescolaRisposte), ripetuta: true });
+function choose(i) {
+  if (instantFeedback() && session.answers[session.index] != null) return;
+  session.answers[session.index] = i;
+  if (instantFeedback()) {
+    const q = session.questions[session.index], correct = i === q.answer, unsure = !!session.unsure[session.index];
+    // A repeated question doesn't move its box again: it's already due tomorrow
+    if (!q.repeated) record(q.id, correct, unsure);
+    if (session.mode === REVIEW && !q.repeated && (!correct || unsure)) {
+      session.questions.push({ ...prepare(q.original, session.shuffleAnswers), repeated: true });
     }
   }
-  mostra();
+  showQuestion();
   $("#next").focus();
 }
 
-function avanti() {
-  if (S.risposte[S.i] == null) return;
-  if (S.i === S.qs.length - 1) {
-    // Saltando tra le caselle si possono lasciare domande indietro: prima di chiudere si torna lì
-    const prima = S.qs.findIndex((_, i) => S.risposte[i] == null);
-    return prima === -1 ? fine() : vaiA(prima);
-  }
-  S.i++;
-  mostra();
-  $("#domanda").focus();
+function next() {
+  if (session.answers[session.index] == null) return;
+  if (session.index < session.questions.length - 1) return goTo(session.index + 1);
+  const firstMissing = session.questions.findIndex((_, i) => session.answers[i] == null);
+  return firstMissing === -1 ? results() : goTo(firstMissing);
 }
 
-function fine() {
-  const primaVolta = vista !== fine;
-  vista = fine;
-  app.dataset.vista = "fine";
-  const T = t();
-  // Le ripresentate a fine giro non contano nel punteggio: sono già contate la prima volta
-  const voci = S.qs.map((q, i) => ({ q, r: S.risposte[i], incerta: !!S.incerte[i] })).filter((v) => !v.q.ripetuta);
-  const n = voci.length;
-  const errori = voci.filter((v) => v.r !== v.q.a);
-  const incerte = voci.filter((v) => v.r === v.q.a && v.incerta);
-  const giuste = n - errori.length;
-  if (primaVolta) {
-    // In modalità esame la correzione (e quindi il ripasso) arriva solo adesso
-    if (!correzioneSubito()) voci.forEach((v) => registra(v.q.id, v.r === v.q.a, v.incerta));
-    if (S.modo !== RIPASSO && !S.errori) {
-      const migliori = store.get("migliori") || {};
-      if (migliori[cfg.test] == null || giuste > migliori[cfg.test]) {
-        migliori[cfg.test] = giuste;
-        store.set("migliori", migliori);
+function results() {
+  const firstTime = view !== results;
+  view = results;
+  app.dataset.view = "results";
+  const T = text();
+  const items = session.questions
+    .map((q, i) => ({ q, answer: session.answers[i], unsure: !!session.unsure[i] }))
+    .filter((item) => !item.q.repeated);
+  const n = items.length;
+  const mistakes = items.filter((item) => item.answer !== item.q.answer);
+  const unsureRight = items.filter((item) => item.answer === item.q.answer && item.unsure);
+  const score = n - mistakes.length;
+  if (firstTime) {
+    // In exam mode the boxes are updated only at the end
+    if (!instantFeedback()) items.forEach((item) => record(item.q.id, item.answer === item.q.answer, item.unsure));
+    if (session.mode !== REVIEW && !session.retry) {
+      const best = store.get("best") || {};
+      if (best[settings.test] == null || score > best[settings.test]) {
+        best[settings.test] = score;
+        store.set("best", best);
       }
     }
   }
-  const risposta = (q, i) => (i == null ? T.nessuna : `${LETTERE[i]}. ${esc(q.o[i])}`);
-  const daRivedere = [...errori, ...incerte];
+  const optionText = (q, i) => (i == null ? T.none : `${LETTERS[i]}. ${escape(q.options[i])}`);
+  const toReview = [...mistakes, ...unsureRight];
   app.innerHTML = `
-    <p class="quiz-score" tabindex="-1" id="punteggio">${giuste}/${n}</p>
-    <p class="note">${T.percentuale(Math.round((giuste / n) * 100))} · ${errori.length ? T.daRivedere(errori.length) : T.tuttoGiusto}${incerte.length ? ` · ${T.incerte(incerte.length)}` : ""}</p>
+    <p class="quiz-score" tabindex="-1" id="score">${score}/${n}</p>
+    <p class="note">${T.percent(Math.round((score / n) * 100))} · ${mistakes.length ? T.toReview(mistakes.length) : T.allCorrect}${unsureRight.length ? ` · ${T.unsureCount(unsureRight.length)}` : ""}</p>
     <p class="quiz-actions">
-      ${errori.length ? `<button type="button" class="btn" id="ripassa">${T.rifaiErrori}</button>` : ""}
-      <button type="button" class="btn ${errori.length ? "ghost" : ""}" id="ancora">${T.ricomincia}</button>
+      ${mistakes.length ? `<button type="button" class="btn" id="retry">${T.retryMistakes}</button>` : ""}
+      <button type="button" class="btn ${mistakes.length ? "ghost" : ""}" id="again">${T.again}</button>
       <button type="button" class="btn ghost" id="menu">${T.menu}</button>
     </p>
-    ${daRivedere.length ? `<h3 class="quiz-titolo">${T.errori}</h3>
-      ${daRivedere.map(({ q, r }) => `
+    ${toReview.length ? `<h3 class="quiz-heading">${T.reviewHeading}</h3>
+      ${toReview.map(({ q, answer }) => `
         <div class="quiz-rev">
-          <p lang="en"><b>${q.id}.</b> ${esc(q.q)}</p>
-          ${r === q.a
-            ? `<p class="ok">${T.giusta}: <span lang="en">${risposta(q, q.a)}</span> <span class="dim">(${T.eraIncerta})</span></p>`
-            : `<p class="bad">${T.tua}: <span lang="en">${risposta(q, r)}</span></p>
-               <p class="ok">${T.giusta}: <span lang="en">${risposta(q, q.a)}</span></p>`}
-          ${q.e ? `<p class="quiz-why"><b>${T.perche}.</b> <span lang="en">${esc(q.e)}</span></p>` : ""}
+          <p lang="en"><b>${q.id}.</b> ${escape(q.question)}</p>
+          ${answer === q.answer
+            ? `<p class="ok">${T.right}: <span lang="en">${optionText(q, q.answer)}</span> <span class="dim">(${T.wasUnsure})</span></p>`
+            : `<p class="bad">${T.yours}: <span lang="en">${optionText(q, answer)}</span></p>
+               <p class="ok">${T.right}: <span lang="en">${optionText(q, q.answer)}</span></p>`}
+          ${q.explanation ? `<p class="quiz-why"><b>${T.why}.</b> <span lang="en">${escape(q.explanation)}</span></p>` : ""}
         </div>`).join("")}` : ""}`;
-  $("#punteggio").focus();
-  const ripassa = $("#ripassa");
-  // Gli errori si rifanno sempre con la correzione subito, per leggere la spiegazione
-  if (ripassa) ripassa.onclick = () => inizia(errori.map((v) => ({ ...v.q.orig, id: v.q.id })), { modo: "studio", errori: true });
-  // Ricomincia: un altro giro dello stesso tipo (ripasso di oggi, giro extra o test scelto)
-  $("#ancora").onclick = () => {
-    if (S.modo !== RIPASSO) return inizia(domandeDi(cfg.test), { modo: S.modo });
-    const giro = S.extra ? giroExtra() : giroDiRipasso().giro;
-    if (giro.length) inizia(giro, { modo: RIPASSO, extra: S.extra });
+  $("#score").focus();
+  const retry = $("#retry");
+  // Mistakes are retried with instant feedback, to read the explanations
+  if (retry) retry.onclick = () => begin(mistakes.map((item) => ({ ...item.q.original, id: item.q.id })), { mode: "study", retry: true });
+  $("#again").onclick = () => {
+    if (session.mode !== REVIEW) return begin(questionsOf(settings.test), { mode: session.mode });
+    const round = session.extra ? extraRound() : reviewRound().round;
+    if (round.length) begin(round, { mode: REVIEW, extra: session.extra });
     else home();
   };
   $("#menu").onclick = home;
 }
 
-// Cambiata la lingua (lingua.js): si ridisegna la schermata attuale, senza perdere le risposte date
-document.addEventListener("lingua", () => { if (vista) vista(); });
+// Redraw the current screen in the new language, keeping the answers given
+document.addEventListener("langchange", () => { if (view) view(); });
 
-// Tastiera durante il quiz: A-D o 1-4 per rispondere, N per "non sono sicuro",
-// Invio o → per andare avanti, ← per tornare indietro; con le opzioni nascoste, Spazio o O le apre
+// Keyboard: A-D or 1-4 to answer, N for "not sure", Enter or → for next, ← for back;
+// with hidden options, Space or O opens them
 document.addEventListener("keydown", (e) => {
-  if (!S || !$(".quiz-q") || e.ctrlKey || e.metaKey || e.altKey) return;
-  const k = e.key.toUpperCase();
-  const i = k.length === 1 ? Math.max(LETTERE.indexOf(k), "12345678".indexOf(k)) : -1;
-  if ($("#apri")) {
-    if (e.key === " " || k === "O") { e.preventDefault(); apriOpzioni(); }
-    else if (k === "N") cambiaIncerto();
+  if (!session || !$(".quiz-q") || e.ctrlKey || e.metaKey || e.altKey) return;
+  const key = e.key.toUpperCase();
+  const option = key.length === 1 ? Math.max(LETTERS.indexOf(key), "12345678".indexOf(key)) : -1;
+  if ($("#open-options")) {
+    if (e.key === " " || key === "O") { e.preventDefault(); openOptions(); }
+    else if (key === "N") toggleUnsure();
     return;
   }
-  if (i >= 0 && i < S.qs[S.i].o.length) scegli(i);
-  else if (k === "N") cambiaIncerto();
-  else if (e.key === "ArrowRight" || (e.key === "Enter" && !e.target.closest("button"))) avanti();
-  else if (e.key === "ArrowLeft" && S.i) { S.i--; mostra(); $("#domanda").focus(); }
+  if (option >= 0 && option < session.questions[session.index].options.length) choose(option);
+  else if (key === "N") toggleUnsure();
+  else if (e.key === "ArrowRight" || (e.key === "Enter" && !e.target.closest("button"))) next();
+  else if (e.key === "ArrowLeft") goTo(session.index - 1);
 });
 
-avvia();
+start();

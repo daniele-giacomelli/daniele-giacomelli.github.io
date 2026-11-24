@@ -1,8 +1,8 @@
-// Condiviso dalla versione italiana e da quella inglese
-const inglese = document.documentElement.lang === "en";
+// Shared by the Italian and English home pages
+const english = document.documentElement.lang === "en";
 
 console.log(
-  inglese
+  english
     ? "%cHi! If you're poking around here, the source of this site is on github.com/daniele-giacomelli\n" +
       "With great power comes great responsibility. Even in production."
     : "%cCiao! Se stai curiosando qui, il codice del sito è su github.com/daniele-giacomelli\n" +
@@ -10,218 +10,215 @@ console.log(
   "font-family: monospace; font-size: 13px;"
 );
 
-// Testata: il numero del "fascicolo" cresce da solo di uno a ogni stagione.
-// Il N° 01 è l'autunno 2026 (primavera da marzo, estate da giugno, autunno da settembre, inverno da dicembre)
+// Masthead issue number: goes up by one each season, starting from N° 01 in autumn 2026
 (() => {
-  const oggi = new Date();
-  const trimestre = (anno, mese) => Math.floor((anno * 12 + mese - 2) / 3);
-  const numero = Math.max(1, trimestre(oggi.getFullYear(), oggi.getMonth()) - trimestre(2026, 8) + 1);
-  const campoNumero = document.querySelector("[data-numero]");
-  if (campoNumero) campoNumero.textContent = String(numero).padStart(2, "0");
+  const now = new Date();
+  const season = (year, month) => Math.floor((year * 12 + month - 2) / 3);
+  const issue = Math.max(1, season(now.getFullYear(), now.getMonth()) - season(2026, 8) + 1);
+  const field = document.querySelector("[data-issue-number]");
+  if (field) field.textContent = String(issue).padStart(2, "0");
 })();
 
-// Nel menu si evidenzia la voce della sezione che si sta leggendo
-(() => {
-  const voci = [...document.querySelectorAll('.nav-links a[href^="#"]')];
-  const sezioni = voci.map((a) => document.querySelector(a.getAttribute("href")));
-  if (!voci.length || sezioni.includes(null)) return;
-  // Un solo calcolo a ogni scorrimento: la voce attiva è l'ultima sezione il cui inizio ha superato metà schermo.
-  // In cima alla pagina nessuna; in fondo l'ultima, anche se è troppo corta per arrivare a metà schermo
-  const aggiorna = () => {
-    const inFondo = innerHeight + scrollY >= document.documentElement.scrollHeight - 4;
-    let attiva = inFondo ? sezioni.length - 1 : -1;
-    if (!inFondo) sezioni.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight / 2) attiva = i; });
-    voci.forEach((a, i) => (i === attiva ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
-  };
-  addEventListener("scroll", aggiorna, { passive: true });
-  addEventListener("resize", aggiorna, { passive: true });
-  aggiorna();
-})();
-
-// Il messaggio in basso, condiviso dalla chiave e dal ragnetto: resta 5 secondi
-const segreto = document.querySelector(".secret");
-let timerSegreto;
-const mostraSegreto = (testo, lingua = "en") => {
-  clearTimeout(timerSegreto);
-  segreto.lang = lingua;
-  segreto.textContent = testo;
-  segreto.classList.add("visibile");
-  timerSegreto = setTimeout(() => segreto.classList.remove("visibile"), 5000);
+// Index of the section being read: the last one whose top has passed mid-screen,
+// or the last section when scrolled to the bottom
+const sectionInView = (sections) => {
+  if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) return sections.length - 1;
+  let index = -1;
+  sections.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight / 2) index = i; });
+  return index;
 };
 
-// Mentre si scorre: il nome in alto diventa il percorso della sezione (~/daniele-giacomelli/progetti),
-// scritto lettera per lettera come in un terminale, e il numero della sezione in cui si è si riempie di colore
+// Highlight the menu entry of the current section
 (() => {
-  const percorso = document.querySelector(".brand .percorso");
-  const sezioni = [...document.querySelectorAll("main > section[id]")];
-  if (!percorso || !sezioni.length) return;
-  const fermo = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let voluto = "";
-  let timerScrittura;
-  // Cancella fino alla parte in comune col nuovo percorso, poi scrive il resto
-  const scrivi = () => {
-    clearTimeout(timerScrittura);
-    const attuale = percorso.textContent;
-    if (attuale === voluto) { timerScrittura = setTimeout(() => percorso.classList.remove("scrive"), 900); return; }
-    percorso.classList.add("scrive");
-    const comune = voluto.startsWith(attuale);
-    percorso.textContent = comune ? voluto.slice(0, attuale.length + 1) : attuale.slice(0, -1);
-    timerScrittura = setTimeout(scrivi, comune ? 55 : 30);
+  const links = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+  const sections = links.map((a) => document.querySelector(a.getAttribute("href")));
+  if (!links.length || sections.includes(null)) return;
+  const update = () => {
+    const current = sectionInView(sections);
+    links.forEach((a, i) => (i === current ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
   };
-  const aggiorna = () => {
-    const inFondo = innerHeight + scrollY >= document.documentElement.scrollHeight - 4;
-    let attiva = inFondo ? sezioni.length - 1 : -1;
-    if (!inFondo) sezioni.forEach((s, i) => { if (s.getBoundingClientRect().top < innerHeight / 2) attiva = i; });
-    sezioni.forEach((s, i) => s.classList.toggle("attuale", i === attiva));
-    const nuovo = attiva < 0 ? "" : "/" + sezioni[attiva].id;
-    if (nuovo === voluto) return;
-    voluto = nuovo;
-    if (fermo) percorso.textContent = voluto;
-    else scrivi();
-  };
-  addEventListener("scroll", aggiorna, { passive: true });
-  addEventListener("resize", aggiorna, { passive: true });
-  aggiorna();
+  addEventListener("scroll", update, { passive: true });
+  addEventListener("resize", update, { passive: true });
+  update();
 })();
 
-// Il cursore dopo il nome, cliccato, diventa una chiave (e viceversa)
+// Bottom toast, used by both easter eggs
+const secret = document.querySelector(".secret");
+let secretTimer;
+const showSecret = (text, lang = "en") => {
+  clearTimeout(secretTimer);
+  secret.lang = lang;
+  secret.textContent = text;
+  secret.classList.add("visible");
+  secretTimer = setTimeout(() => secret.classList.remove("visible"), 5000);
+};
+
+// The brand turns into the current section's path (~/daniele-giacomelli/projects), typed like a terminal
+(() => {
+  const path = document.querySelector(".brand .path");
+  const sections = [...document.querySelectorAll("main > section[id]")];
+  if (!path || !sections.length) return;
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let target = "";
+  let typingTimer;
+  // Delete back to the common prefix, then type the rest
+  const type = () => {
+    clearTimeout(typingTimer);
+    const shown = path.textContent;
+    if (shown === target) { typingTimer = setTimeout(() => path.classList.remove("typing"), 900); return; }
+    path.classList.add("typing");
+    const extending = target.startsWith(shown);
+    path.textContent = extending ? target.slice(0, shown.length + 1) : shown.slice(0, -1);
+    typingTimer = setTimeout(type, extending ? 55 : 30);
+  };
+  const update = () => {
+    const current = sectionInView(sections);
+    sections.forEach((s, i) => s.classList.toggle("current", i === current));
+    const next = current < 0 ? "" : "/" + sections[current].id;
+    if (next === target) return;
+    target = next;
+    if (reducedMotion) path.textContent = target;
+    else type();
+  };
+  addEventListener("scroll", update, { passive: true });
+  addEventListener("resize", update, { passive: true });
+  update();
+})();
+
+// Clicking the caret after the name turns it into a key, and back
 document.querySelector(".caret").addEventListener("click", (e) => {
-  const chiave = e.currentTarget.classList.toggle("chiave");
-  if (chiave) mostraSegreto("May your heart be your guiding key.");
-  else { clearTimeout(timerSegreto); segreto.classList.remove("visibile"); }
+  const isKey = e.currentTarget.classList.toggle("key");
+  if (isKey) showSecret("May your heart be your guiding key.");
+  else { clearTimeout(secretTimer); secret.classList.remove("visible"); }
 });
 
-// Il ragnetto in fondo al filo: da vicino gli viene il senso di ragno, cliccato tira fuori le zampe e parla
+// The spider on its thread: senses the pointer nearby, and talks when clicked
 (() => {
-  const ragno = document.querySelector(".ragno");
-  if (!ragno) return;
-  let timerRagno;
-  ragno.addEventListener("click", () => {
-    clearTimeout(timerRagno);
-    ragno.classList.add("attivo");
-    // In italiano sulla pagina italiana; la frase della chiave invece resta sempre in inglese
-    if (inglese) mostraSegreto("With great power there must also come great responsibility.");
-    else mostraSegreto("Con un grande potere deve venire anche una grande responsabilità.", "it");
-    timerRagno = setTimeout(() => ragno.classList.remove("attivo"), 5000);
+  const spider = document.querySelector(".spider");
+  if (!spider) return;
+  let spiderTimer;
+  spider.addEventListener("click", () => {
+    clearTimeout(spiderTimer);
+    spider.classList.add("active");
+    if (english) showSecret("With great power there must also come great responsibility.");
+    else showSecret("Con un grande potere deve venire anche una grande responsabilità.", "it");
+    spiderTimer = setTimeout(() => spider.classList.remove("active"), 5000);
   });
-  // "Vicino" = il puntatore entro 90px dal ragno. Un solo calcolo per fotogramma
   if (!matchMedia("(hover: hover)").matches) return;
-  let inAttesa = false;
+  let pending = false;
   addEventListener("pointermove", (e) => {
-    if (inAttesa) return;
-    inAttesa = true;
+    if (pending) return;
+    pending = true;
     requestAnimationFrame(() => {
-      inAttesa = false;
-      const r = ragno.getBoundingClientRect();
-      const vicino = r.width > 0 && Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2)) < 90;
-      ragno.classList.toggle("vicino", vicino);
+      pending = false;
+      const r = spider.getBoundingClientRect();
+      const near = r.width > 0 && Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2)) < 90;
+      spider.classList.toggle("near", near);
     });
   }, { passive: true });
 })();
 
-// Il filo che scende dall'alto mentre si scorre la pagina
-const filo = document.querySelector(".filo");
-const aggiornaFilo = () => {
+// The thread grows as the page scrolls
+const thread = document.querySelector(".thread");
+const updateThread = () => {
   const max = document.documentElement.scrollHeight - innerHeight;
-  filo.style.setProperty("--avanzamento", max > 0 ? scrollY / max : 0);
+  thread.style.setProperty("--progress", max > 0 ? scrollY / max : 0);
 };
-addEventListener("scroll", aggiornaFilo, { passive: true });
-aggiornaFilo();
+addEventListener("scroll", updateThread, { passive: true });
+updateThread();
 
-// Modulo di contatto: invia a Web3Forms, che inoltra il messaggio per email.
-// Il controllo dei campi è nostro (novalidate) per avere messaggi chiari nella lingua della pagina.
+// Contact form, sent through Web3Forms. Validation is ours (novalidate) to get messages in the page's language.
 (() => {
-  const modulo = document.querySelector(".contact-form");
-  if (!modulo) return;
-  const stato = modulo.querySelector(".form-status");
-  const pulsante = modulo.querySelector('button[type="submit"]');
-  const testoPulsante = pulsante.textContent;
-  const t = inglese
+  const form = document.querySelector(".contact-form");
+  if (!form) return;
+  const status = form.querySelector(".form-status");
+  const submit = form.querySelector('button[type="submit"]');
+  const submitLabel = submit.textContent;
+  const text = english
     ? {
-        controlla: "Some fields need fixing: they're highlighted above.",
-        nome: "Tell me your name.",
+        fix: "Some fields need fixing: they're highlighted above.",
+        name: "Tell me your name.",
         email: "I need an email address to reply, like name@example.com.",
-        messaggio: "Write at least a couple of words (10 characters).",
-        invio: "Sending…",
-        ok: "Message sent. I'll reply to the address you gave me.",
-        errore: "It didn't go through. Try again in a moment, or write to me on LinkedIn.",
-        spento: "The form isn't active yet. For now, you can reach me on LinkedIn.",
+        message: "Write at least a couple of words (10 characters).",
+        sending: "Sending…",
+        sent: "Message sent. I'll reply to the address you gave me.",
+        failed: "It didn't go through. Try again in a moment, or write to me on LinkedIn.",
+        disabled: "The form isn't active yet. For now, you can reach me on LinkedIn.",
       }
     : {
-        controlla: "Alcuni campi vanno sistemati: li trovi evidenziati qui sopra.",
-        nome: "Scrivimi il tuo nome.",
+        fix: "Alcuni campi vanno sistemati: li trovi evidenziati qui sopra.",
+        name: "Scrivimi il tuo nome.",
         email: "Mi serve un indirizzo email per risponderti, tipo nome@esempio.it.",
-        messaggio: "Scrivi almeno un paio di parole (10 caratteri).",
-        invio: "Invio in corso…",
-        ok: "Messaggio inviato. Ti rispondo all'indirizzo che mi hai lasciato.",
-        errore: "Non è partito. Riprova tra poco, oppure scrivimi su LinkedIn.",
-        spento: "Il modulo non è ancora attivo. Per ora puoi scrivermi su LinkedIn.",
+        message: "Scrivi almeno un paio di parole (10 caratteri).",
+        sending: "Invio in corso…",
+        sent: "Messaggio inviato. Ti rispondo all'indirizzo che mi hai lasciato.",
+        failed: "Non è partito. Riprova tra poco, oppure scrivimi su LinkedIn.",
+        disabled: "Il modulo non è ancora attivo. Per ora puoi scrivermi su LinkedIn.",
       };
-  const campi = {
-    name: [modulo.elements.name, (v) => v.trim().length > 0, t.nome],
-    email: [modulo.elements.email, (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()), t.email],
-    message: [modulo.elements.message, (v) => v.trim().length >= 10, t.messaggio],
+  const fields = {
+    name: [form.elements.name, (v) => v.trim().length > 0, text.name],
+    email: [form.elements.email, (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()), text.email],
+    message: [form.elements.message, (v) => v.trim().length >= 10, text.message],
   };
-  const segna = (campo, errore) => {
-    const avviso = document.getElementById(campo.getAttribute("aria-describedby"));
-    campo.setAttribute("aria-invalid", String(Boolean(errore)));
-    avviso.textContent = errore || "";
+  const mark = (field, error) => {
+    const hint = document.getElementById(field.getAttribute("aria-describedby"));
+    field.setAttribute("aria-invalid", String(Boolean(error)));
+    hint.textContent = error || "";
   };
-  // Un campo si controlla quando lo si lascia (solo se c'è scritto qualcosa: passarci sopra col Tab non è un errore).
-  // Dopo un errore si ricontrolla mentre si scrive, così l'avviso sparisce appena è a posto
-  Object.values(campi).forEach(([campo, valido, errore]) => {
-    campo.addEventListener("blur", () => {
-      if (campo.value.trim()) segna(campo, valido(campo.value) ? "" : errore);
+  // Check on blur only when something was typed; once invalid, re-check while typing
+  Object.values(fields).forEach(([field, isValid, error]) => {
+    field.addEventListener("blur", () => {
+      if (field.value.trim()) mark(field, isValid(field.value) ? "" : error);
     });
-    campo.addEventListener("input", () => {
-      if (campo.getAttribute("aria-invalid") === "true") segna(campo, valido(campo.value) ? "" : errore);
+    field.addEventListener("input", () => {
+      if (field.getAttribute("aria-invalid") === "true") mark(field, isValid(field.value) ? "" : error);
     });
   });
-  // "Scrivimi" in cima alla pagina porta dritto al primo campo
-  document.querySelectorAll(`.window-actions a[href="#${modulo.closest("section").id}"]`).forEach((a) => {
-    a.addEventListener("click", () => setTimeout(() => campi.name[0].focus({ preventScroll: true }), 400));
+  // The "write to me" link in the hero goes straight to the first field
+  document.querySelectorAll(`.window-actions a[href="#${form.closest("section").id}"]`).forEach((a) => {
+    a.addEventListener("click", () => setTimeout(() => fields.name[0].focus({ preventScroll: true }), 400));
   });
-  const mostra = (testo, tipo) => { stato.textContent = testo; stato.dataset.tipo = tipo || ""; };
+  const showStatus = (message, kind) => { status.textContent = message; status.dataset.kind = kind || ""; };
 
-  modulo.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    let primo = null;
-    Object.values(campi).forEach(([campo, valido, errore]) => {
-      const ok = valido(campo.value);
-      segna(campo, ok ? "" : errore);
-      if (!ok && !primo) primo = campo;
+    let firstInvalid = null;
+    Object.values(fields).forEach(([field, isValid, error]) => {
+      const ok = isValid(field.value);
+      mark(field, ok ? "" : error);
+      if (!ok && !firstInvalid) firstInvalid = field;
     });
-    if (primo) { primo.focus(); mostra(t.controlla, "errore"); return; }
-    if (modulo.elements.botcheck.checked) return; // un bot: non inviamo e non diciamo niente
-    if (!modulo.dataset.chiave) { mostra(t.spento, "errore"); return; }
+    if (firstInvalid) { firstInvalid.focus(); showStatus(text.fix, "error"); return; }
+    if (form.elements.botcheck.checked) return; // honeypot: silently drop bots
+    if (!form.dataset.accessKey) { showStatus(text.disabled, "error"); return; }
 
-    pulsante.disabled = true;
-    pulsante.textContent = t.invio;
-    mostra("");
+    submit.disabled = true;
+    submit.textContent = text.sending;
+    showStatus("");
     try {
-      const risposta = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          access_key: modulo.dataset.chiave,
-          subject: inglese ? "New message from the portfolio (EN)" : "Nuovo messaggio dal portfolio",
+          access_key: form.dataset.accessKey,
+          subject: english ? "New message from the portfolio (EN)" : "Nuovo messaggio dal portfolio",
           from_name: "Portfolio",
-          name: campi.name[0].value.trim(),
-          email: campi.email[0].value.trim(),
-          message: campi.message[0].value.trim(),
+          name: fields.name[0].value.trim(),
+          email: fields.email[0].value.trim(),
+          message: fields.message[0].value.trim(),
           botcheck: false,
         }),
       });
-      const dati = await risposta.json().catch(() => ({}));
-      if (!risposta.ok || !dati.success) throw new Error(dati.message || `HTTP ${risposta.status}`);
-      modulo.reset();
-      mostra(t.ok, "ok");
-    } catch (errore) {
-      console.error("Modulo di contatto:", errore);
-      mostra(t.errore, "errore");
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.success) throw new Error(data.message || `HTTP ${response.status}`);
+      form.reset();
+      showStatus(text.sent, "ok");
+    } catch (error) {
+      console.error("Contact form:", error);
+      showStatus(text.failed, "error");
     } finally {
-      pulsante.disabled = false;
-      pulsante.textContent = testoPulsante;
+      submit.disabled = false;
+      submit.textContent = submitLabel;
     }
   });
 })();

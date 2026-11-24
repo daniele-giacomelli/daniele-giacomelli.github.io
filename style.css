@@ -1,6 +1,4 @@
-/* Font ospitati nel repo (licenze in fonts/): JetBrains Mono per i dettagli "da codice",
-   Fraunces per i titoli da rivista (tratti pieni, leggibile anche in corsivo e nei titoli piccoli).
-   File variabili, sottoinsieme latino */
+/* Self-hosted variable fonts, Latin subset (licenses in fonts/) */
 @font-face {
   font-family: "JetBrains Mono";
   src: url("/fonts/JetBrainsMono.woff2") format("woff2");
@@ -24,13 +22,13 @@
 }
 
 :root {
-  --bg: #f2eee4;            /* carta */
-  --fg: #10182b;            /* inchiostro blu-nero */
-  --muted: #3e4555;         /* almeno 4,5:1 anche sul punto più blu del cielo */
+  --bg: #f2eee4;
+  --fg: #10182b;
+  --muted: #3e4555;         /* at least 4.5:1 even on the bluest part of the sky */
   --line: rgba(16, 24, 43, 0.18);
-  --accent: #17365d;        /* lo stesso blu del CV */
+  --accent: #17365d;        /* the CV's blue */
   --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
-  --hot: #d4f23a;           /* lime Y2K, solo per gli evidenziatori */
+  --hot: #d4f23a;           /* highlighters only */
   --chip: #e8e3d6;
   --card: #fbf9f3;
   --ok: #1e7a45;
@@ -39,42 +37,38 @@
   --bad-soft: #f7e3df;
   --holo: linear-gradient(115deg, #c8d4ff, #e6c8ff 28%, #ffd3e6 52%, #c6f2ff 76%, #dcffd6);
   --chrome: linear-gradient(180deg, #ffffff 0%, #d5dae3 42%, #8f98aa 50%, #dfe3ea 62%, #ffffff 100%);
-  /* Ombre piene, pulsanti principali e pulsante del CV: nel tema scuro diventano scuri (vedi sotto) */
-  --ombra: var(--accent);
-  /* Bordi e barre delle finestre: di giorno inchiostro e blu del CV, di notte più morbidi */
-  --bordo: var(--fg);
-  --barra: linear-gradient(90deg, var(--accent), #4f78b0 60%, #9fb7e0);
-  --evidenziatore: color-mix(in srgb, var(--hot) 70%, transparent);
-  --shadow: 6px 6px 0 var(--ombra);
-  --pulsante: var(--fg);
-  --su-pulsante: var(--bg);
-  --oggetto: var(--chrome);
-  --su-oggetto: #10182b;
-  --on-holo: #10182b;       /* testo sopra olografico e lime: sempre scuro */
-  --icona-sole: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4.5'/%3E%3Cpath d='M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1'/%3E%3C/svg%3E");
-  --icona-luna: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20.5 14.8A8.8 8.8 0 0 1 9.2 3.5a8.8 8.8 0 1 0 11.3 11.3z'/%3E%3C/svg%3E");
-  /* Cromo chiaro: il nome navy deve restare leggibile anche dove passa sopra la goccia */
+  --drop: var(--accent);
+  --border: var(--fg);
+  --bar: linear-gradient(90deg, var(--accent), #4f78b0 60%, #9fb7e0);
+  --highlighter: color-mix(in srgb, var(--hot) 70%, transparent);
+  --shadow: 6px 6px 0 var(--drop);
+  --button: var(--fg);
+  --on-button: var(--bg);
+  --object: var(--chrome);
+  --on-object: #10182b;
+  --on-holo: #10182b;
+  --sun-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4.5'/%3E%3Cpath d='M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1'/%3E%3C/svg%3E");
+  --moon-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20.5 14.8A8.8 8.8 0 0 1 9.2 3.5a8.8 8.8 0 1 0 11.3 11.3z'/%3E%3C/svg%3E");
   --blob-bg:
     radial-gradient(circle at 32% 28%, #ffffff 0 8%, transparent 22%),
     radial-gradient(circle at 70% 75%, #7d889e 0, transparent 40%),
     radial-gradient(circle at 40% 40%, #f6f7fa, #d3d8e1 40%, #a3acbd 70%, #75809a 95%);
   --blob-shadow: inset -18px -24px 40px rgba(16, 24, 43, 0.45), inset 14px 16px 30px rgba(255, 255, 255, 0.7);
-  /* Cielo in due strati: il fondo sfumato resta fermo, sopra scorrono le nuvole.
-     Le nuvole sono rumore SVG "cucibile" (stitchTiles): i riquadri da 1400px si attaccano senza taglio */
-  --cielo-fondo: linear-gradient(180deg, #9dbbe6 0%, #c9d9ee 38%, #ece9e2 78%, #f2eee4 100%);
-  --nuvole: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='800'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25' filterUnits='userSpaceOnUse'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0045 .011' numOctaves='5' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 2.2 0 0 0 -1.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E") 0 0 / 1400px 800px repeat-x;
+  /* Static gradient underneath, seamless SVG-noise clouds scrolling on top */
+  --sky-base: linear-gradient(180deg, #9dbbe6 0%, #c9d9ee 38%, #ece9e2 78%, #f2eee4 100%);
+  --clouds: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='800'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25' filterUnits='userSpaceOnUse'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0045 .011' numOctaves='5' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 2.2 0 0 0 -1.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E") 0 0 / 1400px 800px repeat-x;
   color-scheme: light;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --serif: "Fraunces", Georgia, "Times New Roman", serif;
   --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
   --wide: 1120px;
-  /* Scala tipografica: sei livelli, più il nome e i titoli di copertina */
-  --t-1: 0.75rem;   /* 12px: etichette, date, tag, note */
-  --t-2: 0.875rem;  /* 14px: menu, dettagli secondari */
-  --t-3: 1rem;      /* 16px: testo */
-  --t-4: 1.125rem;  /* 18px: introduzione */
-  --t-5: 1.5rem;    /* 24px: titoli piccoli */
-  --t-6: clamp(1.75rem, 3vw, 2.25rem); /* 28-36px: titoli di sezione e dei progetti */
+  /* Type scale */
+  --t-1: 0.75rem;   /* 12px */
+  --t-2: 0.875rem;  /* 14px */
+  --t-3: 1rem;      /* 16px */
+  --t-4: 1.125rem;  /* 18px */
+  --t-5: 1.5rem;    /* 24px */
+  --t-6: clamp(1.75rem, 3vw, 2.25rem); /* 28-36px */
 }
 
 * { box-sizing: border-box; }
@@ -84,7 +78,7 @@ html { scroll-behavior: smooth; }
   html { scroll-behavior: auto; }
 }
 
-/* Le sezioni non finiscono sotto l'header sticky quando si segue un'ancora */
+/* Keep anchored sections clear of the sticky header */
 section[id] { scroll-margin-top: 92px; }
 
 body {
@@ -94,8 +88,7 @@ body {
   font-family: var(--sans);
   line-height: 1.6;
 }
-/* Sfondo: un cielo fisso dietro a tutto. Il fondo sta su html, le nuvole (o le stelle) su body
-   e scorrono piano da destra a sinistra; con lo spostamento di un riquadro intero il giro è continuo */
+/* Fixed sky: gradient on html, clouds (or stars) on body, looping by one full tile */
 html::before,
 body::before {
   content: "";
@@ -105,24 +98,22 @@ body::before {
   height: 100%;
   pointer-events: none;
 }
-html::before { z-index: -2; width: 100%; background: var(--cielo-fondo); }
+html::before { z-index: -2; width: 100%; background: var(--sky-base); }
 body::before {
   z-index: -1;
   width: calc(100% + 1400px);
-  background: var(--nuvole);
+  background: var(--clouds);
   -webkit-mask-image: linear-gradient(180deg, #000 280px, transparent 780px);
   mask-image: linear-gradient(180deg, #000 280px, transparent 780px);
-  animation: vento 180s linear infinite;
+  animation: wind 180s linear infinite;
   will-change: transform;
 }
-@keyframes vento { to { transform: translateX(-1400px); } }
+@keyframes wind { to { transform: translateX(-1400px); } }
 
-
-/* La goccia e gli adesivi possono sporgere dal bordo: niente scroll orizzontale */
+/* The blob and stickers overflow the edge */
 html, body { overflow-x: clip; }
 
 ::selection { background: var(--hot); color: var(--on-holo); }
-/* Anche le parti che il browser disegna da sé seguono la palette */
 html { scrollbar-color: var(--accent) transparent; }
 input, textarea { caret-color: var(--accent); }
 
@@ -147,13 +138,12 @@ a {
   top: -48px;
   z-index: 60;
   background: var(--card);
-  border: 2px solid var(--bordo);
+  border: 2px solid var(--border);
   padding: 8px 12px;
 }
 .skip-link:focus { top: 12px; }
 
-/* ---------- Testata: una barra di vetro smerigliato sospesa sul cielo,
-   con lo stesso bordo netto e l'ombra piena della finestra e delle schede ---------- */
+/* ---------- Header ---------- */
 .site-header {
   position: sticky;
   top: 12px;
@@ -181,15 +171,15 @@ main,
   background: color-mix(in srgb, var(--card) 72%, transparent);
   -webkit-backdrop-filter: blur(14px) saturate(1.4);
   backdrop-filter: blur(14px) saturate(1.4);
-  border: 2px solid var(--bordo);
-  box-shadow: 5px 5px 0 var(--ombra);
+  border: 2px solid var(--border);
+  box-shadow: 5px 5px 0 var(--drop);
   font-family: var(--mono);
   font-size: var(--t-2);
 }
 
 .brand { display: inline-flex; align-items: baseline; gap: 6px; font-weight: 700; text-decoration: none; white-space: nowrap; }
 
-/* Sotto i 980px le voci del menu non stanno accanto al nome (col percorso della sezione): vanno su una seconda riga */
+/* Below 980px the menu wraps to a second row */
 @media (max-width: 980px) {
   .site-header nav { flex-wrap: wrap; row-gap: 8px; }
   .nav-tools { order: 2; margin-left: auto; }
@@ -201,7 +191,6 @@ main,
 .dim { color: var(--muted); font-weight: 400; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* Voci del menu come un indice: numero della sezione in apice, evidenziatore lime */
 .nav-links {
   display: flex;
   align-items: center;
@@ -212,37 +201,33 @@ main,
 }
 .nav-links a {
   display: inline-block;
-  padding: 4px 4px; /* almeno 24px di altezza: bersaglio comodo anche al tocco */
+  padding: 4px 4px; /* 24px tap target */
   text-decoration: none;
 }
 .nav-links sup { margin-right: 3px; font-size: 0.65em; color: var(--accent); }
-/* Gli appunti sono un'altra area: etichetta olografica (l'olografico è il colore delle etichette) */
 .nav-links a.tab {
   display: inline-block;
   padding: 3px 9px;
-  border: 1.5px solid var(--bordo);
+  border: 1.5px solid var(--border);
   background: var(--holo);
   color: var(--on-holo);
 }
 
 .nav-tools { display: flex; align-items: center; gap: 12px; }
 
-/* Lingua: pillola a due posizioni */
-.lang-switch { display: inline-flex; border: 1.5px solid var(--bordo); border-radius: 999px; overflow: hidden; }
+.lang-switch { display: inline-flex; border: 1.5px solid var(--border); border-radius: 999px; overflow: hidden; }
 .lang-switch a { padding: 4px 10px; text-decoration: none; font-size: var(--t-1); line-height: 1.3; }
 .lang-switch a[aria-current] { background: var(--fg); color: var(--bg); }
-/* Negli appunti la lingua si cambia sulla stessa pagina: pulsanti invece di link */
 .lang-switch button { padding: 4px 10px; border: 0; color: inherit; font: inherit; font-size: var(--t-1); line-height: 1.3; cursor: pointer; }
 .lang-switch button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
 
-/* Interruttore del tema: binario olografico, manopola cromata con sole o luna */
 .theme-toggle {
   position: relative;
   flex: none;
   width: 50px;
   height: 26px;
   padding: 0;
-  border: 1.5px solid var(--bordo);
+  border: 1.5px solid var(--border);
   border-radius: 999px;
   background: var(--holo);
   cursor: pointer;
@@ -263,24 +248,22 @@ main,
   line-height: 1;
   transition: transform 0.25s;
 }
-/* Sole e luna disegnati in SVG (non caratteri di testo), con lo stesso tratto */
 .theme-toggle .knob::after {
   content: "";
   width: 11px;
   height: 11px;
   background: #10182b;
-  -webkit-mask: var(--icona-sole) center / contain no-repeat;
-  mask: var(--icona-sole) center / contain no-repeat;
+  -webkit-mask: var(--sun-icon) center / contain no-repeat;
+  mask: var(--sun-icon) center / contain no-repeat;
 }
 .theme-toggle[aria-pressed="true"] { background: #17365d; }
 .theme-toggle[aria-pressed="true"] .knob { transform: translateX(24px); }
 .theme-toggle[aria-pressed="true"] .knob::after {
-  -webkit-mask-image: var(--icona-luna);
-  mask-image: var(--icona-luna);
+  -webkit-mask-image: var(--moon-icon);
+  mask-image: var(--moon-icon);
 }
 
-
-/* ---------- Copertina ---------- */
+/* ---------- Cover ---------- */
 .hero { position: relative; padding: 72px 0 40px; }
 .cover { padding-top: 28px; isolation: isolate; }
 
@@ -291,7 +274,7 @@ main,
   gap: 8px 24px;
   margin: 0 0 28px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--bordo);
+  border-bottom: 1px solid var(--border);
   font-family: var(--mono);
   font-size: var(--t-1);
   text-transform: uppercase;
@@ -311,14 +294,13 @@ main,
 }
 .name .first, .name .last { display: block; }
 .name .last {
-  white-space: nowrap; /* il cursore resta attaccato al nome */
+  white-space: nowrap;
   font-style: italic;
   font-weight: 500;
   padding-left: 0.55em;
   color: var(--accent);
 }
 
-/* Goccia di metallo liquido che cambia forma dietro al nome */
 .blob {
   position: absolute;
   z-index: -1;
@@ -329,15 +311,14 @@ main,
   background: var(--blob-bg);
   border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
   box-shadow: var(--blob-shadow);
-  animation: liquido 14s ease-in-out infinite alternate;
+  animation: liquid 14s ease-in-out infinite alternate;
 }
-@keyframes liquido {
+@keyframes liquid {
   33% { border-radius: 63% 37% 45% 55% / 55% 62% 38% 45%; transform: rotate(18deg) translateY(10px); }
   66% { border-radius: 38% 62% 30% 70% / 60% 35% 65% 40%; transform: rotate(-8deg) translateY(-14px); }
   100% { border-radius: 55% 45% 58% 42% / 35% 55% 45% 65%; transform: rotate(12deg); }
 }
 
-/* Stelline: decorazione ferma */
 .spark {
   position: absolute;
   z-index: 3;
@@ -348,7 +329,6 @@ main,
 .spark:nth-of-type(2) { font-size: 1rem; }
 .spark:nth-of-type(3) { font-size: 2.2rem; }
 
-/* Adesivi: uno olografico rotondo, uno a stella lime */
 .sticker {
   position: absolute;
   z-index: 4;
@@ -369,7 +349,7 @@ main,
   height: 132px;
   border-radius: 50%;
   background: var(--holo);
-  border: 2px solid var(--bordo);
+  border: 2px solid var(--border);
   box-shadow: 4px 4px 0 var(--fg);
   transform: rotate(-12deg);
   right: -12px;
@@ -385,7 +365,6 @@ main,
   right: 26%;
 }
 
-/* Didascalie e finestra "about" sotto il nome */
 .cover-grid {
   display: grid;
   grid-template-columns: 7fr 5fr;
@@ -399,37 +378,36 @@ main,
   gap: 12px 40px;
   margin: 0 0 32px;
   padding: 14px 0;
-  border-top: 1px solid var(--bordo);
-  border-bottom: 1px solid var(--bordo);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   font-family: var(--mono);
   font-size: var(--t-2);
 }
 .cover .meta { flex-direction: column; gap: 0; margin: 0; padding: 0; border-bottom: 0; }
-.cover .meta div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--bordo); }
+.cover .meta div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
 .meta dt { color: var(--muted); font-size: var(--t-1); }
 .cover .meta dt { text-transform: uppercase; letter-spacing: 0.1em; padding-top: 2px; }
 .meta dd { margin: 0; }
 
 .lead { font-size: var(--t-4); color: var(--muted); margin: 0; max-width: 62ch; }
 
-/* Finestra di sistema anni 2000 */
 .window {
   position: relative;
   z-index: 4;
   background: var(--card);
-  border: 2px solid var(--bordo);
-  box-shadow: 8px 8px 0 var(--ombra);
+  border: 2px solid var(--border);
+  box-shadow: 8px 8px 0 var(--drop);
 }
 .window-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 8px 5px 12px;
-  background: var(--barra);
+  background: var(--bar);
   color: #fff;
   font-family: var(--mono);
   font-size: var(--t-1);
-  border-bottom: 2px solid var(--bordo);
+  border-bottom: 2px solid var(--border);
 }
 .window-bar i {
   display: inline-block;
@@ -437,20 +415,19 @@ main,
   height: 14px;
   margin-left: 4px;
   background: var(--chrome);
-  border: 1px solid var(--bordo);
+  border: 1px solid var(--border);
 }
 .window .lead { padding: 20px 22px 4px; color: var(--fg); font-size: var(--t-4); }
 
-/* L'azione principale del primo schermo: scrivermi */
 .window-actions { margin: 0; padding: 14px 22px 22px; }
 a.btn { display: inline-block; text-decoration: none; }
 
-/* ---------- Sezioni come pagine di rivista ---------- */
-main { counter-reset: sezione; }
+/* ---------- Sections ---------- */
+main { counter-reset: section; }
 section { padding: 72px 0; }
-main > section[id] { border-top: 3px solid var(--bordo); margin-top: 24px; }
+main > section[id] { border-top: 3px solid var(--border); margin-top: 24px; }
 h2 {
-  counter-increment: sezione;
+  counter-increment: section;
   display: flex;
   align-items: baseline;
   gap: 18px;
@@ -464,38 +441,36 @@ h2 {
   margin: 0 0 28px;
 }
 h2::before {
-  content: counter(sezione, decimal-leading-zero);
+  content: counter(section, decimal-leading-zero);
   font-style: normal;
   font-weight: 800;
   font-size: 1.9em;
   line-height: 0.8;
   color: transparent;
   -webkit-text-stroke: 1.5px var(--fg);
-  /* Il numero della sezione in cui si è si riempie come un liquido: sale dal basso con una cresta
-     di onde che scorre, e si svuota quando si passa a un'altra sezione (classe messa da script.js) */
-  --livello: 0;
-  --pieno: calc(var(--livello) * 0.89em - 0.09em);
+  /* Current section number fills like a liquid (class set by script.js) */
+  --level: 0;
+  --fill: calc(var(--level) * 0.89em - 0.09em);
   background-image:
     radial-gradient(ellipse 50% 100% at 50% 100%, var(--accent) 96%, transparent 100%),
     linear-gradient(var(--accent), var(--accent));
   background-repeat: repeat-x, no-repeat;
-  background-size: 0.3em 0.09em, 100% max(0em, var(--pieno));
+  background-size: 0.3em 0.09em, 100% max(0em, var(--fill));
   background-position-x: 0, 0;
-  background-position-y: bottom var(--pieno), bottom;
+  background-position-y: bottom var(--fill), bottom;
   -webkit-background-clip: text;
   background-clip: text;
-  transition: --livello 1.2s cubic-bezier(0.5, 0, 0.2, 1);
+  transition: --level 1.2s cubic-bezier(0.5, 0, 0.2, 1);
 }
-section.attuale > h2::before {
-  --livello: 1;
-  animation: onda 0.4s linear 3;
+section.current > h2::before {
+  --level: 1;
+  animation: wave 0.4s linear 3;
 }
-@keyframes onda { to { background-position-x: 0.3em, 0; } }
-@property --livello { syntax: "<number>"; inherits: false; initial-value: 0; }
+@keyframes wave { to { background-position-x: 0.3em, 0; } }
+@property --level { syntax: "<number>"; inherits: false; initial-value: 0; }
 
-/* Il percorso della sezione dopo il nome in alto, con il cursore mentre si scrive */
-.percorso { color: var(--accent); }
-.percorso.scrive::after {
+.path { color: var(--accent); }
+.path.typing::after {
   content: "";
   display: inline-block;
   width: 0.5em;
@@ -505,13 +480,12 @@ section.attuale > h2::before {
   background: currentColor;
 }
 
-/* Progetti come articoli */
 .card {
   position: relative;
   padding: 28px 30px 24px;
   margin: 0 0 36px;
   background: var(--card);
-  border: 2px solid var(--bordo);
+  border: 2px solid var(--border);
   box-shadow: var(--shadow);
 }
 .kicker {
@@ -519,7 +493,7 @@ section.attuale > h2::before {
   margin: 0 0 14px;
   padding: 2px 8px;
   background: var(--holo);
-  border: 1px solid var(--bordo);
+  border: 1px solid var(--border);
   font-family: var(--mono);
   font-size: var(--t-1);
   text-transform: uppercase;
@@ -535,13 +509,9 @@ section.attuale > h2::before {
   letter-spacing: -0.015em;
 }
 .card p { margin: 6px 0; }
-/* Una colonna sola: i paragrafi sono brevi e spezzarli in due fa saltare la lettura a metà frase */
 .card .body { max-width: 68ch; }
 
-/* Ogni progetto: titolo ed etichetta a tutta larghezza, sotto la descrizione a sinistra
-   e l'anteprima a destra, sempre della stessa misura. Testo e anteprima partono dalla stessa riga:
-   centrati, con una descrizione corta il testo si staccherebbe dall'etichetta */
-.card.progetto {
+.card.project {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px;
   grid-template-areas: "testa testa" "testo anteprima";
@@ -549,21 +519,20 @@ section.attuale > h2::before {
   align-items: start;
   margin-bottom: 28px;
 }
-.progetto .card-head { grid-area: testa; margin-bottom: 8px; }
-.progetto .card-text { grid-area: testo; }
-.progetto .window.shot { grid-area: anteprima; margin: 6px 6px 6px 0; }
-.progetto .tags { margin-top: 4px; }
+.project .card-head { grid-area: testa; margin-bottom: 8px; }
+.project .card-text { grid-area: testo; }
+.project .window.shot { grid-area: anteprima; margin: 6px 6px 6px 0; }
+.project .tags { margin-top: 4px; }
 .window.shot {
   position: relative;
   display: block;
   margin-top: 4px;
   text-decoration: none;
 }
-.window.shot img, .copertina { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 607; }
+.window.shot img, .thesis-cover { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 607; }
 
-/* Copertina della tesi disegnata: blu del CV, titolo in Fraunces. Le misure seguono la larghezza della finestra */
 .window.shot { container-type: inline-size; }
-.copertina {
+.thesis-cover {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -574,14 +543,14 @@ section.attuale > h2::before {
     #17365d;
   color: #fff;
 }
-.copertina .cop-sopra, .copertina .cop-sotto {
+.thesis-cover .cover-top, .thesis-cover .cover-bottom {
   font-family: var(--mono);
   font-size: max(9px, 3.3cqi);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.85;
 }
-.copertina .cop-titolo {
+.thesis-cover .cover-title {
   font-family: var(--serif);
   font-optical-sizing: auto;
   font-size: 10cqi;
@@ -591,9 +560,8 @@ section.attuale > h2::before {
   letter-spacing: -0.01em;
 }
 
-/* Cosa succede cliccando l'anteprima: compare al passaggio del mouse o col Tab.
-   Sugli schermi touch, dove il passaggio non c'è, resta sempre visibile */
-.azione {
+/* Preview hint: on hover or focus, always visible on touch screens */
+.action {
   position: absolute;
   right: -12px;
   bottom: -14px;
@@ -601,7 +569,7 @@ section.attuale > h2::before {
   padding: 3px 9px;
   background: var(--holo);
   color: var(--on-holo);
-  border: 1.5px solid var(--bordo);
+  border: 1.5px solid var(--border);
   box-shadow: 3px 3px 0 var(--fg);
   font-family: var(--mono);
   font-size: var(--t-1);
@@ -611,13 +579,11 @@ section.attuale > h2::before {
   transition: opacity 0.15s, transform 0.15s;
   pointer-events: none;
 }
-.window.shot:hover .azione,
-.window.shot:focus-visible .azione { opacity: 1; transform: none; }
+.window.shot:hover .action,
+.window.shot:focus-visible .action { opacity: 1; transform: none; }
 @media (hover: none) {
-  .azione { opacity: 1; transform: none; }
+  .action { opacity: 1; transform: none; }
 }
-
-
 
 .card .body::first-letter {
   float: left;
@@ -629,7 +595,6 @@ section.attuale > h2::before {
   color: var(--accent);
 }
 
-/* Tecnologie come adesivi */
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -642,11 +607,10 @@ section.attuale > h2::before {
   font-family: var(--mono);
   font-size: var(--t-1);
   background: var(--bg);
-  border: 1.5px solid var(--bordo);
+  border: 1.5px solid var(--border);
   padding: 2px 8px;
 }
 
-/* Esperienza come indice di rivista */
 .timeline { list-style: none; padding: 0; margin: 0; }
 .timeline li {
   display: grid;
@@ -666,20 +630,19 @@ section.attuale > h2::before {
 .timeline strong { font-family: var(--serif); font-optical-sizing: auto; font-size: var(--t-5); line-height: 1.2; }
 .timeline p { margin: 4px 0 0; color: var(--muted); }
 
-/* Competenze come annunci */
 .skills {
   list-style: none;
   padding: 0;
   margin: 8px 0 16px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  border-top: 2px solid var(--bordo);
-  border-left: 2px solid var(--bordo);
+  border-top: 2px solid var(--border);
+  border-left: 2px solid var(--border);
 }
 .skills li {
   padding: 16px 18px;
-  border-right: 2px solid var(--bordo);
-  border-bottom: 2px solid var(--bordo);
+  border-right: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
   background: var(--card);
 }
 .skills strong {
@@ -694,7 +657,6 @@ section.attuale > h2::before {
 }
 .note { font-family: var(--mono); font-size: var(--t-1); color: var(--muted); }
 
-/* Contatti: citazione in evidenza e link grandi */
 .availability {
   margin: 0 0 28px;
   padding-left: 22px;
@@ -710,21 +672,20 @@ section.attuale > h2::before {
 .links { list-style: none; padding: 0; margin: 16px 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; }
 .links a { font-family: var(--serif); font-style: italic; font-size: var(--t-5); }
 .links .dim { font-family: var(--mono); font-size: var(--t-1); }
-/* Il CV è un pulsante secondario: stesso rettangolo dei pulsanti, in cromo (il cromo è il colore degli oggetti) */
 .links a[download] {
   display: inline-block;
   padding: 9px 18px;
-  background: var(--oggetto);
-  border: 2px solid var(--bordo);
+  background: var(--object);
+  border: 2px solid var(--border);
   font-family: var(--mono);
   font-style: normal;
   font-size: var(--t-2);
   font-weight: 700;
   text-decoration: none;
-  color: var(--su-oggetto);
+  color: var(--on-object);
 }
 
-/* ---------- Contatti: a sinistra disponibilità e link, a destra il modulo come finestra ---------- */
+/* ---------- Contact ---------- */
 .contact-grid {
   display: grid;
   grid-template-columns: 5fr 6fr;
@@ -747,13 +708,13 @@ section.attuale > h2::before {
   font: inherit;
   color: var(--fg);
   background: var(--bg);
-  border: 2px solid var(--bordo);
+  border: 2px solid var(--border);
   border-radius: 0;
   transition: box-shadow 0.15s;
 }
 .field textarea { resize: vertical; min-height: 120px; }
 .field input:focus-visible,
-.field textarea:focus-visible { outline: none; box-shadow: 4px 4px 0 var(--ombra); }
+.field textarea:focus-visible { outline: none; box-shadow: 4px 4px 0 var(--drop); }
 .field [aria-invalid="true"] { border-color: var(--bad); box-shadow: 4px 4px 0 var(--bad); }
 .field-error { margin: 0; min-height: 0; font-size: var(--t-2); color: var(--bad); }
 .field-error:empty { display: none; }
@@ -763,8 +724,8 @@ section.attuale > h2::before {
 .contact-actions .btn { min-height: 44px; }
 .btn:disabled { cursor: progress; }
 .form-status { margin: 0; font-weight: 600; }
-.form-status[data-tipo="ok"] { color: var(--ok); }
-.form-status[data-tipo="errore"] { color: var(--bad); }
+.form-status[data-kind="ok"] { color: var(--ok); }
+.form-status[data-kind="error"] { color: var(--bad); }
 
 .site-footer {
   font-family: var(--mono);
@@ -773,11 +734,10 @@ section.attuale > h2::before {
   padding-bottom: 40px;
   margin-top: 24px;
 }
-/* La doppia riga resta allineata al testo, non al bordo con il padding */
 .site-footer::before { content: ""; display: block; border-top: 3px double var(--fg); margin-bottom: 20px; }
 .site-footer p { margin: 0 0 4px; }
 
-/* ---------- Cursore, senso di ragno, filo, messaggio segreto ---------- */
+/* ---------- Caret, spider, thread, secret toast ---------- */
 .caret {
   position: relative;
   display: inline-block;
@@ -787,7 +747,6 @@ section.attuale > h2::before {
   vertical-align: -0.02em;
   cursor: pointer;
 }
-/* Il blocco lampeggia; il "senso di ragno" sopra no */
 .caret::before {
   content: "";
   position: absolute;
@@ -797,15 +756,13 @@ section.attuale > h2::before {
 }
 @keyframes blink { 50% { opacity: 0; } }
 
-/* Cliccato, il cursore diventa una chiave */
-.caret.chiave::before {
+.caret.key::before {
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 20'%3E%3Cpath fill-rule='evenodd' d='M5 .5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 1 1 0-7zm0 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 1 0 0-3z'/%3E%3Cpath d='M4 7h2v12.5H4zM6 14h3v1.6H6zM6 17h2.2v1.6H6z'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 20'%3E%3Cpath fill-rule='evenodd' d='M5 .5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 1 1 0-7zm0 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 1 0 0-3z'/%3E%3Cpath d='M4 7h2v12.5H4zM6 14h3v1.6H6zM6 17h2.2v1.6H6z'/%3E%3C/svg%3E") center / contain no-repeat;
   animation: none;
 }
 
-/* "Senso di ragno": tre trattini che vibrano sopra il cursore quando si passa sul nome */
-.senso {
+.sense {
   position: absolute;
   left: 0;
   bottom: 100%;
@@ -819,26 +776,23 @@ section.attuale > h2::before {
   opacity: 0;
   transition: opacity 0.15s;
 }
-.hero h1:hover .senso {
+.hero h1:hover .sense {
   opacity: 1;
-  animation: vibra 0.12s linear 4 alternate;
+  animation: shake 0.12s linear 4 alternate;
 }
-@keyframes vibra { to { transform: translateX(1.5px); } }
+@keyframes shake { to { transform: translateX(1.5px); } }
 
-/* Il filo: scende dall'alto a lato della pagina man mano che si scorre */
-.filo {
+.thread {
   position: fixed;
   z-index: 45;
   top: 0;
   left: calc(50% + var(--wide) / 2 + 8px);
   width: 1px;
-  height: calc(48px + var(--avanzamento, 0) * (100vh - 96px));
+  height: calc(48px + var(--progress, 0) * (100vh - 96px));
   background: color-mix(in srgb, var(--fg) 45%, transparent);
   pointer-events: none;
 }
-/* Il ragnetto in fondo al filo. Avvicinandosi col mouse gli spunta il senso di ragno (???);
-   cliccato tira fuori le zampe, diventa rosso e dice la sua frase, poi torna com'era */
-.ragno {
+.spider {
   position: absolute;
   left: -13.5px;
   bottom: -18px;
@@ -850,14 +804,14 @@ section.attuale > h2::before {
   cursor: pointer;
   pointer-events: auto;
 }
-.ragno svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.ragno .corpo {
+.spider svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.spider .spider-body {
   fill: var(--accent);
   stroke: var(--hot);
   stroke-width: 2;
   transition: fill 0.2s, stroke 0.2s;
 }
-.ragno .zampe {
+.spider .legs {
   fill: none;
   stroke: var(--fg);
   stroke-width: 1.3;
@@ -868,7 +822,7 @@ section.attuale > h2::before {
   opacity: 0;
   transition: transform 0.25s cubic-bezier(0.3, 1.6, 0.5, 1), opacity 0.15s;
 }
-.ragno-senso {
+.spider-sense {
   position: absolute;
   left: 50%;
   bottom: 100%;
@@ -882,20 +836,19 @@ section.attuale > h2::before {
   transform: translateX(-50%);
   transition: opacity 0.15s;
 }
-.ragno.vicino .ragno-senso,
-.ragno:focus-visible .ragno-senso {
+.spider.near .spider-sense,
+.spider:focus-visible .spider-sense {
   opacity: 1;
-  animation: vibra-senso 0.12s linear 4 alternate;
+  animation: shake-sense 0.12s linear 4 alternate;
 }
-@keyframes vibra-senso { to { transform: translateX(calc(-50% + 1.5px)); } }
-.ragno.attivo .corpo { fill: #d3202f; stroke: var(--accent); }
-.ragno.attivo .zampe { transform: none; opacity: 1; }
-.ragno.attivo .ragno-senso { opacity: 0; }
+@keyframes shake-sense { to { transform: translateX(calc(-50% + 1.5px)); } }
+.spider.active .spider-body { fill: #d3202f; stroke: var(--accent); }
+.spider.active .legs { transform: none; opacity: 1; }
+.spider.active .spider-sense { opacity: 0; }
 @media (max-width: 1200px) {
-  .filo { display: none; }
+  .thread { display: none; }
 }
 
-/* Messaggio che appare quando il cursore diventa una chiave */
 .secret {
   position: fixed;
   left: 50%;
@@ -904,9 +857,9 @@ section.attuale > h2::before {
   max-width: calc(100% - 32px);
   margin: 0;
   padding: 12px 18px;
-  background: var(--pulsante);
-  color: var(--su-pulsante);
-  border: 2px solid var(--pulsante);
+  background: var(--button);
+  color: var(--on-button);
+  border: 2px solid var(--button);
   box-shadow: 4px 4px 0 var(--hot);
   font-family: var(--mono);
   font-size: var(--t-2);
@@ -915,9 +868,9 @@ section.attuale > h2::before {
   transform: translate(-50%, 12px);
   transition: opacity 0.3s, transform 0.3s;
 }
-.secret.visibile { opacity: 1; transform: translate(-50%, 0); }
+.secret.visible { opacity: 1; transform: translate(-50%, 0); }
 
-/* ---------- Appunti: elenco degli esami e dei moduli ---------- */
+/* ---------- Notes: exam list ---------- */
 .hero .page-title {
   font-family: var(--serif);
   font-optical-sizing: auto;
@@ -943,9 +896,9 @@ section.attuale > h2::before {
   font-family: var(--mono);
   font-size: var(--t-2);
   font-weight: 700;
-  background: var(--pulsante);
-  color: var(--su-pulsante);
-  border: 2px solid var(--pulsante);
+  background: var(--button);
+  color: var(--on-button);
+  border: 2px solid var(--button);
   padding: 9px 18px;
   cursor: pointer;
 }
@@ -963,7 +916,7 @@ section.attuale > h2::before {
   width: 100%;
   text-align: left;
   background: var(--card);
-  border: 2px solid var(--bordo);
+  border: 2px solid var(--border);
   padding: 11px 14px;
   margin: 10px 0;
   font: inherit;
@@ -972,8 +925,8 @@ section.attuale > h2::before {
 }
 .ans .l { flex: none; font-family: var(--mono); font-size: var(--t-1); color: var(--muted); }
 .ans.sel { background: var(--holo); }
-.ans.ok { border-color: var(--ok); background: var(--ok-soft); --ombra-blocco: var(--ok); --h: 4px; }
-.ans.bad { border-color: var(--bad); background: var(--bad-soft); --ombra-blocco: var(--bad); --h: 4px; }
+.ans.ok { border-color: var(--ok); background: var(--ok-soft); --block-drop: var(--ok); --h: 4px; }
+.ans.bad { border-color: var(--bad); background: var(--bad-soft); --block-drop: var(--bad); --h: 4px; }
 .ans:disabled { cursor: default; }
 .quiz-fb { min-height: 1.6em; margin: 10px 0 0; font-weight: 600; }
 .quiz-fb.ok, .quiz-rev .ok { color: var(--ok); }
@@ -984,27 +937,7 @@ section.attuale > h2::before {
 .quiz-rev { padding: 12px 0; border-bottom: 1px dashed var(--fg); }
 .quiz-rev p { margin: 0 0 4px; }
 
-
-
-/* Simula un test: chiuso finché non serve */
-.quiz-test { margin: 36px 0 0; border-top: 1.5px solid var(--bordo); border-bottom: 1.5px solid var(--bordo); }
-.quiz-test summary { padding: 14px 0; cursor: pointer; font-family: var(--serif); font-size: var(--t-4); font-weight: 600; list-style: none; }
-.quiz-test summary::-webkit-details-marker { display: none; }
-.quiz-test summary::after { content: "+"; float: right; font-family: var(--mono); color: var(--accent); }
-.quiz-test[open] summary::after { content: "−"; }
-.quiz-test-corpo { padding: 0 0 20px; display: grid; gap: 12px; justify-items: start; }
-.quiz-test-corpo .quiz-actions { margin: 4px 0 0; }
-.quiz-test-nota { margin: 0; font-size: var(--t-2); color: var(--muted); }
-/* Scelte del test e della modalità: una sola attiva per gruppo */
-.seg { display: flex; flex-wrap: wrap; gap: 6px; }
-.seg button { padding: 6px 12px; background: var(--card); border: 1.5px solid var(--bordo); font: inherit; font-size: var(--t-2); color: inherit; cursor: pointer; }
-.seg button span { color: var(--muted); margin-left: 4px; }
-.seg button[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--bg); }
-.seg button[aria-pressed="true"] span { color: inherit; opacity: 0.75; }
-.seg button:not([aria-pressed="true"]):hover { background: color-mix(in srgb, var(--accent) 10%, var(--card)); }
-.quiz-azzera { margin: 28px 0 0; font-size: var(--t-2); color: var(--muted); }
-
-/* ---------- Pagina 404 ---------- */
+/* ---------- 404 ---------- */
 .not-found { padding: 80px 0 40px; }
 .not-found h1 {
   font-family: var(--serif);
@@ -1020,24 +953,24 @@ section.attuale > h2::before {
 .not-found .links { margin-top: 24px; }
 .not-found .links a { font-family: var(--mono); font-style: normal; font-size: 1rem; }
 
-/* ---------- Movimento ridotto ---------- */
+/* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .caret::before,
-  .hero h1:hover .senso,
-  .ragno.vicino .ragno-senso,
-  .ragno:focus-visible .ragno-senso,
-  section.attuale > h2::before,
+  .hero h1:hover .sense,
+  .spider.near .spider-sense,
+  .spider:focus-visible .spider-sense,
+  section.current > h2::before,
   .blob,
   .spark,
   body::before { animation: none; }
-  .theme-toggle .knob, .brand-star, .azione, .ragno .zampe, h2::before { transition: none; }
+  .theme-toggle .knob, .brand-star, .action, .spider .legs, h2::before { transition: none; }
 }
 
-/* ---------- Schermi stretti ---------- */
+/* ---------- Narrow screens ---------- */
 @media (max-width: 860px) {
   .cover-grid { grid-template-columns: 1fr; gap: 28px; }
   .contact-grid { grid-template-columns: 1fr; }
-  .card.progetto { grid-template-columns: minmax(0, 1fr) 260px; column-gap: 24px; }
+  .card.project { grid-template-columns: minmax(0, 1fr) 260px; column-gap: 24px; }
   .blob { width: 56vw; right: -18vw; top: 70px; }
   .sticker-holo { width: 104px; height: 104px; font-size: 0.6rem; }
   .sticker-star { width: 92px; height: 92px; font-size: 0.62rem; }
@@ -1047,24 +980,21 @@ section.attuale > h2::before {
   main,
   .site-footer { padding-left: 16px; padding-right: 16px; }
   .site-header { top: 8px; margin: 8px 0; padding: 0 10px; }
-  /* Su telefono il percorso farebbe andare a capo i pulsanti e l'intestazione cambierebbe altezza scorrendo */
-  .percorso { display: none; }
+  /* On phones the typed path would wrap the header buttons */
+  .path { display: none; }
   .hero { padding-top: 48px; }
   section { padding: 48px 0; }
-  /* Il titolo ufficiale della tesi è lungo: su telefono scende a 18px per restare compatto */
   .card h3, .availability { font-size: var(--t-4); }
   .cover { padding-top: 20px; }
   .issue { font-size: var(--t-1); }
   .sticker-star { width: 74px; height: 74px; font-size: 0.55rem; top: 34px; right: -4px; }
   .sticker-holo { right: -4px; bottom: -48px; }
   .name .last { padding-left: 0.25em; }
-  .window { box-shadow: 5px 5px 0 var(--ombra); }
-  .card { padding: 22px 18px 18px; box-shadow: 4px 4px 0 var(--ombra); }
-  /* Su telefono: titolo, anteprima, poi il testo */
-  .card.progetto { grid-template-columns: 1fr; grid-template-areas: "testa" "anteprima" "testo"; row-gap: 18px; }
+  .window { box-shadow: 5px 5px 0 var(--drop); }
+  .card { padding: 22px 18px 18px; box-shadow: 4px 4px 0 var(--drop); }
+  .card.project { grid-template-columns: 1fr; grid-template-areas: "testa" "anteprima" "testo"; row-gap: 18px; }
   .timeline li { grid-template-columns: 1fr; gap: 2px; }
-  /* Riga 1: nome e strumenti; riga 2: le voci del menu */
-  .site-header nav { flex-wrap: wrap; row-gap: 8px; padding: 8px 10px; box-shadow: 4px 4px 0 var(--ombra); }
+  .site-header nav { flex-wrap: wrap; row-gap: 8px; padding: 8px 10px; box-shadow: 4px 4px 0 var(--drop); }
   .nav-tools { order: 2; margin-left: auto; }
   .nav-links { order: 3; width: 100%; margin: 0; flex-wrap: wrap; gap: 6px 10px; font-size: var(--t-1); }
   section[id] { scroll-margin-top: 124px; }
@@ -1072,46 +1002,43 @@ section.attuale > h2::before {
   .links a { font-size: var(--t-5); }
 }
 
-/* Testo sopra superfici olografiche o lime: scuro anche nel tema scuro.
-   Sta in fondo perché deve vincere sui colori delle regole sopra */
+/* Text on holo or lime stays dark in both themes; last so it wins */
 .kicker,
 .ans.sel, .ans.sel .l, .sticker { color: var(--on-holo); }
 
-/* ---------- Tema scuro: rivista stampata su carta blu notte ----------
-   Vale quando lo chiede il sistema (salvo scelta "chiaro" con l'interruttore)
-   oppure quando lo si sceglie a mano. I valori sono gli stessi nei due blocchi. */
+/* ---------- Dark theme ----------
+   Applies with the system preference (unless light was chosen) or when chosen by hand.
+   Both blocks hold the same values. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0c1120;
-    /* Testo un filo meno bianco: resta oltre 13:1 sul fondo ma abbaglia meno */
+    /* ~13:1, slightly softer than white */
     --fg: #d3d9e6;
     --muted: #a1a9bb;
     --line: rgba(236, 239, 246, 0.2);
-    /* Il navy su fondo scuro non si leggerebbe: stessa tinta, più chiara */
     --accent: #90b4e6;
     --chip: #18203a;
     --card: #131a30;
-    --ombra: #2c4c80;
-    --bordo: #5a6a90;
-    --barra: linear-gradient(90deg, #1d3a66, #2b4f86 60%, #3b5f96);
-    /* Di notte il lime sotto il testo chiaro non si leggerebbe: evidenziatore blu */
-    --evidenziatore: #2c4c80;
-    --pulsante: #24467a;
-    --su-pulsante: #d3d9e6;
-    --oggetto: linear-gradient(180deg, #33415f 0%, #1c2540 46%, #141b2f 52%, #26304d 100%);
-    --su-oggetto: #d3d9e6;
+    --drop: #2c4c80;
+    --border: #5a6a90;
+    --bar: linear-gradient(90deg, #1d3a66, #2b4f86 60%, #3b5f96);
+    /* Blue highlighter: lime would make light text unreadable */
+    --highlighter: #2c4c80;
+    --button: #24467a;
+    --on-button: #d3d9e6;
+    --object: linear-gradient(180deg, #33415f 0%, #1c2540 46%, #141b2f 52%, #26304d 100%);
+    --on-object: #d3d9e6;
     --ok: #6fcf92;
     --ok-soft: #16301f;
     --bad: #f08a80;
     --bad-soft: #3a1c19;
-    /* Goccia color grafite, così il nome azzurro resta leggibile sopra */
     --blob-bg:
       radial-gradient(circle at 32% 28%, #9aa6bf 0 6%, transparent 20%),
       radial-gradient(circle at 40% 40%, #3a4560, #1d2640 45%, #0f1528 80%);
     --blob-shadow: inset -18px -24px 40px rgba(0, 0, 0, 0.5), inset 10px 12px 24px rgba(160, 180, 220, 0.35);
-    /* Di notte il cielo diventa stellato; le misure dei riquadri dividono 1400px, così lo scorrimento non scatta */
-    --cielo-fondo: linear-gradient(180deg, #03060f 0%, #0a1226 45%, #0c1120 100%);
-    --nuvole:
+    /* Starry sky; tile sizes divide 1400px so the loop doesn't jump */
+    --sky-base: linear-gradient(180deg, #03060f 0%, #0a1226 45%, #0c1120 100%);
+    --clouds:
       radial-gradient(1px 1px at 20px 30px, #fff, transparent) 0 0 / 175px 170px,
       radial-gradient(1.5px 1.5px at 120px 90px, #dfe8ff, transparent) 0 0 / 280px 230px,
       radial-gradient(1px 1px at 70px 150px, #fff8, transparent) 0 0 / 140px 200px,
@@ -1121,22 +1048,22 @@ section.attuale > h2::before {
 }
 :root[data-theme="dark"] {
   --bg: #0c1120;
-  /* Testo un filo meno bianco: resta oltre 13:1 sul fondo ma abbaglia meno */
+  /* ~13:1, slightly softer than white */
   --fg: #d3d9e6;
   --muted: #a1a9bb;
   --line: rgba(236, 239, 246, 0.2);
   --accent: #90b4e6;
   --chip: #18203a;
   --card: #131a30;
-  --ombra: #2c4c80;
-  --bordo: #5a6a90;
-  --barra: linear-gradient(90deg, #1d3a66, #2b4f86 60%, #3b5f96);
-  /* Di notte il lime sotto il testo chiaro non si leggerebbe: evidenziatore blu */
-  --evidenziatore: #2c4c80;
-  --pulsante: #24467a;
-  --su-pulsante: #d3d9e6;
-  --oggetto: linear-gradient(180deg, #33415f 0%, #1c2540 46%, #141b2f 52%, #26304d 100%);
-  --su-oggetto: #d3d9e6;
+  --drop: #2c4c80;
+  --border: #5a6a90;
+  --bar: linear-gradient(90deg, #1d3a66, #2b4f86 60%, #3b5f96);
+  /* Blue highlighter: lime would make light text unreadable */
+  --highlighter: #2c4c80;
+  --button: #24467a;
+  --on-button: #d3d9e6;
+  --object: linear-gradient(180deg, #33415f 0%, #1c2540 46%, #141b2f 52%, #26304d 100%);
+  --on-object: #d3d9e6;
   --ok: #6fcf92;
   --ok-soft: #16301f;
   --bad: #f08a80;
@@ -1145,9 +1072,9 @@ section.attuale > h2::before {
     radial-gradient(circle at 32% 28%, #9aa6bf 0 6%, transparent 20%),
     radial-gradient(circle at 40% 40%, #3a4560, #1d2640 45%, #0f1528 80%);
   --blob-shadow: inset -18px -24px 40px rgba(0, 0, 0, 0.5), inset 10px 12px 24px rgba(160, 180, 220, 0.35);
-  /* Di notte il cielo diventa stellato; le misure dei riquadri dividono 1400px, così lo scorrimento non scatta */
-  --cielo-fondo: linear-gradient(180deg, #03060f 0%, #0a1226 45%, #0c1120 100%);
-  --nuvole:
+  /* Starry sky; tile sizes divide 1400px so the loop doesn't jump */
+  --sky-base: linear-gradient(180deg, #03060f 0%, #0a1226 45%, #0c1120 100%);
+  --clouds:
     radial-gradient(1px 1px at 20px 30px, #fff, transparent) 0 0 / 175px 170px,
     radial-gradient(1.5px 1.5px at 120px 90px, #dfe8ff, transparent) 0 0 / 280px 230px,
     radial-gradient(1px 1px at 70px 150px, #fff8, transparent) 0 0 / 140px 200px,
@@ -1155,17 +1082,14 @@ section.attuale > h2::before {
   color-scheme: dark;
 }
 
-
-/* ---------- Interazioni: due soli gesti per tutto il sito e gli appunti ----------
-   1. Blocchi (pulsanti, CV, anteprime, scelte e risposte del quiz, scheda degli appunti): poggiano sulla
-      loro ombra; al passaggio si sollevano di 2px, al clic affondano di al massimo 3px (i blocchi alti
-      non arrivano a terra) e tornano su con un rimbalzo leggero. Su touch il passaggio non c'è: resta la pressione.
-   2. Testo (link, voci del menu, lingua, "Esci"): l'evidenziatore si stende da sinistra a destra. */
+/* ---------- Interactions ----------
+   Blocks rest on their shadow: lift 2px on hover, sink up to 3px on press, spring back.
+   Text links: the highlighter sweeps in from the left. */
 .btn, .links a[download], .window.shot, .ans, .nav-links a.tab {
-  --molla: cubic-bezier(0.34, 1.3, 0.64, 1);
-  --affondo: clamp(1px, var(--h), 3px);
-  box-shadow: var(--h) var(--h) 0 var(--ombra-blocco, var(--ombra));
-  transition: transform 0.28s var(--molla), box-shadow 0.28s var(--molla), background-color 0.15s;
+  --spring: cubic-bezier(0.34, 1.3, 0.64, 1);
+  --press-depth: clamp(1px, var(--h), 3px);
+  box-shadow: var(--h) var(--h) 0 var(--block-drop, var(--drop));
+  transition: transform 0.28s var(--spring), box-shadow 0.28s var(--spring), background-color 0.15s;
 }
 .btn, .links a[download] { --h: 3px; }
 .window.shot { --h: 8px; }
@@ -1174,21 +1098,21 @@ section.attuale > h2::before {
 @media (hover: hover) {
   :is(.btn, .links a[download], .window.shot, .ans, .nav-links a.tab):hover:not(:disabled) {
     transform: translate(-2px, -2px);
-    box-shadow: calc(var(--h) + 2px) calc(var(--h) + 2px) 0 var(--ombra-blocco, var(--ombra));
+    box-shadow: calc(var(--h) + 2px) calc(var(--h) + 2px) 0 var(--block-drop, var(--drop));
   }
 }
 :is(.btn, .links a[download], .window.shot, .ans, .nav-links a.tab):focus-visible {
   transform: translate(-2px, -2px);
-  box-shadow: calc(var(--h) + 2px) calc(var(--h) + 2px) 0 var(--ombra-blocco, var(--ombra));
+  box-shadow: calc(var(--h) + 2px) calc(var(--h) + 2px) 0 var(--block-drop, var(--drop));
 }
 :is(.btn, .links a[download], .window.shot, .ans, .nav-links a.tab):active:not(:disabled) {
-  transform: translate(var(--affondo), var(--affondo));
-  box-shadow: max(0px, var(--h) - var(--affondo)) max(0px, var(--h) - var(--affondo)) 0 var(--ombra-blocco, var(--ombra));
+  transform: translate(var(--press-depth), var(--press-depth));
+  box-shadow: max(0px, var(--h) - var(--press-depth)) max(0px, var(--h) - var(--press-depth)) 0 var(--block-drop, var(--drop));
   transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
 }
 
 a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
-  background-image: linear-gradient(var(--evidenziatore), var(--evidenziatore));
+  background-image: linear-gradient(var(--highlighter), var(--highlighter));
   background-repeat: no-repeat;
   background-position: left center;
   background-size: 0% 100%;
@@ -1196,10 +1120,9 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
 }
 :is(a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link):is(:hover, :focus-visible),
 .nav-links a[aria-current] { background-size: 100% 100%; }
-/* Sotto l'evidenziatore il testo torna a pieno colore: un link grigio sul blu notturno non si leggerebbe */
+/* Full-color text under the highlighter */
 :is(a:not([class]):not([download]), .lang-switch a, .lang-switch button:not([aria-pressed="true"]), .link):is(:hover, :focus-visible) { color: var(--fg); }
 
-/* L'interruttore del tema: la manopola scorre con la stessa molla e si schiaccia al clic */
 .theme-toggle .knob { transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1), scale 0.12s ease-out; }
 .theme-toggle:active .knob { scale: 0.9; }
 
@@ -1209,91 +1132,80 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
   :is(.btn, .links a[download], .window.shot, .ans, .nav-links a.tab):is(:hover, :focus-visible, :active) { transform: none; }
 }
 
-/* ---------- Appunti: ordine da strumento, personalità del sito ----------
-   La disposizione viene da design-taste-frontend (achromatic-ledger: conti, compito d'esame e pannelli sulla
-   griglia, colore solo sui dati); colori, caratteri, barra in alto, pulsanti e ombre sono quelli del sito */
-.appunti {
-  --superficie: var(--card);
-  --sopra: color-mix(in srgb, var(--accent) 6%, var(--card));
-  --bordo-app: var(--bordo);
-  --riga-app: var(--line);
-  --inchiostro: var(--fg);
-  --grigio: var(--muted);
-  --tinta: var(--accent);
-  --tinta-chiara: color-mix(in srgb, var(--accent) 28%, var(--card));
-  --scelta: color-mix(in srgb, var(--accent) 12%, var(--card));
+/* ---------- Notes pages ---------- */
+.notes {
+  --surface: var(--card);
+  --hover-bg: color-mix(in srgb, var(--accent) 6%, var(--card));
+  --notes-border: var(--border);
+  --rule: var(--line);
+  --ink: var(--fg);
+  --subtle: var(--muted);
+  --tint: var(--accent);
+  --tint-soft: color-mix(in srgb, var(--accent) 28%, var(--card));
+  --selected: color-mix(in srgb, var(--accent) 12%, var(--card));
 }
-/* Il foglio a quadretti, leggero */
-.appunti::before {
-  --riga: color-mix(in srgb, var(--accent) 7%, transparent);
+/* Grid paper */
+.notes::before {
+  --grid-line: color-mix(in srgb, var(--accent) 7%, transparent);
   background:
-    linear-gradient(var(--riga) 1px, transparent 1px) 0 0 / 24px 24px,
-    linear-gradient(90deg, var(--riga) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 24px 24px,
     var(--bg);
 }
-.appunti body::before { display: none; }
-/* L'interruttore del tema piatto, senza olografico né cromo (come chiesto per gli appunti) */
-.appunti .theme-toggle { background: var(--bg); }
-.appunti .theme-toggle .knob { background: var(--fg); border-color: var(--fg); }
-.appunti .theme-toggle .knob::after { background: var(--bg); }
+.notes body::before { display: none; }
+.notes .theme-toggle { background: var(--bg); }
+.notes .theme-toggle .knob { background: var(--fg); border-color: var(--fg); }
+.notes .theme-toggle .knob::after { background: var(--bg); }
 
-/* Titolo: Fraunces come nel resto del sito */
-.appunti .hero { padding: 48px 0 28px; }
-.appunti .hero .page-title { font-size: clamp(2.25rem, 5vw, 3.25rem); line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
-.appunti .hero .lead { margin: 10px 0 0; font-family: var(--sans); font-size: 1rem; color: var(--grigio); }
-.appunti main > section[id] { border-top: 0; margin-top: 0; padding-top: 8px; }
-.appunti h2::before { content: none; }
-.appunti .note { font-family: var(--sans); font-size: 0.875rem; }
-.appunti .site-footer { color: var(--grigio); }
+.notes .hero { padding: 48px 0 28px; }
+.notes .hero .page-title { font-size: clamp(2.25rem, 5vw, 3.25rem); line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
+.notes .hero .lead { margin: 10px 0 0; font-family: var(--sans); font-size: 1rem; color: var(--subtle); }
+.notes main > section[id] { border-top: 0; margin-top: 0; padding-top: 8px; }
+.notes h2::before { content: none; }
+.notes .note { font-family: var(--sans); font-size: 0.875rem; }
+.notes .site-footer { color: var(--subtle); }
 
-/* Pulsanti: quelli del sito. Nei pannelli stretti occupano tutta la larghezza */
-.appunti .link { font-size: 0.875rem; }
-.appunti .check { font-size: 0.875rem; }
-.appunti .check input { accent-color: var(--accent); }
-.appunti .btn { border-width: 1.5px; }
+.notes .link { font-size: 0.875rem; }
+.notes .check { font-size: 0.875rem; }
+.notes .check input { accent-color: var(--accent); }
+.notes .btn { border-width: 1.5px; }
 
-/* La pagina iniziale: griglia a 12 colonne, gutter 16px.
-   Righe: 3+3+3+3 (i conti), 9+3 (compito e ripasso), 6+6 (test e materiali): ogni bordo interno
-   cade su una linea di colonna di quella sopra */
-#quiz[data-vista="home"] { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
-.conti { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; }
-.conto { display: flex; flex-direction: column; justify-content: space-between; gap: 12px; min-height: 112px; padding: 16px; background: var(--superficie); border: 1.5px solid var(--bordo); box-shadow: 4px 4px 0 var(--ombra); }
-.conto dt { font-size: 0.8125rem; color: var(--grigio); }
-.conto dd { margin: 0; }
-.conto-valore { font-family: var(--serif); font-optical-sizing: auto; font-size: 2.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-.conto-valore.zero { color: var(--grigio); }
-.conto-nota { font-size: 0.8125rem; color: var(--grigio); }
-.pannello { padding: 20px 22px; background: var(--superficie); border: 1.5px solid var(--bordo); box-shadow: 6px 6px 0 var(--ombra); }
-.compito { grid-column: span 8; }
-.colonna { grid-column: span 4; display: grid; gap: 24px; }
-.oggi-nota { margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--riga-app); }
-/* Azzera i progressi: un'azione di servizio, fuori dai pannelli, in fondo a destra */
-.azzera-riga { grid-column: 1 / -1; margin: 0; text-align: right; font-size: 0.875rem; }
+/* Dashboard: 12-column grid */
+#quiz[data-view="home"] { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: start; }
+.stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; }
+.stat { display: flex; flex-direction: column; justify-content: space-between; gap: 12px; min-height: 112px; padding: 16px; background: var(--surface); border: 1.5px solid var(--border); box-shadow: 4px 4px 0 var(--drop); }
+.stat dt { font-size: 0.8125rem; color: var(--subtle); }
+.stat dd { margin: 0; }
+.stat-value { font-family: var(--serif); font-optical-sizing: auto; font-size: 2.5rem; font-weight: 700; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.stat-value.zero { color: var(--subtle); }
+.stat-note { font-size: 0.8125rem; color: var(--subtle); }
+.panel { padding: 20px 22px; background: var(--surface); border: 1.5px solid var(--border); box-shadow: 6px 6px 0 var(--drop); }
+.exam-paper { grid-column: span 8; }
+.side-column { grid-column: span 4; display: grid; gap: 24px; }
+.today-note { margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--rule); }
+.reset-row { grid-column: 1 / -1; margin: 0; text-align: right; font-size: 0.875rem; }
 .test { grid-column: 1 / -1; }
-/* Tre campi etichettati affiancati: Test, Modalità, Opzioni */
-.campi { display: grid; grid-template-columns: repeat(3, minmax(0, max-content)); gap: 16px 48px; margin: 6px 0 20px; }
-.campo { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-.campo-nome { font-size: 0.8125rem; color: var(--grigio); }
-.campo-nota { font-size: 0.8125rem; color: var(--grigio); max-width: 30ch; }
-.campo .check { margin: 0; }
-.pannello-testa { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
-.pannello-titolo { margin: 0; font-family: var(--serif); font-optical-sizing: auto; font-style: normal; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
-.pannello-sotto { margin: 4px 0 14px; font-size: 0.875rem; color: var(--grigio); max-width: 62ch; }
-.pannello p { margin: 0 0 12px; }
-.pannello > :last-child { margin-bottom: 0; }
+.test-fields { display: grid; grid-template-columns: repeat(3, minmax(0, max-content)); gap: 16px 48px; margin: 6px 0 20px; }
+.test-field { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.test-field-label { font-size: 0.8125rem; color: var(--subtle); }
+.test-field-note { font-size: 0.8125rem; color: var(--subtle); max-width: 30ch; }
+.test-field .check { margin: 0; }
+.panel-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+.panel-title { margin: 0; font-family: var(--serif); font-optical-sizing: auto; font-style: normal; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+.panel-sub { margin: 4px 0 14px; font-size: 0.875rem; color: var(--subtle); max-width: 62ch; }
+.panel p { margin: 0 0 12px; }
+.panel > :last-child { margin-bottom: 0; }
 
-/* Il compito d'esame: una riga per argomento, le sue caselle (una per domanda d'esame) e quante ne hai imparate */
-/* Tre colonne: argomento (con quante domande vale all'esame), la barra di quanto ne hai imparato, il conto */
-.compito { --colonne-compito: minmax(0, 1fr) minmax(80px, 200px) 72px; }
-.riga-nome small { display: block; font-size: 0.8125rem; color: var(--grigio); font-weight: 400; }
-.riga-barra { height: 10px; background: var(--superficie); border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent); }
-.riga-barra i { display: block; height: 100%; background: var(--tinta); }
-.righe-argomenti { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--riga-app); }
+.exam-paper { --exam-paper-columns: minmax(0, 1fr) minmax(80px, 200px) 72px; }
+.topic-name small { display: block; font-size: 0.8125rem; color: var(--subtle); font-weight: 400; }
+.topic-bar { height: 10px; background: var(--surface); border: 1.5px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+.topic-bar i { display: block; height: 100%; background: var(--tint); }
+.topic-rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
 
-.righe-argomenti li { border-bottom: 1px solid var(--riga-app); }
-.riga-argomento {
+.topic-rows li { border-bottom: 1px solid var(--rule); }
+.topic-row {
   display: grid;
-  grid-template-columns: var(--colonne-compito);
+  grid-template-columns: var(--exam-paper-columns);
   align-items: center;
   gap: 16px;
   width: 100%;
@@ -1303,83 +1215,78 @@ a:not([class]):not([download]), .lang-switch a, .lang-switch button, .link {
   border: 0;
   font: inherit;
   font-size: 0.875rem;
-  color: var(--inchiostro);
+  color: var(--ink);
   text-align: left;
   cursor: pointer;
 }
-.riga-argomento:hover { background: var(--sopra); }
-.riga-argomento[aria-pressed="true"] { background: var(--scelta); font-weight: 600; }
-.riga-conto { text-align: right; font-variant-numeric: tabular-nums; }
-.riga-conto.zero { color: var(--grigio); }
-.legenda { margin: 12px 0 0; font-size: 0.8125rem; color: var(--grigio); max-width: 75ch; }
+.topic-row:hover { background: var(--hover-bg); }
+.topic-row[aria-pressed="true"] { background: var(--selected); font-weight: 600; }
+.topic-count { text-align: right; font-variant-numeric: tabular-nums; }
+.topic-count.zero { color: var(--subtle); }
+.hint { margin: 12px 0 0; font-size: 0.8125rem; color: var(--subtle); max-width: 75ch; }
 
-/* Ripasso di oggi */
-.oggi-filtro { font-size: 0.875rem; font-weight: 600; }
-.oggi-azioni { display: grid; gap: 8px; margin: 0 0 14px; }
-.oggi-azioni .btn { width: 100%; }
+.today-filter { font-size: 0.875rem; font-weight: 600; }
+.today-actions { display: grid; gap: 8px; margin: 0 0 14px; }
+.today-actions .btn { width: 100%; }
 
-/* Simula un test: scelte a segmenti uniti, così non si confondono con i pulsanti d'azione */
 .seg { display: inline-flex; margin: 0; }
-.seg button { min-height: 36px; padding: 6px 14px; background: var(--superficie); border: 1.5px solid var(--pulsante); font: inherit; font-family: var(--mono); font-size: 0.8125rem; font-weight: 600; color: var(--inchiostro); cursor: pointer; }
+.seg button { min-height: 36px; padding: 6px 14px; background: var(--surface); border: 1.5px solid var(--button); font: inherit; font-family: var(--mono); font-size: 0.8125rem; font-weight: 600; color: var(--ink); cursor: pointer; }
 .seg button + button { margin-left: -1.5px; }
-.seg button span { color: var(--grigio); margin-left: 4px; font-variant-numeric: tabular-nums; }
-.seg button[aria-pressed="true"] { background: var(--pulsante); border-color: var(--pulsante); color: var(--su-pulsante); }
+.seg button span { color: var(--subtle); margin-left: 4px; font-variant-numeric: tabular-nums; }
+.seg button[aria-pressed="true"] { background: var(--button); border-color: var(--button); color: var(--on-button); }
 .seg button[aria-pressed="true"] span { color: inherit; opacity: 0.7; }
-.seg button:not([aria-pressed="true"]):hover { background: var(--sopra); }
+.seg button:not([aria-pressed="true"]):hover { background: var(--hover-bg); }
 
-/* La domanda */
-#quiz[data-vista="domanda"], #quiz[data-vista="fine"] { max-width: 760px; }
-.quiz-meta { display: flex; justify-content: space-between; gap: 12px; font-size: 0.875rem; color: var(--grigio); }
-/* Le domande del giro: pulsanti numerati tutti uguali, in righe ordinate; si salta a quella che vuoi */
-.giro-caselle { display: grid; grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); gap: 4px; margin: 12px 0 24px; }
-.giro-caselle button { height: 32px; padding: 0; background: var(--superficie); border: 1.5px solid var(--bordo-app); font-family: var(--mono); font-size: 0.75rem; font-variant-numeric: tabular-nums; color: var(--grigio); cursor: pointer; transition: background-color 0.15s, border-color 0.15s; }
-.giro-caselle button:hover { border-color: var(--inchiostro); color: var(--inchiostro); }
-.giro-caselle button.visto { background: var(--tinta-chiara); border-color: var(--tinta); color: var(--inchiostro); }
-.giro-caselle button.giusto { background: var(--ok-soft); border-color: var(--ok); color: var(--inchiostro); }
-.giro-caselle button.sbagliato { background: var(--bad-soft); border-color: var(--bad); color: var(--inchiostro); }
-.giro-caselle button.ripetuta { border-style: dashed; }
-.giro-caselle button[aria-current="step"] { background: var(--pulsante); border-color: var(--pulsante); color: var(--su-pulsante); font-weight: 700; box-shadow: 2px 2px 0 var(--ombra); }
-.appunti .ans.sel { background: var(--scelta); color: var(--fg); }
-.appunti .ans.sel .l { color: var(--fg); }
-.quiz-incerto { margin: 8px 0 0; }
-.spunta { display: inline-flex; align-items: center; gap: 8px; padding: 4px 0; background: none; border: 0; font: inherit; font-size: 0.875rem; color: var(--inchiostro); cursor: pointer; }
-.spunta::before { content: ""; width: 14px; height: 14px; border: 1px solid var(--grigio); border-radius: 3px; background: var(--superficie); }
-.spunta[aria-pressed="true"]::before { border-color: var(--inchiostro); background: var(--inchiostro) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M3 7.2l2.6 2.6L11 4.4' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; }
-.spunta:disabled { cursor: default; opacity: 0.6; }
+#quiz[data-view="question"], #quiz[data-view="results"] { max-width: 760px; }
+.quiz-meta { display: flex; justify-content: space-between; gap: 12px; font-size: 0.875rem; color: var(--subtle); }
+/* Round steps: numbered buttons to jump between questions */
+.round-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); gap: 4px; margin: 12px 0 24px; }
+.round-steps button { height: 32px; padding: 0; background: var(--surface); border: 1.5px solid var(--notes-border); font-family: var(--mono); font-size: 0.75rem; font-variant-numeric: tabular-nums; color: var(--subtle); cursor: pointer; transition: background-color 0.15s, border-color 0.15s; }
+.round-steps button:hover { border-color: var(--ink); color: var(--ink); }
+.round-steps button.answered { background: var(--tint-soft); border-color: var(--tint); color: var(--ink); }
+.round-steps button.correct { background: var(--ok-soft); border-color: var(--ok); color: var(--ink); }
+.round-steps button.wrong { background: var(--bad-soft); border-color: var(--bad); color: var(--ink); }
+.round-steps button.repeated { border-style: dashed; }
+.round-steps button[aria-current="step"] { background: var(--button); border-color: var(--button); color: var(--on-button); font-weight: 700; box-shadow: 2px 2px 0 var(--drop); }
+.notes .ans.sel { background: var(--selected); color: var(--fg); }
+.notes .ans.sel .l { color: var(--fg); }
+.quiz-unsure { margin: 8px 0 0; }
+.tick { display: inline-flex; align-items: center; gap: 8px; padding: 4px 0; background: none; border: 0; font: inherit; font-size: 0.875rem; color: var(--ink); cursor: pointer; }
+.tick::before { content: ""; width: 14px; height: 14px; border: 1px solid var(--subtle); border-radius: 3px; background: var(--surface); }
+.tick[aria-pressed="true"]::before { border-color: var(--ink); background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M3 7.2l2.6 2.6L11 4.4' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; }
+.tick:disabled { cursor: default; opacity: 0.6; }
 .quiz-why { margin: 12px 0 0; max-width: 68ch; font-size: 0.9375rem; }
 .quiz-why b { font-weight: 600; }
 
-.appunti .quiz-rev { border-bottom: 1px solid var(--riga-app); }
+.notes .quiz-rev { border-bottom: 1px solid var(--rule); }
 .quiz-rev .quiz-why { margin-top: 6px; }
-.appunti h3.quiz-titolo { font-family: var(--serif); font-size: 1.375rem; font-weight: 700; margin: 28px 0 8px; }
+.notes h3.quiz-heading { font-family: var(--serif); font-size: 1.375rem; font-weight: 700; margin: 28px 0 8px; }
 
-/* Elenco degli esami */
-.appunti .exam { border-bottom: 1px solid var(--riga-app); }
-.appunti .exam h3 { font-family: var(--serif); font-size: var(--t-5); font-weight: 700; }
+.notes .exam { border-bottom: 1px solid var(--rule); }
+.notes .exam h3 { font-family: var(--serif); font-size: var(--t-5); font-weight: 700; }
 
-
-/* La scheda di confronto: tabelle vere, su superfici bianche */
-.quiz-indietro { margin: 0 0 12px; font-size: 0.875rem; }
-.confronti-indice ol { margin: 16px 0 0; padding-left: 1.4em; columns: 2 220px; column-gap: 32px; font-size: 0.9375rem; }
-.confronti-indice li { margin: 0 0 4px; break-inside: avoid; }
-.confronti { padding-top: 32px; }
-.confronti h2 { margin: 0 0 16px; font-family: var(--serif); font-style: italic; font-size: var(--t-6); font-weight: 500; letter-spacing: -0.02em; }
-.tabella { overflow-x: auto; margin: 0 0 24px; background: var(--superficie); border: 1.5px solid var(--bordo); box-shadow: 6px 6px 0 var(--ombra); }
-.tabella table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 0.875rem; line-height: 1.45; }
-.tabella caption { padding: 14px 16px 6px; text-align: left; font-family: var(--serif); font-size: 1.25rem; font-weight: 700; }
-.tabella th, .tabella td { padding: 9px 16px; text-align: left; vertical-align: top; border-top: 1px solid var(--riga-app); }
-.tabella thead th { font-size: 0.8125rem; font-weight: 400; color: var(--grigio); border-top: 0; }
-.tabella tbody th { font-weight: 600; }
-.regole { margin: 0 0 8px; padding-left: 1.2em; font-size: 0.9375rem; }
-.regole li { margin: 0 0 6px; max-width: 75ch; }
+/* Comparison sheet */
+.quiz-back { margin: 0 0 12px; font-size: 0.875rem; }
+.comparisons-index ol { margin: 16px 0 0; padding-left: 1.4em; columns: 2 220px; column-gap: 32px; font-size: 0.9375rem; }
+.comparisons-index li { margin: 0 0 4px; break-inside: avoid; }
+.comparisons { padding-top: 32px; }
+.comparisons h2 { margin: 0 0 16px; font-family: var(--serif); font-style: italic; font-size: var(--t-6); font-weight: 500; letter-spacing: -0.02em; }
+.compare-table { overflow-x: auto; margin: 0 0 24px; background: var(--surface); border: 1.5px solid var(--border); box-shadow: 6px 6px 0 var(--drop); }
+.compare-table table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 0.875rem; line-height: 1.45; }
+.compare-table caption { padding: 14px 16px 6px; text-align: left; font-family: var(--serif); font-size: 1.25rem; font-weight: 700; }
+.compare-table th, .compare-table td { padding: 9px 16px; text-align: left; vertical-align: top; border-top: 1px solid var(--rule); }
+.compare-table thead th { font-size: 0.8125rem; font-weight: 400; color: var(--subtle); border-top: 0; }
+.compare-table tbody th { font-weight: 600; }
+.rules { margin: 0 0 8px; padding-left: 1.2em; font-size: 0.9375rem; }
+.rules li { margin: 0 0 6px; max-width: 75ch; }
 
 @media (max-width: 900px) {
-  .conti { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .compito, .colonna, .test { grid-column: 1 / -1; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .exam-paper, .side-column, .test { grid-column: 1 / -1; }
 }
 @media (max-width: 560px) {
-  .compito { --colonne-compito: minmax(0, 1fr) 64px; }
-  .campi { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .riga-argomento .riga-barra { grid-column: 1 / -1; grid-row: 2; }
-  .conto-valore { font-size: 1.5rem; }
+  .exam-paper { --exam-paper-columns: minmax(0, 1fr) 64px; }
+  .test-fields { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .topic-row .topic-bar { grid-column: 1 / -1; grid-row: 2; }
+  .stat-value { font-size: 1.5rem; }
 }

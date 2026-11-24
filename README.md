@@ -1,34 +1,34 @@
 # daniele-giacomelli.github.io
 
-Il mio sito personale: chi sono, progetti, esperienza e contatti.
+My personal site: about me, projects, experience and contact.
 
-**Online su https://daniele-giacomelli.github.io/** ([versione inglese](https://daniele-giacomelli.github.io/en/))
+**Live at https://daniele-giacomelli.github.io/** ([English version](https://daniele-giacomelli.github.io/en/))
 
-## Com'è fatto
+## How it's built
 
-HTML e CSS scritti a mano, un po' di JavaScript, nessun framework e nessuna build.
-GitHub Pages pubblica direttamente il branch `main`.
+Hand-written HTML and CSS, a little JavaScript, no framework and no build step.
+GitHub Pages publishes the `main` branch directly.
 
-- `index.html`: la home in italiano
-- `en/index.html`: la versione in inglese
-- `style.css`: lo stile, con tema chiaro e scuro
-- `tema.js`: l'interruttore chiaro/scuro; senza una scelta salvata segue il tema di sistema
-- `script.js`: i dettagli della home (numero della testata automatico, menu che segue la sezione, modulo di contatto, easter egg)
-- `404.html`: la pagina per gli indirizzi che non esistono
-- `CV_Daniele_Giacomelli.pdf` e `CV_Daniele_Giacomelli_EN.pdf`: il CV in italiano e in inglese, versione senza
-  telefono ed email. Si generano da pagine HTML tenute fuori dal repository (contengono anche i contatti)
-- `sitemap.xml` e `robots.txt`: per i motori di ricerca; aggiungendo una pagina agli appunti va aggiunta anche alla sitemap
-- `appunti/`: quiz e appunti per esame e modulo (`appunti/<esame>/<modulo>/`), pensati da condividere
-  con il corso: sfondo a quadretti, niente menu del portfolio, interfaccia in italiano e inglese. Il motore è
-  `appunti/quiz.js`, le domande stanno nel `quiz.json` di ogni modulo; `appunti/lingua.js` cambia la lingua
-  sulla stessa pagina (il testo inglese sta negli attributi `data-en`)
-- `fonts/`: JetBrains Mono e Fraunces, ospitati qui invece che su Google Fonts
-  (licenze in `fonts/OFL.txt` e `fonts/OFL-Fraunces.txt`)
+- `index.html`: the Italian home page
+- `en/index.html`: the English version
+- `style.css`: styles, with light and dark themes
+- `theme.js`: the light/dark toggle; without a saved choice it follows the system theme
+- `script.js`: home page details (automatic issue number, menu that follows the section, contact form, easter eggs)
+- `404.html`: the page for addresses that don't exist
+- `CV_Daniele_Giacomelli.pdf` and `CV_Daniele_Giacomelli_EN.pdf`: the CV in Italian and English, without phone
+  and email. They're generated from HTML pages kept outside the repository (those include the contact details)
+- `sitemap.xml` and `robots.txt`: for search engines; a new notes page must be added to the sitemap too
+- `appunti/`: quizzes and notes by exam and module (`appunti/<exam>/<module>/`), meant to be shared with the
+  course: grid-paper background, no portfolio menu, Italian and English UI. The engine is `appunti/quiz.js`,
+  the questions live in each module's `quiz.json`; `appunti/lang.js` switches language on the same page
+  (the English text is in `data-en` attributes)
+- `fonts/`: JetBrains Mono and Fraunces, hosted here instead of Google Fonts
+  (licenses in `fonts/OFL.txt` and `fonts/OFL-Fraunces.txt`)
 
-## Provarlo in locale
+## Run it locally
 
 ```bash
 python -m http.server 8000
 ```
 
-Poi apri http://localhost:8000.
+Then open http://localhost:8000.
